@@ -21,8 +21,29 @@ public class FlashException extends Exception {
             return "Please type in a command or use \"help\" to see the list of commands.";
         case "invalid command":
             return "Invalid command format. Use \"help\" to see the list of all commands.";
+        case "invalid arguments":
+            return "Invalid arguments format. Check your prefixes and try again.";
+        case "argument missing":
+            return "One or more required arguments are missing.";
+        case "missing d/":
+            return "Deck name is required. Use prefix d/.";
+        case "missing q/":
+            return "Question is required. Use prefix q/.";
+        case "missing a/":
+            return "Answer is required. Use prefix a/.";
+        case "missing i/":
+            return "Card index is required. Use prefix i/.";
+        case "duplicate d/":
+        case "duplicate q/":
+        case "duplicate a/":
+        case "duplicate i/":
+            return "Duplicate prefixes detected. Each prefix should appear only once.";
+        case "addCard":
+            return "Invalid format for addCard.\nUse: addCard d/<deck> q/<question> a/<answer>";
+        case "deleteCard":
+            return "Invalid format for deleteCard.\nUse: deleteCard d/<deck> i/<index>";
         default:
-            return "Use \"help\" to see the list of all commands.";
+            return "Invalid command format. Use \"help\" to see the list of all commands.";
         }
     }
 }
