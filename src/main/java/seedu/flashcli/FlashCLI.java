@@ -1,9 +1,9 @@
-package seedu.FlashCLI;
+package seedu.flashcli;
 
 import java.util.Scanner;
-import seedu.FlashCLI.deck.Deck;
-import seedu.FlashCLI.deck.DeckManager;
-import seedu.FlashCLI.storage.Storage;
+import seedu.flashcli.deck.Deck;
+import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.storage.Storage;
 
 public class FlashCLI {
     /**

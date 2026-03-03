@@ -1,4 +1,4 @@
-package seedu.FlashCLI.command;
+package seedu.flashcli.command;
 
 public class FinishCommand {
 }

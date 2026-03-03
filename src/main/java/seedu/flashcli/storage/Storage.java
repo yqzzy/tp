@@ -1,4 +1,4 @@
-package seedu.FlashCLI.storage;
+package seedu.flashcli.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,25 +7,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import seedu.FlashCLI.deck.DeckManager;
+import seedu.flashcli.deck.DeckManager;
 
 public class Storage {
     private final Path filePath;
     private final Gson gson;
 
-    /**
-     * Create a storage class
-     * @param Storage_file_Path, prefer to store in path "data/flashcards.json"
-     */
-    public Storage(String Storage_file_Path){
-        filePath = Paths.get(Storage_file_Path);
+
+    public Storage(String storageFilePath){
+        filePath = Paths.get(storageFilePath);
         this.gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
-    /**
-     * read all stored data
-     * @return a DeckManager item with all data
-     */
+
     public DeckManager load(){
         if (!Files.exists(filePath)) {
             return new DeckManager();
@@ -39,10 +33,7 @@ public class Storage {
         }
     }
 
-    /**
-     * used to store all data in DeckManager
-     * @param list, the DeckManager item
-     */
+
     public void save(DeckManager list){
         try {
             Files.createDirectories(filePath.getParent());

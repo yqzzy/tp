@@ -1,4 +1,4 @@
-package seedu.FlashCLI.deck;
+package seedu.flashcli.deck;
 
 import java.util.HashMap;
 

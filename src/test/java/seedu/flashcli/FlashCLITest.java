@@ -1,12 +1,12 @@
-package seedu.FlashCLI;
+package seedu.flashcli;
 
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import seedu.FlashCLI.deck.DeckManager;
-import seedu.FlashCLI.deck.Deck;
-import seedu.FlashCLI.study.StudySession;
+import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.deck.Deck;
+import seedu.flashcli.study.StudySession;
 
 class FlashCLITest {
 
