@@ -1,0 +1,26 @@
+{
+  "deckList": [
+    {
+      "deckName": "math",
+      "cardList": [
+        {
+          "question": "triangle",
+          "answer": "S\u003d0.5*a*b"
+        },
+        {
+          "question": "rectangle",
+          "answer": "S\u003da*b"
+        }
+      ]
+    },
+    {
+      "deckName": "English",
+      "cardList": [
+        {
+          "question": "hi",
+          "answer": "hello"
+        }
+      ]
+    }
+  ]
+}

@@ -10,6 +10,8 @@ public class Deck {
         this.deckName = deckName;
     }
 
+    public Deck(){}
+
     public String getDeckName(){
         return deckName;
     }
