@@ -1,4 +1,4 @@
-package seedu.FlashCLI.exception;
+package seedu.flashcli.exception;
 
 public enum ErrorType {
 

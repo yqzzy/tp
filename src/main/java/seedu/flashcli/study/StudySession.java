@@ -1,7 +1,7 @@
-package seedu.FlashCLI.study;
+package seedu.flashcli.study;
 
-import seedu.FlashCLI.deck.Deck;
-import seedu.FlashCLI.deck.Card;
+import seedu.flashcli.deck.Deck;
+import seedu.flashcli.deck.Card;
 
 public class StudySession {
     private Deck deck;
@@ -30,8 +30,7 @@ public class StudySession {
             Card currentCard = deck.getCard(currentIndex);
             String cardFront = "%d. %s%n";
             System.out.printf((cardFront), currentIndex+1, currentCard.getQuestionString());
-        }
-        else {
+        } else {
             System.out.println("End of deck reached!");
         }
     }
@@ -44,8 +43,7 @@ public class StudySession {
             Card currentCard = deck.getCard(currentIndex);
             String cardBack = "%d. %s%n";
             System.out.printf((cardBack), currentIndex+1, currentCard.getAnswerString());
-        }
-        else {
+        } else {
             System.out.println("No card currently active. Start study session first. ");
         }
     }

@@ -1,14 +1,15 @@
-package seedu.FlashCLI.deck;
+package seedu.flashcli.deck;
 import java.util.ArrayList;
-import seedu.FlashCLI.deck.Card;
 
 public class Deck {
     private String deckName;
-    private ArrayList<Card> cardList = new ArrayList();
+    private ArrayList<Card> cardList = new ArrayList<>();
 
     public Deck(String deckName){
         this.deckName = deckName;
     }
+
+    public Deck(){}
 
     public String getDeckName(){
         return deckName;
@@ -28,10 +29,10 @@ public class Deck {
 
     //prints out the index and question of every question in the deck
     public void listCards(){
-        final String LISTLINE = "%d. %s%n";
+        final String listLine = "%d. %s%n";
         int count = 1;
         for (Card card: cardList){
-            System.out.printf(LISTLINE, count, card.getQuestion());
+            System.out.printf(listLine, count, card.getQuestion());
             count++;
         }
     }

@@ -1,7 +1,7 @@
-package seedu.FlashCLI.parser;
+package seedu.flashcli.parser;
 
-import seedu.FlashCLI.exception.ErrorType;
-import seedu.FlashCLI.exception.FlashException;
+import seedu.flashcli.exception.ErrorType;
+import seedu.flashcli.exception.FlashException;
 
 /**
  * Parses and validates user input.
@@ -12,12 +12,7 @@ import seedu.FlashCLI.exception.FlashException;
 public class Parser {
 
     // Array of all recognized commands accepted by the application.
-    private static final String[] VALID_COMMANDS = {
-            "addCard", "listCards", "deleteCard",
-            "createDeck", "listDecks", "clearDeck",
-            "study", "nextCard", "finish",
-            "exit", "help"
-    };
+    private static final String[] VALID_COMMANDS = {"addCard", "listCards", "deleteCard", "createDeck", "listDecks", "clearDeck", "study", "nextCard", "finish", "exit", "help"};
 
     private static final String DECK_PREFIX = "d/";
     private static final String QUESTION_PREFIX = "q/";

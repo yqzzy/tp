@@ -1,4 +1,4 @@
-package seedu.FlashCLI.deck;
+package seedu.flashcli.deck;
 
 public class Card {
     private String question;
@@ -8,6 +8,8 @@ public class Card {
         this.question = question;
         this.answer = answer;
     }
+
+    public Card(){}
 
     public String getQuestion(){
         return question;
