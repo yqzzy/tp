@@ -202,5 +202,17 @@ public class ParserTest {
         FlashException e = assertThrows(FlashException.class, () -> new Parser("clearDeck d/"));
         assertEquals(ErrorType.ARGUMENT_MISSING, e.getErrorType());
     }
-    
+
+    // study Tests
+
+    @Test
+    void study_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> new Parser("study d/Math"));
+    }
+
+    @Test
+    void study_missingDeckPrefix_throwsMissingDeck() {
+        FlashException e = assertThrows(FlashException.class, () -> new Parser("study Math"));
+        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+    }
 }
