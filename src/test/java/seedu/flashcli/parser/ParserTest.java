@@ -175,6 +175,13 @@ public class ParserTest {
         assertEquals(ErrorType.ARGUMENT_MISSING, e.getErrorType());
     }
 
-    
+    // listDecks Tests
 
+    @Test
+    void listDecks_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> new Parser("listDecks"));
+        assertDoesNotThrow(() -> new Parser("listDecks xyz"));
+        assertDoesNotThrow(() -> new Parser("listDecks    "));
+    }
+    
 }
