@@ -23,15 +23,17 @@ public class StudySession {
     /**
      * displays question of next card referenced by currentIndex
       */
-    public void nextCard() {
+    public boolean nextCard() {
         int size = deck.getSize();
         if (currentIndex + 1 < size) {
             currentIndex ++;
             Card currentCard = deck.getCard(currentIndex);
             String cardFront = "%d. %s%n";
             System.out.printf((cardFront), currentIndex+1, currentCard.getQuestionString());
+            return false;
         } else {
             System.out.println("End of deck reached!");
+            return this.finish();
         }
     }
 
