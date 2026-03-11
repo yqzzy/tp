@@ -156,4 +156,25 @@ public class ParserTest {
         assertEquals(ErrorType.ARGUMENT_MISSING, e.getErrorType());
     }
 
+    // createDeck Tests
+
+    @Test
+    void createDeck_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> new Parser("createDeck d/Math"));
+    }
+
+    @Test
+    void createDeck_missingDeckPrefix_throwsMissingDeck() {
+        FlashException e = assertThrows(FlashException.class, () -> new Parser("createDeck Math"));
+        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+    }
+
+    @Test
+    void createDeck_emptyDeckName_throwsArgumentMissing() {
+        FlashException e = assertThrows(FlashException.class, () -> new Parser("createDeck d/"));
+        assertEquals(ErrorType.ARGUMENT_MISSING, e.getErrorType());
+    }
+
+    
+
 }
