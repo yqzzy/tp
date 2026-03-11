@@ -33,14 +33,14 @@ public class FlashCLI {
         DeckManager testManager = new DeckManager();
         testManager.createDeck("math");
         testManager.createDeck("English");
-        Deck mathDeck = testManager.getDeck(0);
+        Deck mathDeck = testManager.getDeck("math");
         mathDeck.addCard("triangle", "S=0.5*a*b");
         mathDeck.addCard("rectangle","S=a*b");
 
-        Deck englishDeck = testManager.getDeck(1);
+        Deck englishDeck = testManager.getDeck("english");
         englishDeck.addCard("hi", "hello");
 
-        System.out.println("Create " + testManager.getDeck(0).getSize() + " decks");
+        System.out.println("Create " + testManager.getDeck("math").getSize() + " decks");
 
         // 3. save data
         storage.save(testManager);
@@ -50,9 +50,9 @@ public class FlashCLI {
         DeckManager loadedManager = storage.load();
 
         // 5. simple test
-        if (loadedManager.getDeck(0) != null) {
-            System.out.println("first deck: " + loadedManager.getDeck(0).getDeckName());
-            System.out.println("this deck includes " + loadedManager.getDeck(0).getSize() + " cards");
+        if (loadedManager.getDeck("math") != null) {
+            System.out.println("first deck: " + loadedManager.getDeck("math").getDeckName());
+            System.out.println("this deck includes " + loadedManager.getDeck("math").getSize() + " cards");
         } else {
             System.out.println("fail");
         }
