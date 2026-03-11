@@ -61,7 +61,7 @@ public class ParserTest {
                 () -> new Parser("addCard d/Math q/What is 2+2?"));
         assertEquals(ErrorType.MISSING_ANSWER, e.getErrorType());
     }
-    
+
     @Test
     void addCard_wrongPrefixOrder_throwsInvalidAddCard() {
         FlashException e = assertThrows(FlashException.class,
@@ -97,4 +97,23 @@ public class ParserTest {
         assertEquals(ErrorType.DUPLICATE_PREFIX, e.getErrorType());
     }
 
+    // listCards Tests
+
+    @Test
+    void listCards_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> new Parser("listCards d/Math"));
+    }
+
+    @Test
+    void listCards_missingDeckPrefix_throwsMissingDeck() {
+        FlashException e = assertThrows(FlashException.class, () -> new Parser("listCards Math"));
+        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+    }
+
+    @Test
+    void listCards_emptyDeckName_throwsArgumentMissing() {
+        FlashException e = assertThrows(FlashException.class, () -> new Parser("listCards d/"));
+        assertEquals(ErrorType.ARGUMENT_MISSING, e.getErrorType());
+    }
+    
 }
