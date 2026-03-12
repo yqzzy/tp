@@ -20,7 +20,7 @@ public class Parser {
     private static final String QUESTION_PREFIX = "q/";
     private static final String ANSWER_PREFIX = "a/";
     private static final String INDEX_PREFIX = "i/";
-    private DeckManager deckManager;
+    private DeckManager deckManager = new DeckManager();
 
     private static final int PREFIX_LEN = 2;
 
@@ -34,8 +34,7 @@ public class Parser {
      * @param userInput the raw input string entered by the user
      * @throws FlashException if the input is null or blank, or if the command is not valid
      */
-    public Parser(String userInput, DeckManager deckManager) throws FlashException {
-        this.deckManager = deckManager;
+    public Parser(String userInput) throws FlashException {
         validateInput(userInput);
         String[] words = userInput.split(" ", 2);
         command = words[0].trim();
