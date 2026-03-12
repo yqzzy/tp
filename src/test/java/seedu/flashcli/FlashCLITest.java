@@ -4,9 +4,6 @@ package seedu.flashcli;
 //import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import seedu.flashcli.deck.DeckManager;
-import seedu.flashcli.deck.Deck;
-import seedu.flashcli.study.StudySession;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

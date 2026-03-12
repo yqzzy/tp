@@ -1,7 +1,6 @@
 package seedu.flashcli.deck;
 
 import org.junit.jupiter.api.Test;
-import seedu.flashcli.deck.DeckManager;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
