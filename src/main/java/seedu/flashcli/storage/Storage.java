@@ -48,10 +48,17 @@ public class Storage {
         return gson.toJson(list);
     }
 
-    private DeckManager parse(String data){
+    private DeckManager parse(String data) {
         if (data == null || data.trim().isEmpty()) {
             return new DeckManager();
         }
-        return gson.fromJson(data, DeckManager.class);
+        try {
+            return gson.fromJson(data, DeckManager.class);
+        } catch (com.google.gson.JsonSyntaxException e) {
+            // Handles corrupted or invalid JSON format gracefully.
+            // Returns an empty DeckManager instead of propagating the exception.
+            System.err.println("Warning: Encountered invalid JSON data. Returning empty DeckManager.");
+            return new DeckManager();
+        }
     }
 }
