@@ -3,6 +3,7 @@ package seedu.flashcli.storage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+
 import seedu.flashcli.deck.DeckManager;
 
 import java.io.IOException;
@@ -10,7 +11,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,8 +24,8 @@ import java.util.stream.Collectors;
  * Provides functionality to save, retrieve, and clean up historical versions.
  */
 public class HistoryManager {
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyyMMdd");
     private final Path dataDir;
     private final Path historyDir;
     private final Path wasteDir;
@@ -58,10 +60,26 @@ public class HistoryManager {
      * @throws IOException If the historical file cannot be written.
      */
     public void saveVersion(DeckManager currentData) throws IOException {
-        String timestamp = LocalDateTime.now().format(TIMESTAMP_FORMATTER);
-        String historyFileName = String.format("%s_%s.json", baseFileName, timestamp);
+        String date = LocalDate.now().format(DATE_FORMATTER);
+        int maxSequence = 0;
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(historyDir, baseFileName + "_" + date + "_*.json")) {
+            for (Path entry : stream) {
+                String fileName = entry.getFileName().toString();
+                String seqStr = fileName.replace(baseFileName + "_" + date + "_", "").replace(".json", "");
+                try {
+                    int seq = Integer.parseInt(seqStr);
+                    if (seq > maxSequence) {
+                        maxSequence = seq;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Error with history file sequence");
+                }
+            }
+        }
+        int newSequence = maxSequence + 1;
+        String sequenceStr = String.format("%03d", newSequence);
+        String historyFileName = String.format("%s_%s_%s.json", baseFileName, date, sequenceStr);
         Path historyFile = historyDir.resolve(historyFileName);
-
         String jsonData = gson.toJson(currentData);
         Files.writeString(historyFile, jsonData);
     }
@@ -75,12 +93,8 @@ public class HistoryManager {
     public List<String> listVersions() throws IOException {
         List<Path> historyFiles = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(historyDir, "*.json")) {
-            for (Path entry : stream) {
-                historyFiles.add(entry);
-            }
+            stream.forEach(historyFiles::add);
         }
-
-        // Sort by filename (which contains timestamp) in descending order
         return historyFiles.stream()
                 .map(Path::getFileName)
                 .map(Path::toString)
@@ -112,16 +126,16 @@ public class HistoryManager {
     /**
      * Retrieves a historical version by its exact timestamp.
      *
-     * @param timestamp The timestamp of the version to retrieve (format: yyyyMMdd_HHmmss).
+     * @param versionId The id of the version to retrieve (format: yyyyMMdd_versionId).
      * @return The DeckManager data from that historical version.
      * @throws IOException If the file cannot be read or does not exist.
      */
-    public DeckManager retrieveByTime(String timestamp) throws IOException {
-        String historyFileName = String.format("%s_%s.json", baseFileName, timestamp);
+    public DeckManager retrieveByTime(String versionId) throws IOException {
+        String historyFileName = String.format("%s_%s.json", baseFileName, versionId);
         Path historyFile = historyDir.resolve(historyFileName);
 
         if (!Files.exists(historyFile)) {
-            throw new IOException("Historical version not found: " + timestamp);
+            throw new IOException("Historical version not found: " + versionId);
         }
 
         String jsonData = Files.readString(historyFile);
@@ -137,7 +151,7 @@ public class HistoryManager {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(historyDir, "*.json")) {
             for (Path historyFile : stream) {
                 Path wasteFile = wasteDir.resolve(historyFile.getFileName());
-                Files.move(historyFile, wasteFile);
+                Files.move(historyFile, wasteFile, StandardCopyOption.REPLACE_EXISTING);
             }
         }
     }
@@ -145,19 +159,19 @@ public class HistoryManager {
     /**
      * Moves selected historical files (identified by timestamps) to the waste directory.
      *
-     * @param timestamps The timestamps of the versions to delete.
+     * @param versionIds The ids of the versions to delete.
      * @throws IOException If any file cannot be moved or a timestamp is invalid.
      */
-    public void deleteSelectHistory(List<String> timestamps) throws IOException {
-        for (String timestamp : timestamps) {
-            String historyFileName = String.format("%s_%s.json", baseFileName, timestamp);
+    public void deleteSelectHistory(List<String> versionIds) throws IOException {
+        for (String versionId : versionIds) {
+            String historyFileName = String.format("%s_%s.json", baseFileName, versionId);
             Path historyFile = historyDir.resolve(historyFileName);
             Path wasteFile = wasteDir.resolve(historyFileName);
 
             if (!Files.exists(historyFile)) {
-                throw new IOException("Historical version not found: " + timestamp);
+                throw new IOException("Historical version not found: " + versionId);
             }
-            Files.move(historyFile, wasteFile);
+            Files.move(historyFile, wasteFile, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 

@@ -1,0 +1,40 @@
+{
+  "deckMap": {
+    "TestDeck2": {
+      "deckName": "TestDeck2",
+      "cardList": [
+        {
+          "question": "Question 2",
+          "answer": "Answer 2"
+        }
+      ]
+    },
+    "TestDeck1": {
+      "deckName": "TestDeck1",
+      "cardList": [
+        {
+          "question": "Question 1",
+          "answer": "Answer 1"
+        }
+      ]
+    },
+    "Science": {
+      "deckName": "Science",
+      "cardList": [
+        {
+          "question": "What is H鈧侽?",
+          "answer": "Water"
+        }
+      ]
+    },
+    "Mathematics": {
+      "deckName": "Mathematics",
+      "cardList": [
+        {
+          "question": "What is 2+2?",
+          "answer": "4"
+        }
+      ]
+    }
+  }
+}

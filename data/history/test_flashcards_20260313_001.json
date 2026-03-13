@@ -1,0 +1,22 @@
+{
+  "deckMap": {
+    "Science": {
+      "deckName": "Science",
+      "cardList": [
+        {
+          "question": "What is H鈧侽?",
+          "answer": "Water"
+        }
+      ]
+    },
+    "Mathematics": {
+      "deckName": "Mathematics",
+      "cardList": [
+        {
+          "question": "What is 2+2?",
+          "answer": "4"
+        }
+      ]
+    }
+  }
+}
