@@ -11,7 +11,16 @@ public class ArgumentExtractor {
     static final String INDEX_PREFIX = "i/";
     private static final int PREFIX_LEN = 2;
 
-    private ArgumentExtractor() {}
+    private ArgumentExtractor() {
+
+    }
+
+    public static DeckArgs parseDeckArgs(String arguments) throws FlashException {
+        validatePrefixes(arguments, DECK_PREFIX);
+        String deckName = extractAfter(arguments, DECK_PREFIX);
+        validateNonEmpty(deckName, ErrorType.MISSING_DECK);
+        return new DeckArgs(deckName);
+    }
 
     public static AddCardArgs parseAddCardArgs(String arguments) throws FlashException {
         validatePrefixes(arguments, DECK_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);

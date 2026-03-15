@@ -97,10 +97,8 @@ public class Parser {
 
     // Ensures the d/ prefix, and non-empty deck name
     private static Command parseListCardsCommand(String arguments) throws FlashException {
-        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
-        requireNonEmpty(deck);
-        return new ListCardsCommand(deck);
+        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        return new ListCardsCommand(args.getDeckName());
     }
 
     // Ensures the d/ and i/ prefixes are contained in the right order, and non-empty descriptions
@@ -111,26 +109,20 @@ public class Parser {
 
     // Ensures the d/ prefix is contained, and non-empty deck name
     private static Command parseCreateDeckCommand(String arguments) throws FlashException {
-        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
-        requireNonEmpty(deck);
-        return new CreateDeckCommand(deck);
+        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        return new CreateDeckCommand(args.getDeckName());
     }
 
     // Ensures the d/ prefix is contained, and non-empty deck name
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
-        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
-        requireNonEmpty(deck);
-        return new ClearDeckCommand(deck);
+        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        return new ClearDeckCommand(args.getDeckName());
     }
 
     // Ensures the d/ prefix is contained, and non-empty deck name
     private static Command parseStudyCommand(String arguments) throws FlashException {
-        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
-        requireNonEmpty(deck);
-        return new StudyCommand(deck);
+        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        return new StudyCommand(args.getDeckName());
     }
 
     // Ensures each string passed in non-empty
