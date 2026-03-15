@@ -8,21 +8,14 @@ import seedu.flashcli.exception.FlashException;
  * Parses and validates user input.
  * Calls the command constructor if the command is valid.
  */
-
 public class Parser {
 
-    // Array of all recognized commands accepted by the application.
-    private static final String[] VALID_COMMANDS = {"addCard", "listCards", "deleteCard", "createDeck", "listDecks", "clearDeck", "study", "nextCard", "finish", "exit", "help"};
+    private static final String[] VALID_COMMANDS = {
+            "addCard", "listCards", "deleteCard", "createDeck",
+            "listDecks", "clearDeck", "study", "nextCard", "finish", "exit", "help"
+    };
 
-    private static final String DECK_PREFIX = "d/";
-    private static final String QUESTION_PREFIX = "q/";
-    private static final String ANSWER_PREFIX = "a/";
-    private static final String INDEX_PREFIX = "i/";
-    private static final int PREFIX_LEN = 2;
-
-    private Parser() {
-
-    }
+    private Parser() {}
 
     /**
      * Validates that the user input is not blank.
@@ -38,11 +31,9 @@ public class Parser {
 
     public static Command parse(String userInput) throws FlashException {
         validateInput(userInput);
-
         String[] tokens  = userInput.split(" ", 2);
         String command   = tokens[0].trim();
         String arguments = tokens.length > 1 ? tokens[1].trim() : "";
-
         validateCommandName(command);
         return dispatch(command, arguments);
     }
@@ -100,38 +91,38 @@ public class Parser {
 
     // Ensures the d/, q/ and a/ prefixes are contained in the right order, and non-empty descriptions
     private static Command parseAddCardCommand(String arguments) throws FlashException {
-        validatePrefixes(arguments, DECK_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
-        int deckIdx = arguments.indexOf(DECK_PREFIX);
-        int questionIdx = arguments.indexOf(QUESTION_PREFIX);
-        int answerIdx = arguments.indexOf(ANSWER_PREFIX);
+        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX, ArgumentExtractor.QUESTION_PREFIX, ArgumentExtractor.ANSWER_PREFIX);
+        int deckIdx     = arguments.indexOf(ArgumentExtractor.DECK_PREFIX);
+        int questionIdx = arguments.indexOf(ArgumentExtractor.QUESTION_PREFIX);
+        int answerIdx   = arguments.indexOf(ArgumentExtractor.ANSWER_PREFIX);
         if (!(deckIdx < questionIdx && questionIdx < answerIdx)) {
             throw new FlashException(ErrorType.INVALID_ADD_CARD);
         }
-        String deck = arguments.substring(deckIdx + PREFIX_LEN, questionIdx).trim();
-        String question = arguments.substring(questionIdx + PREFIX_LEN, answerIdx).trim();
-        String answer = arguments.substring(answerIdx + PREFIX_LEN).trim();
+        String deck     = arguments.substring(deckIdx + 2, questionIdx).trim();
+        String question = arguments.substring(questionIdx + 2, answerIdx).trim();
+        String answer   = arguments.substring(answerIdx + 2).trim();
         requireNonEmpty(deck, question, answer);
         return new AddCardCommand(deck, question, answer);
     }
 
     // Ensures the d/ prefix, and non-empty deck name
     private static Command parseListCardsCommand(String arguments) throws FlashException {
-        validatePrefixes(arguments, DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(DECK_PREFIX) + PREFIX_LEN).trim();
+        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
+        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
         requireNonEmpty(deck);
         return new ListCardsCommand(deck);
     }
 
     // Ensures the d/ and i/ prefixes are contained in the right order, and non-empty descriptions
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
-        validatePrefixes(arguments, DECK_PREFIX, INDEX_PREFIX);
-        int deckIdx = arguments.indexOf(DECK_PREFIX);
-        int indexIdx = arguments.indexOf(INDEX_PREFIX);
+        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX, ArgumentExtractor.INDEX_PREFIX);
+        int deckIdx  = arguments.indexOf(ArgumentExtractor.DECK_PREFIX);
+        int indexIdx = arguments.indexOf(ArgumentExtractor.INDEX_PREFIX);
         if (!(deckIdx < indexIdx)) {
             throw new FlashException(ErrorType.INVALID_DELETE_CARD);
         }
-        String deck = arguments.substring(deckIdx + PREFIX_LEN, indexIdx).trim();
-        String indexString = arguments.substring(indexIdx + PREFIX_LEN).trim();
+        String deck        = arguments.substring(deckIdx + 2, indexIdx).trim();
+        String indexString = arguments.substring(indexIdx + 2).trim();
         requireNonEmpty(deck, indexString);
         int index;
         try {
@@ -144,24 +135,24 @@ public class Parser {
 
     // Ensures the d/ prefix is contained, and non-empty deck name
     private static Command parseCreateDeckCommand(String arguments) throws FlashException {
-        validatePrefixes(arguments, DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(DECK_PREFIX) + PREFIX_LEN).trim();
+        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
+        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
         requireNonEmpty(deck);
         return new CreateDeckCommand(deck);
     }
 
     // Ensures the d/ prefix is contained, and non-empty deck name
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
-        validatePrefixes(arguments, DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(DECK_PREFIX) + PREFIX_LEN).trim();
+        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
+        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
         requireNonEmpty(deck);
         return new ClearDeckCommand(deck);
     }
 
     // Ensures the d/ prefix is contained, and non-empty deck name
     private static Command parseStudyCommand(String arguments) throws FlashException {
-        validatePrefixes(arguments, DECK_PREFIX);
-        String deck = arguments.substring(arguments.indexOf(DECK_PREFIX) + PREFIX_LEN).trim();
+        ArgumentExtractor.validatePrefixes(arguments, ArgumentExtractor.DECK_PREFIX);
+        String deck = arguments.substring(arguments.indexOf(ArgumentExtractor.DECK_PREFIX) + 2).trim();
         requireNonEmpty(deck);
         return new StudyCommand(deck);
     }
@@ -179,33 +170,6 @@ public class Parser {
     private static void requireEmptyArgs(String args) throws FlashException {
         if (args != null && !args.trim().isEmpty()) {
             throw new FlashException(ErrorType.UNEXPECTED_ARGUMENTS);
-        }
-    }
-
-    // Ensures each prefix occurs, and only occurs once
-    private static void validatePrefixes(String arguments, String... prefixes) throws FlashException {
-        if (arguments == null) {
-            throw new FlashException(ErrorType.INVALID_ARGUMENTS);
-        }
-        for (String prefix : prefixes) {
-            if (!arguments.contains(prefix)) {
-                if (DECK_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_DECK);
-                }
-                if (QUESTION_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_QUESTION);
-                }
-                if (ANSWER_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_ANSWER);
-                }
-                if (INDEX_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_INDEX);
-                }
-                throw new FlashException(ErrorType.INVALID_ARGUMENTS);
-            }
-            if (arguments.indexOf(prefix) != arguments.lastIndexOf(prefix)) {
-                throw new FlashException(ErrorType.DUPLICATE_PREFIX);
-            }
         }
     }
 }
