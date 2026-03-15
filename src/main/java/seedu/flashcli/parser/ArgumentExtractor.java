@@ -13,29 +13,39 @@ public class ArgumentExtractor {
 
     private ArgumentExtractor() {}
 
+    // Ensures each prefix occurs, and only occurs once
     static void validatePrefixes(String arguments, String... prefixes) throws FlashException {
         if (arguments == null) {
             throw new FlashException(ErrorType.INVALID_ARGUMENTS);
         }
         for (String prefix : prefixes) {
             if (!arguments.contains(prefix)) {
-                if (DECK_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_DECK);
-                }
-                if (QUESTION_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_QUESTION);
-                }
-                if (ANSWER_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_ANSWER);
-                }
-                if (INDEX_PREFIX.equals(prefix)) {
-                    throw new FlashException(ErrorType.MISSING_INDEX);
-                }
-                throw new FlashException(ErrorType.INVALID_ARGUMENTS);
+                throw missingErrorFor(prefix);
             }
             if (arguments.indexOf(prefix) != arguments.lastIndexOf(prefix)) {
                 throw new FlashException(ErrorType.DUPLICATE_PREFIX);
             }
+        }
+    }
+
+    static void validatePrefixOrder(String arguments, String... prefixes) throws FlashException {
+        int last = -1;
+        for (String prefix : prefixes) {
+            int index = arguments.indexOf(prefix);
+            if (index <= last) {
+                throw new FlashException(ErrorType.INVALID_ARGUMENTS);
+            }
+            last = index;
+        }
+    }
+
+    private static FlashException missingErrorFor(String prefix) {
+        switch (prefix) {
+        case DECK_PREFIX:     return new FlashException(ErrorType.MISSING_DECK);
+        case QUESTION_PREFIX: return new FlashException(ErrorType.MISSING_QUESTION);
+        case ANSWER_PREFIX:   return new FlashException(ErrorType.MISSING_ANSWER);
+        case INDEX_PREFIX:    return new FlashException(ErrorType.MISSING_INDEX);
+        default:              return new FlashException(ErrorType.INVALID_ARGUMENTS);
         }
     }
 }
