@@ -5,8 +5,9 @@ import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 
 /**
- * Parses and validates user input.
- * Calls the command constructor if the command is valid.
+ * Converts raw user input into a command object for execution.
+ * Validates input is non-blank, and validates command keyword.
+ * Dispatches to the appropriate helper, then constructs and returns the command.
  */
 public class Parser {
 
@@ -15,22 +16,20 @@ public class Parser {
             "listDecks", "clearDeck", "study", "nextCard", "finish", "exit", "help"
     };
 
-    private Parser() {}
+    private Parser() {
+
+    }
 
     /**
-     * Validates that the user input is not blank.
-     *
-     * @param userInput the raw input string to validate
-     * @throws FlashException if userInput is null or contains only whitespace
+     * Parses user input into an executable command.
+     * @param userInput String typed by the user.
+     * @return The command corresponding to the userInput.
+     * @throws FlashException if blank input, unrecognised command or invalid arguments.
      */
-    private static void validateInput(String userInput) throws FlashException {
-        if (userInput == null || userInput.trim().isEmpty()) {
-            throw new FlashException(ErrorType.NULL_INPUT);
-        }
-    }
 
     public static Command parse(String userInput) throws FlashException {
         validateInput(userInput);
+        // Splits the user input into two words (command, argument)
         String[] tokens = userInput.split(" ", 2);
         String command = tokens[0].trim();
         String arguments = tokens.length > 1 ? tokens[1].trim() : "";
@@ -39,10 +38,22 @@ public class Parser {
     }
 
     /**
+     * Validates that the user input is not blank.
+     *
+     * @param userInput The raw input string to validate.
+     * @throws FlashException If userInput is null or contains only whitespace.
+     */
+    private static void validateInput(String userInput) throws FlashException {
+        if (userInput == null || userInput.trim().isEmpty()) {
+            throw new FlashException(ErrorType.NULL_INPUT);
+        }
+    }
+
+    /**
      * Validates that the command matches one of the entries in VALID_COMMANDS.
      *
-     * @param command the command to validate
-     * @throws FlashException if the command is not found in the list of valid commands
+     * @param command The command to validate.
+     * @throws FlashException If the command is not found in VALID_COMMANDS.
      */
     private static void validateCommandName(String command) throws FlashException {
         for (String valid : VALID_COMMANDS) {
@@ -54,7 +65,10 @@ public class Parser {
     }
 
     /**
-     * Validates the appropriate command.
+     * Routes the command keyword to the appropriate parse helper.
+     *
+     * @return The command corresponding to the keyword.
+     * @throws FlashException If the arguments are invalid.
      */
     private static Command dispatch(String command, String arguments) throws FlashException {
         switch (command) {
@@ -85,43 +99,47 @@ public class Parser {
         }
     }
 
-    // Ensures the d/, q/ and a/ prefixes are contained in the right order, and non-empty descriptions
+    // Parses arguments and returns an AddCardCommand.
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
         return new AddCardCommand(args.getDeckName(), args.getQuestion(), args.getAnswer());
     }
 
-    // Ensures the d/ prefix, and non-empty deck name
-    private static Command parseListCardsCommand(String arguments) throws FlashException {
-        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
-        return new ListCardsCommand(args.getDeckName());
-    }
-
-    // Ensures the d/ and i/ prefixes are contained in the right order, and non-empty descriptions
+    // Parses arguments and returns a DeleteCardCommand.
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
         DeleteCardArgs args = ArgumentExtractor.parseDeleteCardArgs(arguments);
         return new DeleteCardCommand(args.getDeckName(), args.getCardIndex());
     }
 
-    // Ensures the d/ prefix is contained, and non-empty deck name
+    // Parses arguments and returns a ListCardsCommand.
+    private static Command parseListCardsCommand(String arguments) throws FlashException {
+        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        return new ListCardsCommand(args.getDeckName());
+    }
+
+    // Parses arguments and returns a CreateDeckCommand.
     private static Command parseCreateDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
         return new CreateDeckCommand(args.getDeckName());
     }
 
-    // Ensures the d/ prefix is contained, and non-empty deck name
+    // Parses arguments and returns a ClearDeckCommand.
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
         return new ClearDeckCommand(args.getDeckName());
     }
 
-    // Ensures the d/ prefix is contained, and non-empty deck name
+    // Parses arguments and returns a StudyCommand.
     private static Command parseStudyCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
         return new StudyCommand(args.getDeckName());
     }
 
-    // Ensures each string passed in non-empty
+    /**
+     * Returns the command if no arguments are present, as expected for certain commands.
+     *
+     * @throws FlashException If arguments are non-empty.
+     */
     private static Command requireEmpty(String args, Command command) throws FlashException {
         if (args != null && !args.trim().isEmpty()) {
             throw new FlashException(ErrorType.UNEXPECTED_ARGUMENTS);
