@@ -78,3 +78,4 @@ public class ArgumentExtractor {
         return arguments.substring(start).trim();
     }
 }
+
