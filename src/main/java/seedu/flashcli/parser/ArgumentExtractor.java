@@ -18,11 +18,29 @@ public class ArgumentExtractor {
         validatePrefixOrder(arguments, DECK_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
         String deckName = extractBetween(arguments, DECK_PREFIX, QUESTION_PREFIX);
         String question = extractBetween(arguments, QUESTION_PREFIX, ANSWER_PREFIX);
-        String answer   = extractAfter(arguments, ANSWER_PREFIX);
+        String answer = extractAfter(arguments, ANSWER_PREFIX);
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(question, ErrorType.MISSING_QUESTION);
         validateNonEmpty(answer,   ErrorType.MISSING_ANSWER);
         return new AddCardArgs(deckName, question, answer);
+    }
+
+    public static DeleteCardArgs parseDeleteCardArgs(String arguments) throws FlashException {
+        validatePrefixes(arguments, DECK_PREFIX, INDEX_PREFIX);
+        validatePrefixOrder(arguments, DECK_PREFIX, INDEX_PREFIX);
+        String deckName = extractBetween(arguments, DECK_PREFIX, INDEX_PREFIX);
+        String indexStr = extractAfter(arguments, INDEX_PREFIX);
+        validateNonEmpty(deckName, ErrorType.MISSING_DECK);
+        validateNonEmpty(indexStr, ErrorType.MISSING_INDEX);
+        return new DeleteCardArgs(deckName, parseIndex(indexStr));
+    }
+
+    private static int parseIndex(String indexStr) throws FlashException {
+        try {
+            return Integer.parseInt(indexStr) - 1;
+        } catch (NumberFormatException e) {
+            throw new FlashException(ErrorType.INVALID_INDEX);
+        }
     }
 
     // Ensures each prefix occurs, and only occurs once

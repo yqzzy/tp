@@ -105,24 +105,8 @@ public class Parser {
 
     // Ensures the d/ and i/ prefixes are contained in the right order, and non-empty descriptions
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
-        String deckPrefix  = ArgumentExtractor.DECK_PREFIX;
-        String indexPrefix = ArgumentExtractor.INDEX_PREFIX;
-
-        ArgumentExtractor.validatePrefixes(arguments, deckPrefix, indexPrefix);
-        ArgumentExtractor.validatePrefixOrder(arguments, deckPrefix, indexPrefix);
-        int deckIdx  = arguments.indexOf(deckPrefix);
-        int indexIdx = arguments.indexOf(indexPrefix);
-
-        String deck        = arguments.substring(deckIdx + 2, indexIdx).trim();
-        String indexString = arguments.substring(indexIdx + 2).trim();
-        requireNonEmpty(deck, indexString);
-        int index;
-        try {
-            index = Integer.parseInt(indexString);
-        } catch (NumberFormatException e) {
-            throw new FlashException(ErrorType.INVALID_INDEX);
-        }
-        return new DeleteCardCommand(deck, index);
+        DeleteCardArgs args = ArgumentExtractor.parseDeleteCardArgs(arguments);
+        return new DeleteCardCommand(args.getDeckName(), args.getCardIndex());
     }
 
     // Ensures the d/ prefix is contained, and non-empty deck name
