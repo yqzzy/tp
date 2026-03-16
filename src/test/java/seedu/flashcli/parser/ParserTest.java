@@ -119,25 +119,32 @@ public class ParserTest {
 
     }
 
-    // listCards Tests
+    @Nested
+    @DisplayName("listCards Command Tests")
+    class ListCardsTests {
 
-    @Test
-    void listCards_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("listCards d/Math"));
-    }
+        @Test
+        @DisplayName("listCards valid command parses successfully")
+        void listCards_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("listCards d/Math"));
+        }
 
-    @Test
-    void listCards_missingDeckPrefix_throwsMissingDeck() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("listCards Math"));
-        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
-    }
+        @Test
+        @DisplayName("listCards missing deck prefix throws MISSING_DECK")
+        void listCards_missingDeckPrefix_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("listCards Math"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
 
-    @Test
-    void listCards_emptyDeckName_throwsMissingDeck() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("listCards d/"));
-        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        @Test
+        @DisplayName("listCards empty deck name throws MISSING_DECK")
+        void listCards_emptyDeckName_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("listCards d/"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
+
     }
 
     // deleteCard Tests
