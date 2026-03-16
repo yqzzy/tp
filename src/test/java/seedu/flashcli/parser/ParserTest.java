@@ -225,19 +225,25 @@ public class ParserTest {
         }
     }
 
-    // listDecks Tests
+    @Nested
+    @DisplayName("listDecks Command Tests")
+    class ListDecksTests {
 
-    @Test
-    void listDecks_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("listDecks"));
+        @Test
+        @DisplayName("listDecks valid command parses successfully")
+        void listDecks_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("listDecks"));
+        }
+
+        @Test
+        @DisplayName("listDecks unexpected arguments throws UNEXPECTED_ARGUMENTS")
+        void listDecks_unexpectedArguments_throwsUnexpectedArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("listDecks xyz"));
+            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+        }
     }
 
-    @Test
-    void listDecks_unexpectedArguments_throwsUnexpectedArguments() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("listDecks xyz"));
-        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-    }
 
     // clearDeck Tests
 
