@@ -243,7 +243,7 @@ public class ParserTest {
             assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
         }
     }
-    
+
     @Nested
     @DisplayName("clearDeck Command Tests")
     class ClearDeckTests {
@@ -271,26 +271,33 @@ public class ParserTest {
         }
     }
 
-    // study Tests
+    @Nested
+    @DisplayName("study Command Tests")
+    class StudyTests {
 
-    @Test
-    void study_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("study d/Math"));
+        @Test
+        @DisplayName("study valid command parses successfully")
+        void study_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("study d/Math"));
+        }
+
+        @Test
+        @DisplayName("study missing deck prefix throws MISSING_DECK")
+        void study_missingDeckPrefix_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("study Math"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
+
+        @Test
+        @DisplayName("study empty deck name throws MISSING_DECK")
+        void study_emptyDeckName_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("study d/"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
     }
 
-    @Test
-    void study_missingDeckPrefix_throwsMissingDeck() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("study Math"));
-        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
-    }
-
-    @Test
-    void study_emptyDeckName_throwsMissingDeck() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("study d/"));
-        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
-    }
 
     // No-argument command Tests
 
