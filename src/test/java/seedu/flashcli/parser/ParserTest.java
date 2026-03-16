@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 public class ParserTest {
 
     @Nested
+    @DisplayName("Input Validation Tests")
     class InputValidation {
         @Test
         @DisplayName("Parser rejects null input")
@@ -42,67 +43,80 @@ public class ParserTest {
         }
     }
 
-    // addCard Tests
+    @Nested
+    @DisplayName("addCard Command Tests")
+    class AddCardTests {
 
-    @Test
-    void addCard_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("addCard d/Math q/What is 2+2? a/4"));
-    }
+        @Test
+        @DisplayName("addCard valid command parses successfully")
+        void addCard_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("addCard d/Math q/What is 2+2? a/4"));
+        }
 
-    @Test
-    void addCard_missingDeckPrefix_throwsMissingDeck() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard q/What is 2+2? a/4"));
-        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard missing deck prefix throws MISSING_DECK")
+        void addCard_missingDeckPrefix_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard q/What is 2+2? a/4"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
 
-    @Test
-    void addCard_missingQuestionPrefix_throwsMissingQuestion() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard d/Math a/4"));
-        assertEquals(ErrorType.MISSING_QUESTION, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard missing question prefix throws MISSING_QUESTION")
+        void addCard_missingQuestionPrefix_throwsMissingQuestion() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard d/Math a/4"));
+            assertEquals(ErrorType.MISSING_QUESTION, e.getErrorType());
+        }
 
-    @Test
-    void addCard_missingAnswerPrefix_throwsMissingAnswer() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard d/Math q/What is 2+2?"));
-        assertEquals(ErrorType.MISSING_ANSWER, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard missing answer prefix throws MISSING_ANSWER")
+        void addCard_missingAnswerPrefix_throwsMissingAnswer() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard d/Math q/What is 2+2?"));
+            assertEquals(ErrorType.MISSING_ANSWER, e.getErrorType());
+        }
 
-    @Test
-    void addCard_wrongPrefixOrder_throwsInvalidArguments() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard q/What is 2+2? d/Math a/4"));
-        assertEquals(ErrorType.INVALID_ARGUMENTS, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard wrong prefix order throws INVALID_ARGUMENTS")
+        void addCard_wrongPrefixOrder_throwsInvalidArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard q/What is 2+2? d/Math a/4"));
+            assertEquals(ErrorType.INVALID_ARGUMENTS, e.getErrorType());
+        }
 
-    @Test
-    void addCard_emptyDeckName_throwsMissingDeck() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard d/ q/What is 2+2? a/4"));
-        assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard empty deck name throws MISSING_DECK")
+        void addCard_emptyDeckName_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard d/ q/What is 2+2? a/4"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
 
-    @Test
-    void addCard_emptyQuestion_throwsMissingQuestion() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard d/Math q/ a/4"));
-        assertEquals(ErrorType.MISSING_QUESTION, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard empty question throws MISSING_QUESTION")
+        void addCard_emptyQuestion_throwsMissingQuestion() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard d/Math q/ a/4"));
+            assertEquals(ErrorType.MISSING_QUESTION, e.getErrorType());
+        }
 
-    @Test
-    void addCard_emptyAnswer_throwsMissingAnswer() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard d/Math q/What is 2+2? a/"));
-        assertEquals(ErrorType.MISSING_ANSWER, e.getErrorType());
-    }
+        @Test
+        @DisplayName("addCard empty answer throws MISSING_ANSWER")
+        void addCard_emptyAnswer_throwsMissingAnswer() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard d/Math q/What is 2+2? a/"));
+            assertEquals(ErrorType.MISSING_ANSWER, e.getErrorType());
+        }
 
-    @Test
-    void addCard_duplicateDeckPrefix_throwsDuplicatePrefix() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("addCard d/Math d/Science q/What is 2+2? a/4"));
-        assertEquals(ErrorType.DUPLICATE_PREFIX, e.getErrorType());
+        @Test
+        @DisplayName("addCard duplicate deck prefix throws DUPLICATE_PREFIX")
+        void addCard_duplicateDeckPrefix_throwsDuplicatePrefix() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard d/Math d/Science q/What is 2+2? a/4"));
+            assertEquals(ErrorType.DUPLICATE_PREFIX, e.getErrorType());
+        }
+
     }
 
     // listCards Tests
