@@ -34,7 +34,9 @@ public class Parser {
         String command = tokens[0].trim();
         String arguments = tokens.length > 1 ? tokens[1].trim() : "";
         validateCommandName(command);
-        return dispatch(command, arguments);
+        Command result = dispatch(command, arguments);
+        assert result != null : "dispatch() returned null for command: " + command;
+        return result;
     }
 
     /**
@@ -71,6 +73,7 @@ public class Parser {
      * @throws FlashException If the arguments are invalid.
      */
     private static Command dispatch(String command, String arguments) throws FlashException {
+        assert !command.isEmpty() : "dispatch() received an empty command";
         switch (command) {
         case "addCard":
             return parseAddCardCommand(arguments);
@@ -102,36 +105,46 @@ public class Parser {
     // Parses arguments and returns an AddCardCommand.
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
+        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseAddCardArgs deck issue";
+        assert args.getQuestion() != null && !args.getQuestion().isEmpty() : "parseAddCardArgs question issue";
+        assert args.getAnswer() != null && !args.getAnswer().isEmpty() : "parseAddCardArgs answer issue";
         return new AddCardCommand(args.getDeckName(), args.getQuestion(), args.getAnswer());
+
     }
 
     // Parses arguments and returns a DeleteCardCommand.
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
         DeleteCardArgs args = ArgumentExtractor.parseDeleteCardArgs(arguments);
+        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseDeleteCardArgs deck issue";
+        assert args.getCardIndex() >= 0 : "parseDeleteCardArgs index issue";
         return new DeleteCardCommand(args.getDeckName(), args.getCardIndex());
     }
 
     // Parses arguments and returns a ListCardsCommand.
     private static Command parseListCardsCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseListCardsCommand deck issue";
         return new ListCardsCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a CreateDeckCommand.
     private static Command parseCreateDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseCreateDeckCommand deck issue";
         return new CreateDeckCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a ClearDeckCommand.
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseClearDeckCommand deck issue";
         return new ClearDeckCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a StudyCommand.
     private static Command parseStudyCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseStudyCommand deck issue";
         return new StudyCommand(args.getDeckName());
     }
 
