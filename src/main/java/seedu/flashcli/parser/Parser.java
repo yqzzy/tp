@@ -105,9 +105,6 @@ public class Parser {
     // Parses arguments and returns an AddCardCommand.
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
-        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseAddCardArgs deck issue";
-        assert args.getQuestion() != null && !args.getQuestion().isEmpty() : "parseAddCardArgs question issue";
-        assert args.getAnswer() != null && !args.getAnswer().isEmpty() : "parseAddCardArgs answer issue";
         return new AddCardCommand(args.getDeckName(), args.getQuestion(), args.getAnswer());
 
     }
@@ -115,8 +112,6 @@ public class Parser {
     // Parses arguments and returns a DeleteCardCommand.
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
         DeleteCardArgs args = ArgumentExtractor.parseDeleteCardArgs(arguments);
-        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseDeleteCardArgs deck issue";
-        assert args.getCardIndex() >= 0 : "parseDeleteCardArgs index issue";
         return new DeleteCardCommand(args.getDeckName(), args.getCardIndex());
     }
 

@@ -34,6 +34,7 @@ public class ArgumentExtractor {
         validatePrefixes(arguments, DECK_PREFIX);
         String deckName = extractAfter(arguments, DECK_PREFIX);
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
+        assert !deckName.isEmpty() : "parseDeckArgs deck issue";
         return new DeckArgs(deckName);
     }
 
@@ -56,6 +57,10 @@ public class ArgumentExtractor {
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(question, ErrorType.MISSING_QUESTION);
         validateNonEmpty(answer,   ErrorType.MISSING_ANSWER);
+        // Assertions for programmer error catching
+        assert !deckName.isEmpty() : "parseAddCardArgs deck issue";
+        assert !question.isEmpty() : "parseAddCardArgs question issue";
+        assert !answer.isEmpty() : "parseAddCardArgs answer issue";
         // Return the AddCardArgs
         return new AddCardArgs(deckName, question, answer);
     }
@@ -77,6 +82,8 @@ public class ArgumentExtractor {
         // Ensure each string is non-empty
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(indexStr, ErrorType.MISSING_INDEX);
+        // Assertions for programmer error catching
+        assert !deckName.isEmpty() : "parseDeleteCardArgs deck issue";
         // Return the DeleteCardArgs
         return new DeleteCardArgs(deckName, parseIndex(indexStr));
     }
@@ -89,7 +96,9 @@ public class ArgumentExtractor {
      */
     private static int parseIndex(String indexStr) throws FlashException {
         try {
-            return Integer.parseInt(indexStr) - 1;
+            int result = Integer.parseInt(indexStr) - 1;
+            assert result >= 0 : "parseIndex result issue";
+            return result;
         } catch (NumberFormatException e) {
             throw new FlashException(ErrorType.INVALID_INDEX);
         }
@@ -106,6 +115,7 @@ public class ArgumentExtractor {
         if (arguments == null) {
             throw new FlashException(ErrorType.INVALID_ARGUMENTS);
         }
+        assert prefixes != null && prefixes.length > 0 : "validatePrefixes prefixes issue";
         for (String prefix : prefixes) {
             if (!arguments.contains(prefix)) {
                 throw missingErrorFor(prefix);
@@ -151,6 +161,7 @@ public class ArgumentExtractor {
      * Returns a FlashException mapped to the appropriate ErrorType
      */
     private static FlashException missingErrorFor(String prefix) {
+        assert prefix != null : "missingErrorFor prefix issue";
         switch (prefix) {
         case DECK_PREFIX:     return new FlashException(ErrorType.MISSING_DECK);
         case QUESTION_PREFIX: return new FlashException(ErrorType.MISSING_QUESTION);
@@ -164,6 +175,10 @@ public class ArgumentExtractor {
      * Extracts and trims the substring between startPrefix and endPrefix.
      */
     private static String extractBetween(String arguments, String startPrefix, String endPrefix) {
+        assert arguments.contains(startPrefix) : "extractBetween startPrefix issue";
+        assert arguments.contains(endPrefix) : "extractBetween endPrefix issue";
+        assert arguments.indexOf(startPrefix) + PREFIX_LEN
+                <= arguments.indexOf(endPrefix) : "extractBetween index issue";
         int start = arguments.indexOf(startPrefix) + PREFIX_LEN;
         int end   = arguments.indexOf(endPrefix);
         return arguments.substring(start, end).trim();
@@ -173,6 +188,7 @@ public class ArgumentExtractor {
      * Extracts and trims the substring from endPrefix till the end of the string.
      */
     private static String extractAfter(String arguments, String prefix) {
+        assert arguments.contains(prefix) : "extractAfter prefix issue";
         int start = arguments.indexOf(prefix) + PREFIX_LEN;
         return arguments.substring(start).trim();
     }
