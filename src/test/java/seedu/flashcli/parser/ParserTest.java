@@ -1,5 +1,8 @@
 package seedu.flashcli.parser;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
@@ -12,26 +15,31 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  * Unit tests for the Parser class.
  * Tests are grouped by command type.
  */
+@Tag("parser")
 public class ParserTest {
 
-    // Input Validation Tests
+    @Nested
+    class InputValidation {
+        @Test
+        @DisplayName("Parser rejects null input")
+        void nullInput_throwsNullInput() {
+            FlashException e = assertThrows(FlashException.class, () -> Parser.parse(null));
+            assertEquals(ErrorType.NULL_INPUT, e.getErrorType());
+        }
 
-    @Test
-    void nullInput_throwsNullInput() {
-        FlashException e = assertThrows(FlashException.class, () -> Parser.parse(null));
-        assertEquals(ErrorType.NULL_INPUT, e.getErrorType());
-    }
+        @Test
+        @DisplayName("Parser rejects blank input")
+        void blankInput_throwsNullInput() {
+            FlashException e = assertThrows(FlashException.class, () -> Parser.parse("   "));
+            assertEquals(ErrorType.NULL_INPUT, e.getErrorType());
+        }
 
-    @Test
-    void blankInput_throwsNullInput() {
-        FlashException e = assertThrows(FlashException.class, () -> Parser.parse("   "));
-        assertEquals(ErrorType.NULL_INPUT, e.getErrorType());
-    }
-
-    @Test
-    void unknownCommand_throwsInvalidCommand() {
-        FlashException e = assertThrows(FlashException.class, () -> Parser.parse("unknownCmd"));
-        assertEquals(ErrorType.INVALID_COMMAND, e.getErrorType());
+        @Test
+        @DisplayName("Parser rejects unknown command")
+        void unknownCommand_throwsInvalidCommand() {
+            FlashException e = assertThrows(FlashException.class, () -> Parser.parse("unknownCmd"));
+            assertEquals(ErrorType.INVALID_COMMAND, e.getErrorType());
+        }
     }
 
     // addCard Tests
