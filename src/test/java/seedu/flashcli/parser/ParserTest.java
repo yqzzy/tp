@@ -21,6 +21,7 @@ public class ParserTest {
     @Nested
     @DisplayName("Input Validation Tests")
     class InputValidation {
+
         @Test
         @DisplayName("Parser rejects null input")
         void nullInput_throwsNullInput() {
@@ -298,54 +299,64 @@ public class ParserTest {
         }
     }
 
+    @Nested
+    @DisplayName("No-Argument Command Tests")
+    class NoArgumentCommandTests {
 
-    // No-argument command Tests
+        @Test
+        @DisplayName("nextCard valid command parses successfully")
+        void nextCard_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("nextCard"));
+        }
 
-    @Test
-    void nextCard_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("nextCard"));
-    }
+        @Test
+        @DisplayName("nextCard unexpected arguments throws UNEXPECTED_ARGUMENTS")
+        void nextCard_unexpectedArguments_throwsUnexpectedArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("nextCard xyz"));
+            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+        }
 
-    @Test
-    void nextCard_unexpectedArguments_throwsUnexpectedArguments() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("nextCard xyz"));
-        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-    }
+        @Test
+        @DisplayName("finish valid command parses successfully")
+        void finish_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("finish"));
+        }
 
-    @Test
-    void finish_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("finish"));
-    }
+        @Test
+        @DisplayName("finish unexpected arguments throws UNEXPECTED_ARGUMENTS")
+        void finish_unexpectedArguments_throwsUnexpectedArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("finish xyz"));
+            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+        }
 
-    @Test
-    void finish_unexpectedArguments_throwsUnexpectedArguments() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("finish xyz"));
-        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-    }
+        @Test
+        @DisplayName("exit valid command parses successfully")
+        void exit_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("exit"));
+        }
 
-    @Test
-    void exit_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("exit"));
-    }
+        @Test
+        @DisplayName("exit unexpected arguments throws UNEXPECTED_ARGUMENTS")
+        void exit_unexpectedArguments_throwsUnexpectedArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("exit xyz"));
+            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+        }
 
-    @Test
-    void exit_unexpectedArguments_throwsUnexpectedArguments() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("exit xyz"));
-        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-    }
+        @Test
+        @DisplayName("help valid command parses successfully")
+        void help_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("help"));
+        }
 
-    @Test
-    void help_valid_doesNotThrow() {
-        assertDoesNotThrow(() -> Parser.parse("help"));
-    }
-
-    @Test
-    void help_unexpectedArguments_throwsUnexpectedArguments() {
-        FlashException e = assertThrows(FlashException.class,
-                () -> Parser.parse("help xyz"));
-        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+        @Test
+        @DisplayName("help unexpected arguments throws UNEXPECTED_ARGUMENTS")
+        void help_unexpectedArguments_throwsUnexpectedArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("help xyz"));
+            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+        }
     }
 }
