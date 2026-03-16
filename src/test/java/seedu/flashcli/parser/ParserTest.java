@@ -236,4 +236,54 @@ public class ParserTest {
                 () -> Parser.parse("study d/"));
         assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
     }
+
+    // No-argument command Tests
+
+    @Test
+    void nextCard_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> Parser.parse("nextCard"));
+    }
+
+    @Test
+    void nextCard_unexpectedArguments_throwsUnexpectedArguments() {
+        FlashException e = assertThrows(FlashException.class,
+                () -> Parser.parse("nextCard xyz"));
+        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+    }
+
+    @Test
+    void finish_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> Parser.parse("finish"));
+    }
+
+    @Test
+    void finish_unexpectedArguments_throwsUnexpectedArguments() {
+        FlashException e = assertThrows(FlashException.class,
+                () -> Parser.parse("finish xyz"));
+        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+    }
+
+    @Test
+    void exit_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> Parser.parse("exit"));
+    }
+
+    @Test
+    void exit_unexpectedArguments_throwsUnexpectedArguments() {
+        FlashException e = assertThrows(FlashException.class,
+                () -> Parser.parse("exit xyz"));
+        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+    }
+
+    @Test
+    void help_valid_doesNotThrow() {
+        assertDoesNotThrow(() -> Parser.parse("help"));
+    }
+
+    @Test
+    void help_unexpectedArguments_throwsUnexpectedArguments() {
+        FlashException e = assertThrows(FlashException.class,
+                () -> Parser.parse("help xyz"));
+        assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
+    }
 }
