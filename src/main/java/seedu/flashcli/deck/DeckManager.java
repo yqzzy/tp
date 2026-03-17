@@ -1,75 +1,57 @@
 package seedu.flashcli.deck;
 
+import seedu.flashcli.exception.ErrorType;
+import seedu.flashcli.exception.FlashException;
+
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeckManager {
-    // Key is deck name, Value is Deck obj
+    // Key is deck name, Value is the Deck object
     private HashMap<String, Deck> deckMap = new HashMap<>();
 
     /**
-     * takes in the deckName, creates a new Deck object and
-     * adds it to the deckMap
-      */
-    public void createDeck(String deckName) {
-        if (!deckMap.containsKey(deckName)) {
-            deckMap.put(deckName, new Deck(deckName));
-            System.out.println("Deck '" + deckName + "' added!");
-        } else {
-            System.out.println("Deck already exists!");
+     * Creates and stores a new Deck.
+     * Throws FlashException if name is blank or already exists.
+     */
+    public void createDeck(String deckName) throws FlashException {
+        if (deckName == null || deckName.trim().isEmpty()) {
+            throw new FlashException(ErrorType.INVALID_ARGUMENTS);
         }
+
+        if (deckMap.containsKey(deckName)) {
+            // Updated to use the new DUPLICATE_NAME error type
+            throw new FlashException(ErrorType.DUPLICATE_NAME);
+        }
+
+        deckMap.put(deckName, new Deck(deckName));
     }
 
     /**
-     * prints out the deckName of every deck
+     * Returns a list of all deck names for the Ui to print.
      */
-    public void listDecks() {
-        int count = 1;
-        for (String name : deckMap.keySet()) {
-            System.out.printf("%d. %s%n", count, name);
-            count++;
-        }
+    public List<String> listDecks() {
+        return new ArrayList<>(deckMap.keySet());
     }
 
     /**
-     * deletes the Deck object by the specified name
+     * Removes the named deck.
+     * @return true if found and removed, false otherwise.
      */
-    public void deleteDeck(String deckName) {
-        if (deckMap.remove(deckName) != null) {
-            System.out.printf("Deck '%s' removed!%n", deckName);
-        } else {
-            System.out.println("Deck not found.");
-        }
+    public boolean deleteDeck(String deckName) {
+        return deckMap.remove(deckName) != null;
     }
 
     /**
-     * add card to a deck of the specified name
+     * Retrieves a Deck by name.
+     * Throws FlashException if the deck does not exist.
      */
-    public void addCardToDeck(String deckName, String question, String answer) {
+    public Deck getDeck(String deckName) throws FlashException {
         Deck deck = deckMap.get(deckName);
-        if (deck != null) {
-            deck.addCard(question, answer);
-        } else {
-            System.out.println("Target deck not found.");
+        if (deck == null) {
+            throw new FlashException(ErrorType.DECK_NOT_FOUND);
         }
+        return deck;
     }
-
-    /**
-     * delete card from a deck of the specified name
-     */
-    public void deleteCardFromDeck(String deckName, int cardIndex) {
-        Deck deck = deckMap.get(deckName);
-        if (deck != null) {
-            deck.deleteCard(cardIndex);
-        } else {
-            System.out.println("Target deck not found.");
-        }
-    }
-
-    /**
-     * returns the Deck object by the specified name
-     */
-    public Deck getDeck(String deckName) {
-        return deckMap.get(deckName);
-    }
-
 }
