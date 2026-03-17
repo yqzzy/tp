@@ -1,5 +1,6 @@
 package seedu.flashcli;
 
+import java.util.List;
 import java.util.Scanner;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
@@ -21,6 +22,7 @@ public class FlashCLI {
         Scanner in = new Scanner(System.in);
         System.out.println("Hello " + in.nextLine());
         //testStorageFunctionality();
+        //testStorageHistory();
     }
 
     private static void testStorageFunctionality() {
@@ -61,6 +63,92 @@ public class FlashCLI {
 
         System.out.println("\ndata saved in " + System.getProperty("user.dir") + "/data/flashcards.json");
         System.out.println("You can view JSON file there");
+    }
+
+    /**
+     * Tests the Storage and HistoryManager functionality.
+     * Creates test data, saves multiple versions, lists them, and cleans up.
+     * Run with: java FlashCLI --test-storage
+     */
+    private static void testStorageHistory() {
+        System.out.println("=== Storage History Functionality Test ===");
+
+        // Use a test file to avoid interfering with actual data
+        String testFilePath = "./data/test_flashcards.json";
+        Storage storage = new Storage(testFilePath);
+
+        DeckManager deckManager = new DeckManager();
+
+        // Create first deck and save
+        System.out.println("\n1. Creating and saving first deck...");
+        deckManager.createDeck("Mathematics");
+        deckManager.addCardToDeck("Mathematics", "What is 2+2?", "4");
+        storage.save(deckManager);
+
+        // Create second deck and save (should create first history version)
+        System.out.println("2. Creating and saving second deck...");
+        deckManager.createDeck("Science");
+        deckManager.addCardToDeck("Science", "What is H₂O?", "Water");
+        storage.save(deckManager);
+
+        // List all history versions
+        System.out.println("3. Listing all history versions...");
+        List<String> versions = storage.getHistoryVersions();
+        System.out.println("   Found " + versions.size() + " history versions:");
+        for (int i = 0; i < versions.size(); i++) {
+            System.out.println("   [" + i + "] " + versions.get(i));
+        }
+
+        // Test retrieval by index
+        if (!versions.isEmpty()) {
+            System.out.println("\n4. Retrieving latest history version (index 0)...");
+            DeckManager retrieved = storage.retrieveHistoryByIndex(0);
+            System.out.println("   Successfully retrieved historical version.");
+        }
+
+        // Test retrieval by timestamp
+        if (!versions.isEmpty()) {
+            System.out.println("\n5. Retrieving by timestamp: " + versions.get(0));
+            DeckManager retrievedByTime = storage.retrieveHistoryByTimestamp(versions.get(0));
+            System.out.println("   Successfully retrieved version by timestamp.");
+        }
+
+        // Clean all history
+        System.out.println("\n6. Cleaning all history (moving to waste)...");
+        storage.cleanAllHistory();
+
+        // Verify cleanup
+        List<String> remainingVersions = storage.getHistoryVersions();
+        System.out.println("   Remaining versions after cleanup: " + remainingVersions.size());
+
+        // Create more test data
+        System.out.println("\n7. Creating more test data for selective cleanup...");
+        for (int i = 1; i <= 3; i++) {
+            deckManager.createDeck("TestDeck" + i);
+            deckManager.addCardToDeck("TestDeck" + i, "Question " + i, "Answer " + i);
+            storage.save(deckManager);
+        }
+
+        // List new versions
+        List<String> newVersions = storage.getHistoryVersions();
+        System.out.println("   Created " + newVersions.size() + " new history versions.");
+
+        // Test selective cleanup
+        if (newVersions.size() >= 2) {
+            System.out.println("\n8. Testing selective cleanup...");
+            List<String> toDelete = newVersions.subList(0, 2);
+            storage.cleanSelectHistory(toDelete);
+            System.out.println("   Deleted " + toDelete.size() + " selected versions.");
+
+            List<String> finalVersions = storage.getHistoryVersions();
+            System.out.println("   Final version count: " + finalVersions.size());
+        }
+
+        System.out.println("\n=== Test Complete ===");
+        System.out.println("Check the following directories for files:");
+        System.out.println("1. ./data/ - Main data file");
+        System.out.println("2. ./data/history/ - History versions");
+        System.out.println("3. ./data/waste/ - Cleaned history versions");
     }
 
 }

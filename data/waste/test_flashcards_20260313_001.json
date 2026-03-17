@@ -1,0 +1,13 @@
+{
+  "deckMap": {
+    "Mathematics": {
+      "deckName": "Mathematics",
+      "cardList": [
+        {
+          "question": "What is 2+2?",
+          "answer": "4"
+        }
+      ]
+    }
+  }
+}
