@@ -16,7 +16,10 @@ public enum ErrorType {
     INVALID_DELETE_CARD("Invalid format for deleteCard.\nUse: deleteCard d/<deck> i/<index>"),
     INVALID_INDEX("Input an integer index number."),
     DECK_NOT_FOUND("Deck not found. Use listDecks to see available decks."),
-    CARD_NOT_FOUND("Card index out of bounds. Use listCards to see valid indices.");
+    CARD_NOT_FOUND("Card index out of bounds. Use listCards to see valid indices."),
+    SESSION_ALREADY_IN_PROGRESS("A study session is already running. Please finish it before starting a new one."),
+    NO_ACTIVE_SESSION("No study session is currently active. Use the 'study' command first."),
+    DUPLICATE_NAME("A deck with this name already exists. Please choose a unique name.");
 
     private final String message;
 

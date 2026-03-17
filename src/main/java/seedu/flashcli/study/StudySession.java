@@ -2,9 +2,12 @@ package seedu.flashcli.study;
 
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.Card;
+import seedu.flashcli.exception.ErrorType;
+import seedu.flashcli.exception.FlashException;
+import seedu.flashcli.ui.Ui;
 
 public class StudySession {
-    private Deck deck;
+    private final Deck deck;
     private int currentIndex = -1;
 
     public StudySession(Deck deck) {
@@ -12,52 +15,37 @@ public class StudySession {
     }
 
     /**
-     * displays the question of the first card by calling nextCard()
-      */
-    public void start() {
-        String startStudySession = "Studying deck: %s%n";
-        System.out.printf((startStudySession), deck.getDeckName());
-        this.nextCard();
+     * Returns the current card without advancing.
+     */
+    public Card getCurrentCard() throws FlashException { // Added throws
+        if (currentIndex < 0 || currentIndex >= deck.getSize()) {
+            throw new FlashException(ErrorType.CARD_NOT_FOUND);
+        }
+        return deck.getCard(currentIndex);
     }
 
     /**
-     * displays question of next card referenced by currentIndex
-      */
+     * Increments the index. Returns true if the end is reached.
+     */
     public boolean nextCard() {
-        int size = deck.getSize();
-        if (currentIndex + 1 < size) {
-            currentIndex ++;
-            Card currentCard = deck.getCard(currentIndex);
-            String cardFront = "%d. %s%n";
-            System.out.printf((cardFront), currentIndex+1, currentCard.getQuestionString());
-            return false;
-        } else {
-            System.out.println("End of deck reached!");
-            return this.finish();
-        }
+        currentIndex++;
+        return isFinished();
     }
 
     /**
-     * displays answer of current card
-      */
-    public void showAnswer() {
-        if (currentIndex >= 0) {
-            Card currentCard = deck.getCard(currentIndex);
-            String cardBack = "%d. %s%n";
-            System.out.printf((cardBack), currentIndex+1, currentCard.getAnswerString());
-        } else {
-            System.out.println("No card currently active. Start study session first. ");
-        }
-    }
-
-    /**
-     * displays summary of number of cards reviewed
-     * reset currentIndex and returns true to exit session and go back to main menu in main loop
-      */
-    public boolean finish() {
-        System.out.println("Study session end!");
-        System.out.printf("You reviewed %d cards in the '%s' deck.%n", (currentIndex + 1), deck.getDeckName());
+     * Resets session state and returns total cards reviewed.
+     */
+    public int finish() {
+        int cardsReviewed = currentIndex + 1;
+        int finalCount = Math.min(cardsReviewed, deck.getSize());
         currentIndex = -1;
-        return true;
+        return finalCount;
+    }
+
+    /**
+     * Checks if the index has reached or passed the last card.
+     */
+    public boolean isFinished() {
+        return currentIndex >= deck.getSize() - 1;
     }
 }
