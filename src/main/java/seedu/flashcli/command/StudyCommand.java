@@ -1,9 +1,11 @@
 package seedu.flashcli.command;
 
+import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
+import seedu.flashcli.study.SessionManager;
 import seedu.flashcli.study.StudySession;
 import seedu.flashcli.ui.Ui;
 
@@ -34,18 +36,18 @@ public class StudyCommand implements Command {
         if (deck == null) {
             throw new FlashException(ErrorType.DECK_NOT_FOUND);
         }
-        StudySession studySession = new StudySession(deck);
-        studySession.start();
+        SessionManager sessionManager = new SessionManager();
+        sessionManager.startSession(deck);
         boolean showQn = false; //tells program to show qn if true, ans if false
         boolean endSession = false;
-
+        Card currentCard = sessionManager.nextCard();
         //logic to alternate between showing the next card (question), and revealing ans for the current card.
         while (!endSession && !in.nextLine().equals("q")) {
             if (showQn) {
-                endSession = studySession.nextCard();
+                endSession = sessionManager.nextCard();
                 showQn = false;
             } else {
-                studySession.showAnswer();
+                sessionManager.showAnswer();
                 showQn = true;
             }
         }
