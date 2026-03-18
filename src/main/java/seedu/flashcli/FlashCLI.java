@@ -18,22 +18,24 @@ public class FlashCLI {
     public FlashCLI() {
         deckManager = storage.load();
     }
+
     /**
      * Main entry-point for the java.duke.Duke application.
      */
     public static void main(String[] args) {
-    FlashCLI flashCLI = new FlashCLI();
-    flashCLI.ui.hello();
-    Scanner in = new Scanner(System.in);
-    String userInput;
-    while (!(userInput = in.nextLine()).equals("exit")) {
-        if (flashCLI.executeCommand(userInput, in)) break;
+        FlashCLI flashCLI = new FlashCLI();
+        flashCLI.ui.hello();
+        Scanner in = new Scanner(System.in);
+        String userInput;
+        while (!(userInput = in.nextLine()).equals("exit")) {
+            if (flashCLI.executeCommand(userInput, in)) break;
+        }
     }
-}
 
 
     /**
      * Executes command the user wants (add item to list, print list, exit).
+     *
      * @param userInput The command input by the user.
      * @return true if program should exit after executing this command.
      */

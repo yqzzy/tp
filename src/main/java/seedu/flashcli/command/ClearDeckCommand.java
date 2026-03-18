@@ -26,9 +26,6 @@ public class ClearDeckCommand implements Command {
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
         Deck deck = deckManager.getDeck(deckName);
-        if (deck == null) {
-            throw new FlashException(ErrorType.DECK_NOT_FOUND);
-        }
         deck.clearCards();
         ui.showDeckCleared(deckName);
         return false;

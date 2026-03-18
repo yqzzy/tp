@@ -24,7 +24,7 @@ public class Ui {
                 + card.getQuestion() + "\n"
                 + card.getAnswer() + "\n"
                 + "to deck " + deckName
-                );
+        );
         System.out.println(LINE);
     }
 
@@ -105,16 +105,16 @@ public class Ui {
         String helpMessage = """
             FlashCLI Command Guide
 
-            createsub d/DECK_NAME
+            createDeck d/DECK_NAME
                 Create a new subject deck
 
-            listsub
+            listDeck
                 List all subject decks
 
-            addcard d/DECK q/QUESTION a/ANSWER
+            addCard d/DECK q/QUESTION a/ANSWER
                 Add a flashcard to a deck
 
-            listcards d/DECK
+            listCards d/DECK
                 List all flashcards in a deck
 
             study d/DECK
@@ -145,14 +145,61 @@ public class Ui {
     }
 
     /**
+     * Prints the current question at the start of or during a study session.
+     *
+     * @param question The question text of the current card.
+     */
+    public void showStudyQuestion(String question) {
+        System.out.println("Q: " + question);
+        System.out.println("(Press Enter to reveal answer, or type 'q' to quit)");
+    }
+
+    /**
+     * Prints the answer for the current card during a study session.
+     *
+     * @param answer The answer text of the current card.
+     */
+    public void showStudyAnswer(String answer) {
+        System.out.println("A: " + answer);
+    }
+
+    /**
+     * Prints the end-of-deck message and session summary.
+     *
+     * @param reviewed Number of cards reviewed in the session.
+     */
+    public void showStudySessionEnd(int reviewed) {
+        System.out.println("End of deck!");
+        System.out.println("Session ended. Cards reviewed: " + reviewed);
+    }
+
+    /**
+     * Prints the session summary when the user quits mid-session.
+     *
+     * @param reviewed Number of cards reviewed before quitting.
+     */
+    public void showStudySessionQuit(int reviewed) {
+        System.out.println("Session ended. Cards reviewed: " + reviewed);
+    }
+
+    /**
+     * Prints a message when the user tries to study an empty deck.
+     */
+    public void showEmptyDeck() {
+        System.out.println(LINE);
+        System.out.println("Deck is empty. Add cards before studying.");
+        System.out.println(LINE);
+    }
+
+    /**
      * Prints out error message together with the user input that caused it.
      *
      * @param errorMsg String to print out.
      */
     public void showError(String userInput, String errorMsg) {
         System.out.println("Error encountered: \n"
-            + "Error msg: " + errorMsg + "\n"
-            + "User Input: " + userInput
-            );
+                + "Error msg: " + errorMsg + "\n"
+                + "User Input: " + userInput
+        );
     }
 }

@@ -31,9 +31,6 @@ public class ListCardsCommand implements Command {
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
         Deck deck = deckManager.getDeck(deckName);
-        if (deck == null) {
-            throw new FlashException(ErrorType.DECK_NOT_FOUND);
-        }
         ArrayList<Card> cardList = deck.listCards();
         ui.showCardList(cardList, deckName);
         return false;
