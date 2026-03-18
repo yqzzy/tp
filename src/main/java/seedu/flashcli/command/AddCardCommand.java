@@ -36,9 +36,6 @@ public class AddCardCommand implements Command {
      */
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
         Deck deck = deckManager.getDeck(deckName);
-        if (deck == null) {
-            throw new FlashException(ErrorType.DECK_NOT_FOUND);
-        }
         Card card = deck.addCard(question, answer);
         ui.showCardAdded(card, deckName);
         return false;

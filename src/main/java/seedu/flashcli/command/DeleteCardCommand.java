@@ -35,9 +35,6 @@ public class DeleteCardCommand implements Command {
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
         Deck deck = deckManager.getDeck(deckName);
-        if (deck == null) {
-            throw new FlashException(ErrorType.DECK_NOT_FOUND);
-        }
         Card card = deck.deleteCard(cardIndex);
         ui.showCardDeleted(card, deckName);
         return false;

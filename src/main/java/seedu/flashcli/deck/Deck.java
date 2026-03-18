@@ -40,7 +40,7 @@ public class Deck {
     
     //deletes the card at the index specified by the user
     public Card deleteCard(int cardIndex) throws FlashException{
-        if (cardIndex > cardList.size()){
+        if (cardIndex >= cardList.size() || cardIndex < 0){
             throw new FlashException(ErrorType.INVALID_INDEX);
         } else { 
             Card removed = cardList.get(cardIndex);
