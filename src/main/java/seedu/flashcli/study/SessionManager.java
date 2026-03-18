@@ -1,6 +1,7 @@
 package seedu.flashcli.study;
 
 import seedu.flashcli.deck.Deck;
+import seedu.flashcli.deck.Card;
 import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 
@@ -50,4 +51,11 @@ public class SessionManager {
     public StudySession getCurrentSession() {
         return activeSession;
     }
+
+    public Card getCurrentCard() throws FlashException {
+    if (!hasActiveSession()) {
+        throw new FlashException(ErrorType.NO_ACTIVE_SESSION);
+    }
+    return activeSession.getCurrentCard();
+}
 }

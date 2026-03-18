@@ -8,7 +8,7 @@ import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.parser.Parser;
 import seedu.flashcli.storage.Storage;
-import seedu.flashcli.ui.Ui;
+import seedu.flashcli.exception.FlashException;
 
 public class FlashCLI {
     private final DeckManager deckManager;
@@ -25,6 +25,26 @@ public class FlashCLI {
         FlashCLI flashCLI = new FlashCLI();
         Scanner in = new Scanner(System.in);
         System.out.println("Hello " + in.nextLine());
+        //testStorageFunctionality();
+        //testStorageHistory();
+    }
+
+    private static void testStorageFunctionality() throws FlashException{
+        System.out.println("=== Storage Test ===");
+
+        // 1. Initialize
+        Storage storage = new Storage("data/flashcards.json");
+
+        // 2. Create test data
+        DeckManager testManager = new DeckManager();
+        testManager.createDeck("math");
+        testManager.createDeck("English");
+        Deck mathDeck = testManager.getDeck("math");
+        mathDeck.addCard("triangle", "S=0.5*a*b");
+        mathDeck.addCard("rectangle","S=a*b");
+
+        Deck englishDeck = testManager.getDeck("english");
+        englishDeck.addCard("hi", "hello");
 
         Command command;
         String userInput;

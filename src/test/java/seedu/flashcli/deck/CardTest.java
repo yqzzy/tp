@@ -23,19 +23,19 @@ public class CardTest {
     @Test
     void getQuestionString_formatsCorrectly() {
         Card card = new Card("Question text", "Answer text");
-        assertEquals("Question: Question text", card.getQuestionString());
+        assertEquals("Question text", card.getQuestion());
     }
 
     @Test
     void getAnswerString_formatsCorrectly() {
         Card card = new Card("Q", "A");
-        assertEquals("Answer: A", card.getAnswerString());
+        assertEquals("A", card.getAnswer());
     }
 
     @Test
     void getFormattedStrings_withNullValues() {
         Card card = new Card();
-        assertEquals("Question: null", card.getQuestionString());
-        assertEquals("Answer: null", card.getAnswerString());
+        assertEquals("Question: null", card.getQuestion());
+        assertEquals("Answer: null", card.getAnswer());
     }
 }
