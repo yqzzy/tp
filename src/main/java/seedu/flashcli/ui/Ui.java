@@ -17,8 +17,8 @@ public class Ui {
     public void showCardAdded(Card card, String deckName) {
         System.out.println(LINE);
         System.out.println("Added Card: \n"
-                + card.getQuestionString() + "\n"
-                + card.getAnswerString() + "\n"
+                + card.getQuestion() + "\n"
+                + card.getAnswer() + "\n"
                 + "to deck " + deckName
                 );
         System.out.println(LINE);
@@ -33,8 +33,8 @@ public class Ui {
     public void showCardDeleted(Card card, String deckName) {
         System.out.println(LINE);
         System.out.println("Deleted Card: \n"
-                + card.getQuestionString() + "\n"
-                + card.getAnswerString() + "\n"
+                + card.getQuestion() + "\n"
+                + card.getAnswer() + "\n"
                 + "from deck " + deckName
         );
         System.out.println(LINE);
@@ -92,7 +92,7 @@ public class Ui {
         System.out.println(LINE);
         System.out.println("Here are all the cards in the deck " + deckName + ": ");
         for (int i = 0; i < cardList.size(); i++) {
-            System.out.println(i + ". " + cardList.get(i).getQuestionString() + "\n" + cardList.get(i).getAnswerString() + "\n");
+            System.out.println(i + ". " + cardList.get(i).getQuestion() + "\n" + cardList.get(i).getAnswer() + "\n");
         }
         System.out.println(LINE);
     }

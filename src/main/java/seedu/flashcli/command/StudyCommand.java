@@ -35,7 +35,7 @@ public class StudyCommand implements Command {
             throw new FlashException(ErrorType.DECK_NOT_FOUND);
         }
         StudySession studySession = new StudySession(deck);
-        studySession.start();
+        studySession.startSession();
         boolean showQn = false; //tells program to show qn if true, ans if false
         boolean endSession = false;
 

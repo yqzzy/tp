@@ -5,6 +5,7 @@ import java.util.Scanner;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.storage.Storage;
+import seedu.flashcli.exception.FlashException;
 
 public class FlashCLI {
     /**
@@ -25,7 +26,7 @@ public class FlashCLI {
         //testStorageHistory();
     }
 
-    private static void testStorageFunctionality() {
+    private static void testStorageFunctionality() throws FlashException{
         System.out.println("=== Storage Test ===");
 
         // 1. Initialize
