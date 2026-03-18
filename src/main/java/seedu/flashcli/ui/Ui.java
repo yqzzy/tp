@@ -59,6 +59,17 @@ public class Ui {
     }
 
     /**
+     * Prints user message when a deck has been successfully cleared.
+     *
+     * @param deckName Name of the deck cleared.
+     */
+    public void showDeckCleared(String deckName) {
+        System.out.println(LINE);
+        System.out.println("Cleared deck: " + deckName);
+        System.out.println(LINE);
+    }
+
+    /**
      * Prints out a list of all the decks currently.
      *
      * @param deckNameList String of ordered list of names of current decks in deckManager.
@@ -86,12 +97,58 @@ public class Ui {
         System.out.println(LINE);
     }
 
+    public void showHelp() {
+        String helpMessage = """
+            FlashCLI Command Guide
+
+            createsub d/DECK_NAME
+                Create a new subject deck
+
+            listsub
+                List all subject decks
+
+            addcard d/DECK q/QUESTION a/ANSWER
+                Add a flashcard to a deck
+
+            listcards d/DECK
+                List all flashcards in a deck
+
+            study d/DECK
+                Start study mode
+            
+            q
+                End study mode
+                
+            enter (keystroke)
+                show next card/answer during an active study session
+
+            delete d/DECK i/INDEX
+                Delete a flashcard by index
+
+            clear d/DECK
+                Clear all flashcards in a deck
+
+            help
+                Show this help message
+
+            exit
+                Exit the program
+                
+            =================================================
+            """;
+
+        System.out.println(helpMessage);
+    }
+
     /**
-     * Prints out error message.
+     * Prints out error message together with the user input that caused it.
      *
      * @param errorMsg String to print out.
      */
-    public void showError(String errorMsg) {
-        System.out.println(errorMsg);
+    public void showError(String userInput, String errorMsg) {
+        System.out.println("Error encountered: \n"
+            + "Error msg: " + errorMsg + "\n"
+            + "User Input: " + userInput
+            );
     }
 }
