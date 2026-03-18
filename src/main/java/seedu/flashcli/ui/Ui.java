@@ -82,7 +82,7 @@ public class Ui {
         System.out.println(LINE);
         System.out.println("Here are all the decks you have currently: ");
         for (int i = 0; i < deckNameList.size(); i++) {
-            System.out.println(i + ". " + deckNameList.get(i));
+            System.out.println((i+1) + ". " + deckNameList.get(i));
         }
         System.out.println(LINE);
     }
@@ -96,7 +96,7 @@ public class Ui {
         System.out.println(LINE);
         System.out.println("Here are all the cards in the deck " + deckName + ": ");
         for (int i = 0; i < cardList.size(); i++) {
-            System.out.println(i + ". " + cardList.get(i).getQuestion() + "\n" + cardList.get(i).getAnswer() + "\n");
+            System.out.println((i+1) + ". " + cardList.get(i).getQuestion() + "\n" + cardList.get(i).getAnswer() + "\n");
         }
         System.out.println(LINE);
     }
