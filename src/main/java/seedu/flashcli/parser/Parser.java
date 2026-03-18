@@ -94,18 +94,14 @@ public class Parser {
             return parseCreateDeckCommand(arguments);
         case "listDecks":
             return new ListDecksCommand();
-        case "clearDeck":
-            return parseClearDeckCommand(arguments);
+//        case "clearDeck":
+//            return parseClearDeckCommand(arguments);
         case "study":
             return parseStudyCommand(arguments);
-        case "nextCard":
-            return requireEmpty(arguments, new NextCardCommand());
-        case "finish":
-            return requireEmpty(arguments, new FinishCommand());
         case "exit":
             return requireEmpty(arguments, new ExitCommand());
-        case "help":
-            return requireEmpty(arguments, new HelpCommand());
+//        case "help":
+//            return requireEmpty(arguments, new HelpCommand());
         default:
             throw new FlashException(ErrorType.INVALID_COMMAND);
         }
@@ -114,14 +110,14 @@ public class Parser {
     // Parses arguments and returns an AddCardCommand.
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
-        return new AddCardCommand(args.getDeckName(), args.getQuestion(), args.getAnswer());
+        return new AddCardCommand(args);
 
     }
 
     // Parses arguments and returns a DeleteCardCommand.
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
         DeleteCardArgs args = ArgumentExtractor.parseDeleteCardArgs(arguments);
-        return new DeleteCardCommand(args.getDeckName(), args.getCardIndex());
+        return new DeleteCardCommand(args);
     }
 
     // Parses arguments and returns a ListCardsCommand.

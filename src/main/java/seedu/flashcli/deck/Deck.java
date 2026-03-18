@@ -21,10 +21,10 @@ public class Deck {
     
     // takes in the card question and answer, creates a new Card object 
     // and adds it to the cardList
-    public void addCard(String question, String answer){
+    public Card addCard(String question, String answer){
         Card newCard = new Card(question, answer);
         cardList.add(newCard);
-        System.out.println("Card added!");
+        return newCard;
     }
 
     //prints out the index and question of every question in the deck
@@ -38,9 +38,8 @@ public class Deck {
     }
     
     //deletes the card at the index specified by the user
-    public void deleteCard(int cardIndex){
-        cardList.remove(cardIndex);
-        System.out.println("Card deleted!");
+    public Card deleteCard(int cardIndex){
+        return cardList.remove(cardIndex);
     }
 
     //returns the Card object at the specified index of the cardList

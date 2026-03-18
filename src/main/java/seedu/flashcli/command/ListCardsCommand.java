@@ -1,21 +1,40 @@
 package seedu.flashcli.command;
 
+import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.exception.ErrorType;
+import seedu.flashcli.exception.FlashException;
+import seedu.flashcli.ui.Ui;
+
+import java.util.ArrayList;
 
 public class ListCardsCommand implements Command {
     private String deckName;
 
+    /**
+     * Creates a ListCardCommands object
+     *
+     * @param deckName The name (identifier) of the deck from which to list all the cards.
+     */
     public ListCardsCommand(String deckName) {
         this.deckName = deckName;
     }
+
+    /**
+     * Lists all the cards in a specific deck for the user to see.
+     *
+     * @param deckManager Represents the current deckManager state.
+     * @return false, false, indicating the program should not terminate after executing this object.
+     */
     @Override
-    public boolean execute(DeckManager deckManager) {
+    public boolean execute(DeckManager deckManager, Ui ui) throws FlashException {
         Deck deck = deckManager.getDeck(deckName);
         if (deck == null) {
-            return false;
+            throw new FlashException(ErrorType.DECK_NOT_FOUND);
         }
-        deck.listCards();
+        ArrayList<Card> cardList = deck.listCards();
+        ui.showCardList(cardList, deckName);
         return false;
     }
 
