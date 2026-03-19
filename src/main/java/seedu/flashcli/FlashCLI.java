@@ -3,7 +3,6 @@ package seedu.flashcli;
 import java.util.Scanner;
 
 import seedu.flashcli.command.Command;
-import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.parser.Parser;
