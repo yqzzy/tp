@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Ui {
-    private final String LINE = "_______________________________";
+    private static final String LINE = "_______________________________";
 
     public void hello() {
         System.out.println("Welcome to FlashCLI!");

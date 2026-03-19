@@ -5,20 +5,20 @@ import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateDeckCommandTest {
     @Test
-    public void execute_validDeck_deckCreated() {
+    public void execute_validDeck_deckCreated() throws FlashException {
         DeckManager deckManager = new DeckManager();
         Ui ui = new Ui();
-        try {
-            Command command = new CreateDeckCommand("MA1513");
-            assertFalse(command.execute(deckManager, ui));
-            assertNotNull(deckManager.getDeck("MA1513"));
-        } catch (FlashException e) {
-            System.out.println(e.getMessage());
-        }
+        Scanner in = new Scanner(System.in);
+        Command command = new CreateDeckCommand("MA1513");
+        assertFalse(command.execute(deckManager, ui, in));
+        assertNotNull(deckManager.getDeck("MA1513"));
+
     }
 
 }

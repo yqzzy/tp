@@ -7,26 +7,26 @@ import seedu.flashcli.parser.AddCardArgs;
 import seedu.flashcli.parser.DeleteCardArgs;
 import seedu.flashcli.ui.Ui;
 
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeleteCardCommandTest {
     @Test
-    public void execute_validCard_cardDeletedFromDeck() {
+    public void execute_validCard_cardDeletedFromDeck() throws FlashException {
         DeckManager deckManager = new DeckManager();
         Ui ui = new Ui();
-        try {
-            Command commandCreateDeck = new CreateDeckCommand("MA1513");
-            commandCreateDeck.execute(deckManager, ui);
-            AddCardArgs addCardArgs = new AddCardArgs("MA1513", "1+1", "2");
-            Command commandAddCard = new AddCardCommand(addCardArgs);
-            commandAddCard.execute(deckManager, ui);
-            DeleteCardArgs deleteCardArgs = new DeleteCardArgs("MA1513", 0);
-            Command commandDeleteCard = new DeleteCardCommand(deleteCardArgs);
-            assertFalse(commandDeleteCard.execute(deckManager, ui));
-            assertEquals(0, deckManager.getDeck("MA1513").getSize());
-        } catch (FlashException e) {
-            System.out.println(e.getMessage());
-        }
+        Scanner in = new Scanner(System.in);
+        Command commandCreateDeck = new CreateDeckCommand("MA1513");
+        commandCreateDeck.execute(deckManager, ui, in);
+        AddCardArgs addCardArgs = new AddCardArgs("MA1513", "1+1", "2");
+        Command commandAddCard = new AddCardCommand(addCardArgs);
+        commandAddCard.execute(deckManager, ui, in);
+        DeleteCardArgs deleteCardArgs = new DeleteCardArgs("MA1513", 0);
+        Command commandDeleteCard = new DeleteCardCommand(deleteCardArgs);
+        assertFalse(commandDeleteCard.execute(deckManager, ui, in));
+        assertEquals(0, deckManager.getDeck("MA1513").getSize());
+
 
     }
 }

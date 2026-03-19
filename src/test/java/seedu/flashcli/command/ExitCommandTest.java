@@ -5,18 +5,17 @@ import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExitCommandTest {
     @Test
-    public void execute_exitCommand_returnsTrue() {
+    public void execute_exitCommand_returnsTrue() throws FlashException {
         DeckManager deckManager = new DeckManager();
         Command command = new ExitCommand();
+        Scanner in = new Scanner(System.in);
         Ui ui = new Ui();
-        try {
-            assertTrue(command.execute(deckManager, ui));
-        } catch (FlashException e) {
-            System.out.println(e.getMessage());
-        }
+        assertTrue(command.execute(deckManager, ui, in));
     }
 }
