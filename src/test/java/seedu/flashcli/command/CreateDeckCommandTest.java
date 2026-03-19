@@ -5,6 +5,8 @@ import seedu.flashcli.deck.DeckManager;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateDeckCommandTest {
@@ -12,8 +14,9 @@ public class CreateDeckCommandTest {
     public void execute_validDeck_deckCreated() throws FlashException {
         DeckManager deckManager = new DeckManager();
         Ui ui = new Ui();
+        Scanner in = new Scanner(System.in);
         Command command = new CreateDeckCommand("MA1513");
-        assertFalse(command.execute(deckManager, ui));
+        assertFalse(command.execute(deckManager, ui, in));
         assertNotNull(deckManager.getDeck("MA1513"));
 
     }

@@ -16,6 +16,6 @@ public class ExitCommandTest {
         Command command = new ExitCommand();
         Scanner in = new Scanner(System.in);
         Ui ui = new Ui();
-        assertTrue(command.execute(deckManager, ui));
+        assertTrue(command.execute(deckManager, ui, in));
     }
 }
