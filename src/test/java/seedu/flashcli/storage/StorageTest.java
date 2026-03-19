@@ -7,6 +7,7 @@ import seedu.flashcli.deck.Deck;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import seedu.flashcli.exception.FlashException;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -65,7 +66,7 @@ class StorageTest {
     }
 
     @Test
-    void testSaveAndLoad_deckManagerWithDecks() throws IOException {
+    void testSaveAndLoad_deckManagerWithDecks() throws IOException, FlashException {
         Path testFile = tempDir.resolve("test.json");
         Storage storage = new Storage(testFile.toString());
 
@@ -76,9 +77,9 @@ class StorageTest {
         original.createDeck("Science");
 
         // Add cards to decks using the actual addCardToDeck method
-        original.addCardToDeck("Mathematics", "What is 2+2?", "4");
-        original.addCardToDeck("Mathematics", "What is 5×3?", "15");
-        original.addCardToDeck("Science", "What is H₂O?", "Water");
+        original.getDeck("Mathematics").addCard( "What is 2+2?", "4");
+        original.getDeck("Mathematics").addCard( "What is 3*5?", "15");
+        original.getDeck("Science").addCard("What is H₂O?", "Water");
 
         storage.save(original);
 
@@ -104,7 +105,7 @@ class StorageTest {
     }
 
     @Test
-    void testSave_createsParentDirectories() throws IOException {
+    void testSave_createsParentDirectories() throws IOException, FlashException {
         Path nestedDir = tempDir.resolve("nested").resolve("deep").resolve("test.json");
         Storage storage = new Storage(nestedDir.toString());
 
@@ -129,7 +130,7 @@ class StorageTest {
     }
 
     @Test
-    void testRoundTrip_complexDeckManager() throws IOException {
+    void testRoundTrip_complexDeckManager() throws IOException, FlashException {
         Path testFile = tempDir.resolve("complex.json");
         Storage storage = new Storage(testFile.toString());
 
@@ -141,7 +142,7 @@ class StorageTest {
             original.createDeck(deckName);
 
             for (int j = 1; j <= i; j++) {
-                original.addCardToDeck(deckName,
+                original.getDeck(deckName).addCard(
                         "Question " + j + " of " + deckName,
                         "Answer " + j + " of " + deckName);
             }
@@ -162,7 +163,7 @@ class StorageTest {
     }
 
     @Test
-    void testSaveAndLoad_cardContentPreserved() throws IOException {
+    void testSaveAndLoad_cardContentPreserved() throws IOException, FlashException {
         // Test that card question and answer are correctly preserved
         Path testFile = tempDir.resolve("cardtest.json");
         Storage storage = new Storage(testFile.toString());
@@ -173,7 +174,7 @@ class StorageTest {
         // Add a card with specific content
         String testQuestion = "What is the capital of France?";
         String testAnswer = "Paris";
-        original.addCardToDeck("TestDeck", testQuestion, testAnswer);
+        original.getDeck("TestDeck").addCard(testQuestion, testAnswer);
 
         storage.save(original);
         DeckManager loaded = storage.load();

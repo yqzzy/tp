@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import seedu.flashcli.exception.FlashException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,7 +39,7 @@ class HistoryManagerTest {
     }
 
     @Test
-    void testSaveVersionCreatesHistoricalFile() throws IOException {
+    void testSaveVersionCreatesHistoricalFile() throws IOException, FlashException {
         DeckManager testData = createTestDeckManager();
 
         historyManager.saveVersion(testData);
@@ -48,10 +49,14 @@ class HistoryManagerTest {
     }
 
     @Test
-    void testListVersionsOrder() throws IOException, InterruptedException {
+    void testListVersionsOrder() throws IOException, InterruptedException, FlashException {
         DeckManager data1 = createTestDeckManager();
         DeckManager data2 = createTestDeckManager();
-        data2.createDeck("Second Deck");
+        try {
+            data2.createDeck("Second Deck");
+        } catch (FlashException e) {
+            throw new RuntimeException(e);
+        }
 
         historyManager.saveVersion(data1);
         Thread.sleep(10); // Ensure different timestamps
@@ -62,7 +67,7 @@ class HistoryManagerTest {
     }
 
     @Test
-    void testRetrieveByIndex() throws IOException {
+    void testRetrieveByIndex() throws IOException, FlashException {
         DeckManager original = createTestDeckManager();
         original.createDeck("Test Deck");
 
@@ -73,7 +78,7 @@ class HistoryManagerTest {
     }
 
     @Test
-    void testRetrieveByTime() throws IOException {
+    void testRetrieveByTime() throws IOException, FlashException {
         DeckManager original = createTestDeckManager();
         original.createDeck("TimeTest");
 
@@ -86,7 +91,7 @@ class HistoryManagerTest {
     }
 
     @Test
-    void testDeleteAllHistory() throws IOException {
+    void testDeleteAllHistory() throws IOException, FlashException {
         historyManager.saveVersion(createTestDeckManager());
         historyManager.saveVersion(createTestDeckManager());
 
@@ -106,10 +111,10 @@ class HistoryManagerTest {
         }, "Should throw for non-existent index");
     }
 
-    private DeckManager createTestDeckManager() {
+    private DeckManager createTestDeckManager() throws FlashException {
         DeckManager deckManager = new DeckManager();
         deckManager.createDeck("Mathematics");
-        deckManager.addCardToDeck("Mathematics", "2+2?", "4");
+        deckManager.getDeck("Mathematics").addCard( "2+2?", "4");
         return deckManager;
     }
 }
