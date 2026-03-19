@@ -53,9 +53,9 @@ public class SessionManager {
     }
 
     public Card getCurrentCard() throws FlashException {
-    if (!hasActiveSession()) {
-        throw new FlashException(ErrorType.NO_ACTIVE_SESSION);
+        if (!hasActiveSession()) {
+            throw new FlashException(ErrorType.NO_ACTIVE_SESSION);
+        }
+        return activeSession.getCurrentCard();
     }
-    return activeSession.getCurrentCard();
-}
 }

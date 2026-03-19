@@ -26,8 +26,8 @@ public class Parser {
     private static final Logger logger = Logger.getLogger("Parser");
 
     private static final String[] VALID_COMMANDS = {
-            "addCard", "listCards", "deleteCard", "createDeck",
-            "listDecks", "clearDeck", "study", "exit", "help"
+        "addCard", "listCards", "deleteCard", "createDeck",
+        "listDecks", "clearDeck", "study", "exit", "help"
     };
 
     public Parser() {
@@ -36,6 +36,7 @@ public class Parser {
 
     /**
      * Parses user input into an executable command.
+     *
      * @param userInput String typed by the user.
      * @return The command corresponding to the userInput.
      * @throws FlashException if blank input, unrecognised command or invalid arguments.
