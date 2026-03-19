@@ -1,6 +1,15 @@
 package seedu.flashcli.parser;
 
-import seedu.flashcli.command.*;
+import seedu.flashcli.command.AddCardCommand;
+import seedu.flashcli.command.ClearDeckCommand;
+import seedu.flashcli.command.CreateDeckCommand;
+import seedu.flashcli.command.DeleteCardCommand;
+import seedu.flashcli.command.ExitCommand;
+import seedu.flashcli.command.HelpCommand;
+import seedu.flashcli.command.ListCardsCommand;
+import seedu.flashcli.command.ListDecksCommand;
+import seedu.flashcli.command.StudyCommand;
+import seedu.flashcli.command.Command;
 import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 
