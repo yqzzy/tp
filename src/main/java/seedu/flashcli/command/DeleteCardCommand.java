@@ -5,14 +5,13 @@ import java.util.Scanner;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
-import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.parser.DeleteCardArgs;
 import seedu.flashcli.ui.Ui;
 
 public class DeleteCardCommand implements Command {
-    private String deckName;
-    private int cardIndex;
+    private final String deckName;
+    private final int cardIndex;
 
     /**
      * Creates a DeleteCardCommand object

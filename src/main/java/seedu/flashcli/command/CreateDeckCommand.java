@@ -7,7 +7,7 @@ import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
 public class CreateDeckCommand implements Command {
-    private String deckName;
+    private final String deckName;
 
     public CreateDeckCommand(String deckName) {
         this.deckName = deckName;

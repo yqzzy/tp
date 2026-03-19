@@ -3,7 +3,6 @@ package seedu.flashcli.command;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
-import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ListCardsCommand implements Command {
-    private String deckName;
+    private final String deckName;
 
     /**
      * Creates a ListCardCommands object
@@ -35,6 +34,4 @@ public class ListCardsCommand implements Command {
         ui.showCardList(cardList, deckName);
         return false;
     }
-
-
 }

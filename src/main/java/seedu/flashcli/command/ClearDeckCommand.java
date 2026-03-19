@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
-import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
