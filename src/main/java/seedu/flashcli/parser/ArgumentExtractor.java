@@ -19,10 +19,10 @@ public class ArgumentExtractor {
     private static final Logger logger = Logger.getLogger("ArgumentExtractor");
 
     /** Prefix tokens for possible arguments. */
-    static final String DECK_PREFIX = "d/";
-    static final String QUESTION_PREFIX = "q/";
-    static final String ANSWER_PREFIX = "a/";
-    static final String INDEX_PREFIX = "i/";
+    private static final String DECK_PREFIX = "d/";
+    private static final String QUESTION_PREFIX = "q/";
+    private static final String ANSWER_PREFIX = "a/";
+    private static final String INDEX_PREFIX = "i/";
     private static final int PREFIX_LEN = 2;
 
     private ArgumentExtractor() {
