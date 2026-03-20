@@ -8,7 +8,8 @@ import seedu.flashcli.ui.Ui;
 
 import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AddCardCommandTest {
 
