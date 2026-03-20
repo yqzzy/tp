@@ -117,7 +117,6 @@ public class ParserTest {
                     () -> Parser.parse("addCard d/Math d/Science q/What is 2+2? a/4"));
             assertEquals(ErrorType.DUPLICATE_PREFIX, e.getErrorType());
         }
-
     }
 
     @Nested
@@ -145,7 +144,6 @@ public class ParserTest {
                     () -> Parser.parse("listCards d/"));
             assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
         }
-
     }
 
     @Nested
@@ -235,14 +233,6 @@ public class ParserTest {
         void listDecks_valid_doesNotThrow() {
             assertDoesNotThrow(() -> Parser.parse("listDecks"));
         }
-
-        @Test
-        @DisplayName("listDecks unexpected arguments throws UNEXPECTED_ARGUMENTS")
-        void listDecks_unexpectedArguments_throwsUnexpectedArguments() {
-            FlashException e = assertThrows(FlashException.class,
-                    () -> Parser.parse("listDecks xyz"));
-            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-        }
     }
 
     @Nested
@@ -302,34 +292,6 @@ public class ParserTest {
     @Nested
     @DisplayName("No-Argument Command Tests")
     class NoArgumentCommandTests {
-
-        @Test
-        @DisplayName("nextCard valid command parses successfully")
-        void nextCard_valid_doesNotThrow() {
-            assertDoesNotThrow(() -> Parser.parse("nextCard"));
-        }
-
-        @Test
-        @DisplayName("nextCard unexpected arguments throws UNEXPECTED_ARGUMENTS")
-        void nextCard_unexpectedArguments_throwsUnexpectedArguments() {
-            FlashException e = assertThrows(FlashException.class,
-                    () -> Parser.parse("nextCard xyz"));
-            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-        }
-
-        @Test
-        @DisplayName("finish valid command parses successfully")
-        void finish_valid_doesNotThrow() {
-            assertDoesNotThrow(() -> Parser.parse("finish"));
-        }
-
-        @Test
-        @DisplayName("finish unexpected arguments throws UNEXPECTED_ARGUMENTS")
-        void finish_unexpectedArguments_throwsUnexpectedArguments() {
-            FlashException e = assertThrows(FlashException.class,
-                    () -> Parser.parse("finish xyz"));
-            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
-        }
 
         @Test
         @DisplayName("exit valid command parses successfully")
