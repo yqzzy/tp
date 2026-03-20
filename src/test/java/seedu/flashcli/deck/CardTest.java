@@ -35,7 +35,7 @@ public class CardTest {
     @Test
     void getFormattedStrings_withNullValues() {
         Card card = new Card();
-        assertEquals("Question: null", card.getQuestion());
-        assertEquals("Answer: null", card.getAnswer());
+        assertNull(card.getQuestion());
+        assertNull(card.getAnswer());
     }
 }
