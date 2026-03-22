@@ -99,6 +99,7 @@ public class ArgumentExtractor {
      * @throws FlashException If indexStr cannot be parsed as an integer.
      */
     private static int parseIndex(String indexStr) throws FlashException {
+        assert indexStr != null && !indexStr.isEmpty() : "parseIndex called with blank indexStr";
         try {
             int result = Integer.parseInt(indexStr) - 1;
             if (result < 0) {
@@ -120,6 +121,7 @@ public class ArgumentExtractor {
      */
     private static void validatePrefixes(String arguments, String... prefixes) throws FlashException {
         assert prefixes != null && prefixes.length > 0 : "validatePrefixes prefixes issue";
+        assert arguments != null : "validatePrefixes called with null arguments";
         for (String prefix : prefixes) {
             if (!arguments.contains(prefix)) {
                 logger.log(Level.WARNING, "validatePrefixes failed: prefix \"{0}\" not found in \"{1}\"");
@@ -159,7 +161,8 @@ public class ArgumentExtractor {
      * @throws FlashException If value is null or empty.
      */
     private static void validateNonEmpty(String value, ErrorType errorType) throws FlashException {
-        if (value == null || value.isEmpty()) {
+        assert value != null : "validateNonEmpty called with null value";
+        if (value.isEmpty()) {
             logger.log(Level.WARNING, "validateNonEmpty failed for ErrorType: {0}", errorType);
             throw new FlashException(errorType);
         }
