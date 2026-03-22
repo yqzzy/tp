@@ -180,11 +180,11 @@ public class ArgumentExtractor {
     private static FlashException missingErrorFor(String prefix) {
         assert prefix != null : "missingErrorFor prefix issue";
         switch (prefix) {
-        case DECK_PREFIX:     return new FlashException(ErrorType.MISSING_DECK);
+        case DECK_PREFIX: return new FlashException(ErrorType.MISSING_DECK);
         case QUESTION_PREFIX: return new FlashException(ErrorType.MISSING_QUESTION);
-        case ANSWER_PREFIX:   return new FlashException(ErrorType.MISSING_ANSWER);
-        case INDEX_PREFIX:    return new FlashException(ErrorType.MISSING_INDEX);
-        default:              return new FlashException(ErrorType.INVALID_ARGUMENTS);
+        case ANSWER_PREFIX: return new FlashException(ErrorType.MISSING_ANSWER);
+        case INDEX_PREFIX: return new FlashException(ErrorType.MISSING_INDEX);
+        default: throw new AssertionError("Unexpected prefix: " + prefix);
         }
     }
 
