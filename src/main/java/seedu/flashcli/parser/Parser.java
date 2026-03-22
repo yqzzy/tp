@@ -121,7 +121,6 @@ public class Parser {
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
         return new AddCardCommand(args);
-
     }
 
     // Parses arguments and returns a DeleteCardCommand.

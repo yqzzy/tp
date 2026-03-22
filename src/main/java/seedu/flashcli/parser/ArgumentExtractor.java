@@ -40,7 +40,6 @@ public class ArgumentExtractor {
         validatePrefixes(arguments, DECK_PREFIX);
         String deckName = extractAfter(arguments, DECK_PREFIX);
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
-        assert !deckName.isEmpty() : "parseDeckArgs deck issue";
         logger.log(Level.FINE, "parseDeckArgs succeeded: deckName=\"{0}\"", deckName);
         return new DeckArgs(deckName);
     }
@@ -65,10 +64,6 @@ public class ArgumentExtractor {
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(question, ErrorType.MISSING_QUESTION);
         validateNonEmpty(answer,   ErrorType.MISSING_ANSWER);
-        // Assertions for programmer error catching
-        assert !deckName.isEmpty() : "parseAddCardArgs deck issue";
-        assert !question.isEmpty() : "parseAddCardArgs question issue";
-        assert !answer.isEmpty() : "parseAddCardArgs answer issue";
         logger.log(Level.FINE, "parseAddCardArgs succeeded");
         // Return the AddCardArgs
         return new AddCardArgs(deckName, question, answer);
@@ -92,10 +87,7 @@ public class ArgumentExtractor {
         // Ensure each string is non-empty
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(indexStr, ErrorType.MISSING_INDEX);
-        // Assertions for programmer error catching
-        assert !deckName.isEmpty() : "parseDeleteCardArgs deck issue";
         int cardIndex = parseIndex(indexStr);
-        assert cardIndex >= 0 : "parseDeleteCardArgs index issue";
         logger.log(Level.FINE, "parseDeleteCardArgs succeeded");
         return new DeleteCardArgs(deckName, cardIndex);
     }
@@ -148,7 +140,6 @@ public class ArgumentExtractor {
      * @throws FlashException If the prefixes do not appear in the specified order.
      */
     private static void validatePrefixOrder(String arguments, String... prefixes) throws FlashException {
-        assert arguments != null : "validatePrefixOrder arguments issue";
         int last = -1;
         for (String prefix : prefixes) {
             int index = arguments.indexOf(prefix);
