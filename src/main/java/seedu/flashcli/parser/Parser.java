@@ -113,7 +113,7 @@ public class Parser {
         case "help":
             return requireEmpty(arguments, new HelpCommand());
         default:
-            throw new FlashException(ErrorType.INVALID_COMMAND);
+            throw new AssertionError("Unexpected command reached dispatch: " + command);
         }
     }
 
