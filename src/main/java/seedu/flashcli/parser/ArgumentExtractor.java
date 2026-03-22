@@ -109,7 +109,9 @@ public class ArgumentExtractor {
     private static int parseIndex(String indexStr) throws FlashException {
         try {
             int result = Integer.parseInt(indexStr) - 1;
-            assert result >= 0 : "parseIndex result issue";
+            if (result < 0) {
+                throw new FlashException(ErrorType.INVALID_INDEX);
+            }
             return result;
         } catch (NumberFormatException e) {
             logger.log(Level.WARNING, "parseIndex failed: \"{0}\" is not a valid integer", indexStr);
