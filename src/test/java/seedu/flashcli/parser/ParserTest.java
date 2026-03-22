@@ -203,6 +203,14 @@ public class ParserTest {
                     () -> Parser.parse("deleteCard d/Math i/"));
             assertEquals(ErrorType.MISSING_INDEX, e.getErrorType());
         }
+
+        @Test
+        @DisplayName("deleteCard negative index throws INVALID_INDEX")
+        void deleteCard_negativeIndex_throwsInvalidIndex() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("deleteCard d/Math i/-1"));
+            assertEquals(ErrorType.INVALID_INDEX, e.getErrorType());
+        }
     }
 
     @Nested
