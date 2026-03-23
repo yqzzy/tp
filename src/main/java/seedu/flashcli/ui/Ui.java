@@ -74,6 +74,17 @@ public class Ui {
     }
 
     /**
+     * Prints user message when a deck has been successfully deleted.
+     *
+     * @param deckName Name of the deck deleted.
+     */
+    public void showDeckDeleted(String deckName) {
+        System.out.println(LINE);
+        System.out.println("Deleted deck: " + deckName);
+        System.out.println(LINE);
+    }
+
+    /**
      * Prints out a list of all the decks currently.
      *
      * @param deckNameList String of ordered list of names of current decks in deckManager.
@@ -108,36 +119,39 @@ public class Ui {
             createDeck d/DECK_NAME
                 Create a new subject deck
 
-            listDeck
+            listDecks
                 List all subject decks
-
+            
+            clearDeck d/DECK_NAME
+                 Clear all flashcards in a deck
+            
+            deleteDeck d/DECK_NAME
+                Delete a deck and all its cards
+            
             addCard d/DECK q/QUESTION a/ANSWER
                 Add a flashcard to a deck
 
-            listCards d/DECK
+            listCards d/DECK_NAME
                 List all flashcards in a deck
-
+           
+            deleteCard d/DECK_NAME i/INDEX
+                Delete a flashcard by index
+            
             study d/DECK
                 Start study mode
             
             q
                 End study mode
-                
+            
             enter (keystroke)
                 show next card/answer during an active study session
-
-            delete d/DECK i/INDEX
-                Delete a flashcard by index
-
-            clear d/DECK
-                Clear all flashcards in a deck
 
             help
                 Show this help message
 
             exit
                 Exit the program
-                
+            
             =================================================
             """;
 
