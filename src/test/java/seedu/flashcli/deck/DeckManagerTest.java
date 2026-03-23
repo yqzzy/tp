@@ -39,10 +39,23 @@ public class DeckManagerTest {
     }
 
     @Test
-    public void deleteDeck_existing_returnsTrue() throws FlashException {
+    public void deleteDeck_existingDeck_deckNoLongerExists() throws FlashException {
         manager.createDeck("History");
-        assertTrue(manager.deleteDeck("History"));
-        assertThrows(FlashException.class, () -> manager.getDeck("History"));
+        manager.deleteDeck("History");
+        FlashException ex = assertThrows(FlashException.class, () -> manager.getDeck("History"));
+        assertEquals(ErrorType.DECK_NOT_FOUND, ex.getErrorType());
+    }
+
+    @Test
+    public void deleteDeck_nonExistentDeck_throwsException() {
+        FlashException ex = assertThrows(FlashException.class, () -> manager.deleteDeck("Ghost"));
+        assertEquals(ErrorType.DECK_NOT_FOUND, ex.getErrorType());
+    }
+
+    @Test
+    public void deleteDeck_blankName_throwsException() {
+        FlashException ex = assertThrows(FlashException.class, () -> manager.deleteDeck("  "));
+        assertEquals(ErrorType.INVALID_ARGUMENTS, ex.getErrorType());
     }
 
     @Test

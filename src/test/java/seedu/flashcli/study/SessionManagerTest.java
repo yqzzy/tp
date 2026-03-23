@@ -31,6 +31,13 @@ public class SessionManagerTest {
     }
 
     @Test
+    public void startSession_nullDeck_throwsException() {
+        FlashException ex = assertThrows(FlashException.class, () ->
+                sessionManager.startSession(null));
+        assertEquals(ErrorType.INVALID_ARGUMENTS, ex.getErrorType());
+    }
+
+    @Test
     public void startSession_alreadyActive_throwsException() throws FlashException {
         sessionManager.startSession(sampleDeck);
         FlashException ex = assertThrows(FlashException.class, () ->
@@ -55,7 +62,15 @@ public class SessionManagerTest {
     }
 
     @Test
+    public void finishSession_noActiveSession_returnsZero() {
+        int count = sessionManager.finishSession();
+        assertEquals(0, count);
+    }
+
+    @Test
     public void getCurrentCard_noSession_throwsException() {
-        assertThrows(FlashException.class, () -> sessionManager.getCurrentCard());
+        FlashException ex = assertThrows(FlashException.class, () ->
+                sessionManager.getCurrentCard());
+        assertEquals(ErrorType.NO_ACTIVE_SESSION, ex.getErrorType());
     }
 }
