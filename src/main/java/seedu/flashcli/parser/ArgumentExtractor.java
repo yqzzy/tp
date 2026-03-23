@@ -40,7 +40,6 @@ public class ArgumentExtractor {
         validatePrefixes(arguments, DECK_PREFIX);
         String deckName = extractAfter(arguments, DECK_PREFIX);
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
-        assert !deckName.isEmpty() : "parseDeckArgs deck issue";
         logger.log(Level.FINE, "parseDeckArgs succeeded: deckName=\"{0}\"", deckName);
         return new DeckArgs(deckName);
     }
@@ -65,10 +64,6 @@ public class ArgumentExtractor {
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(question, ErrorType.MISSING_QUESTION);
         validateNonEmpty(answer,   ErrorType.MISSING_ANSWER);
-        // Assertions for programmer error catching
-        assert !deckName.isEmpty() : "parseAddCardArgs deck issue";
-        assert !question.isEmpty() : "parseAddCardArgs question issue";
-        assert !answer.isEmpty() : "parseAddCardArgs answer issue";
         logger.log(Level.FINE, "parseAddCardArgs succeeded");
         // Return the AddCardArgs
         return new AddCardArgs(deckName, question, answer);
@@ -92,10 +87,7 @@ public class ArgumentExtractor {
         // Ensure each string is non-empty
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(indexStr, ErrorType.MISSING_INDEX);
-        // Assertions for programmer error catching
-        assert !deckName.isEmpty() : "parseDeleteCardArgs deck issue";
         int cardIndex = parseIndex(indexStr);
-        assert cardIndex >= 0 : "parseDeleteCardArgs index issue";
         logger.log(Level.FINE, "parseDeleteCardArgs succeeded");
         return new DeleteCardArgs(deckName, cardIndex);
     }
@@ -107,9 +99,12 @@ public class ArgumentExtractor {
      * @throws FlashException If indexStr cannot be parsed as an integer.
      */
     private static int parseIndex(String indexStr) throws FlashException {
+        assert indexStr != null && !indexStr.isEmpty() : "parseIndex called with blank indexStr";
         try {
             int result = Integer.parseInt(indexStr) - 1;
-            assert result >= 0 : "parseIndex result issue";
+            if (result < 0) {
+                throw new FlashException(ErrorType.INVALID_INDEX);
+            }
             return result;
         } catch (NumberFormatException e) {
             logger.log(Level.WARNING, "parseIndex failed: \"{0}\" is not a valid integer", indexStr);
@@ -125,11 +120,8 @@ public class ArgumentExtractor {
      * @throws FlashException If any prefix is absent or appears more than once.
      */
     private static void validatePrefixes(String arguments, String... prefixes) throws FlashException {
-        if (arguments == null) {
-            logger.log(Level.WARNING, "validatePrefixes called with null arguments");
-            throw new FlashException(ErrorType.INVALID_ARGUMENTS);
-        }
         assert prefixes != null && prefixes.length > 0 : "validatePrefixes prefixes issue";
+        assert arguments != null : "validatePrefixes called with null arguments";
         for (String prefix : prefixes) {
             if (!arguments.contains(prefix)) {
                 logger.log(Level.WARNING, "validatePrefixes failed: prefix \"{0}\" not found in \"{1}\"");
@@ -150,7 +142,6 @@ public class ArgumentExtractor {
      * @throws FlashException If the prefixes do not appear in the specified order.
      */
     private static void validatePrefixOrder(String arguments, String... prefixes) throws FlashException {
-        assert arguments != null : "validatePrefixOrder arguments issue";
         int last = -1;
         for (String prefix : prefixes) {
             int index = arguments.indexOf(prefix);
@@ -170,7 +161,8 @@ public class ArgumentExtractor {
      * @throws FlashException If value is null or empty.
      */
     private static void validateNonEmpty(String value, ErrorType errorType) throws FlashException {
-        if (value == null || value.isEmpty()) {
+        assert value != null : "validateNonEmpty called with null value";
+        if (value.isEmpty()) {
             logger.log(Level.WARNING, "validateNonEmpty failed for ErrorType: {0}", errorType);
             throw new FlashException(errorType);
         }
@@ -182,11 +174,11 @@ public class ArgumentExtractor {
     private static FlashException missingErrorFor(String prefix) {
         assert prefix != null : "missingErrorFor prefix issue";
         switch (prefix) {
-        case DECK_PREFIX:     return new FlashException(ErrorType.MISSING_DECK);
+        case DECK_PREFIX: return new FlashException(ErrorType.MISSING_DECK);
         case QUESTION_PREFIX: return new FlashException(ErrorType.MISSING_QUESTION);
-        case ANSWER_PREFIX:   return new FlashException(ErrorType.MISSING_ANSWER);
-        case INDEX_PREFIX:    return new FlashException(ErrorType.MISSING_INDEX);
-        default:              return new FlashException(ErrorType.INVALID_ARGUMENTS);
+        case ANSWER_PREFIX: return new FlashException(ErrorType.MISSING_ANSWER);
+        case INDEX_PREFIX: return new FlashException(ErrorType.MISSING_INDEX);
+        default: throw new AssertionError("Unexpected prefix: " + prefix);
         }
     }
 

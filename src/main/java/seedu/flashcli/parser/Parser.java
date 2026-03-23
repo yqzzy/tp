@@ -30,7 +30,7 @@ public class Parser {
         "listDecks", "clearDeck", "study", "exit", "help"
     };
 
-    public Parser() {
+    private Parser() {
 
     }
 
@@ -52,9 +52,7 @@ public class Parser {
         validateCommandName(command);
         logger.log(Level.FINE, "Dispatching command: \"{0}\" with arguments: \"{1}\"",
                 new Object[]{command, arguments});
-        Command result = dispatch(command, arguments);
-        assert result != null : "dispatch() returned null for command: " + command;
-        return result;
+        return dispatch(command, arguments);
     }
 
     /**
@@ -103,7 +101,7 @@ public class Parser {
         case "createDeck":
             return parseCreateDeckCommand(arguments);
         case "listDecks":
-            return new ListDecksCommand();
+            return requireEmpty(arguments, new ListDecksCommand());
         case "clearDeck":
             return parseClearDeckCommand(arguments);
         case "study":
@@ -113,7 +111,7 @@ public class Parser {
         case "help":
             return requireEmpty(arguments, new HelpCommand());
         default:
-            throw new FlashException(ErrorType.INVALID_COMMAND);
+            throw new AssertionError("Unexpected command reached dispatch: " + command);
         }
     }
 
@@ -121,7 +119,6 @@ public class Parser {
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
         return new AddCardCommand(args);
-
     }
 
     // Parses arguments and returns a DeleteCardCommand.
@@ -133,28 +130,24 @@ public class Parser {
     // Parses arguments and returns a ListCardsCommand.
     private static Command parseListCardsCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
-        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseListCardsCommand deck issue";
         return new ListCardsCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a CreateDeckCommand.
     private static Command parseCreateDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
-        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseCreateDeckCommand deck issue";
         return new CreateDeckCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a ClearDeckCommand.
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
-        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseClearDeckCommand deck issue";
         return new ClearDeckCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a StudyCommand.
     private static Command parseStudyCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
-        assert args.getDeckName() != null && !args.getDeckName().isEmpty() : "parseStudyCommand deck issue";
         return new StudyCommand(args.getDeckName());
     }
 
@@ -164,7 +157,8 @@ public class Parser {
      * @throws FlashException If arguments are non-empty.
      */
     private static Command requireEmpty(String args, Command command) throws FlashException {
-        if (args != null && !args.trim().isEmpty()) {
+        assert args != null : "requireEmpty called with null args";
+        if (!args.trim().isEmpty()) {
             logger.log(Level.WARNING, "requireEmpty failed: unexpected arguments \"{0}\"", args);
             throw new FlashException(ErrorType.UNEXPECTED_ARGUMENTS);
         }

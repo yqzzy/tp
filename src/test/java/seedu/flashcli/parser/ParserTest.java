@@ -117,6 +117,14 @@ public class ParserTest {
                     () -> Parser.parse("addCard d/Math d/Science q/What is 2+2? a/4"));
             assertEquals(ErrorType.DUPLICATE_PREFIX, e.getErrorType());
         }
+
+        @Test
+        @DisplayName("addCard with no arguments throws MISSING_DECK")
+        void addCard_noArguments_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("addCard"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
     }
 
     @Nested
@@ -195,6 +203,14 @@ public class ParserTest {
                     () -> Parser.parse("deleteCard d/Math i/"));
             assertEquals(ErrorType.MISSING_INDEX, e.getErrorType());
         }
+
+        @Test
+        @DisplayName("deleteCard negative index throws INVALID_INDEX")
+        void deleteCard_negativeIndex_throwsInvalidIndex() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("deleteCard d/Math i/-1"));
+            assertEquals(ErrorType.INVALID_INDEX, e.getErrorType());
+        }
     }
 
     @Nested
@@ -232,6 +248,14 @@ public class ParserTest {
         @DisplayName("listDecks valid command parses successfully")
         void listDecks_valid_doesNotThrow() {
             assertDoesNotThrow(() -> Parser.parse("listDecks"));
+        }
+
+        @Test
+        @DisplayName("listDecks with unexpected arguments throws UNEXPECTED_ARGUMENTS")
+        void listDecks_unexpectedArguments_throwsUnexpectedArguments() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("listDecks someArgument"));
+            assertEquals(ErrorType.UNEXPECTED_ARGUMENTS, e.getErrorType());
         }
     }
 
