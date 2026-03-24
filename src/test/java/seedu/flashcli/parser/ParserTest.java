@@ -287,6 +287,33 @@ public class ParserTest {
     }
 
     @Nested
+    @DisplayName("deleteDeck Command Tests")
+    class DeleteDeckTests {
+
+        @Test
+        @DisplayName("deleteDeck valid command parses successfully")
+        void deleteDeck_valid_doesNotThrow() {
+            assertDoesNotThrow(() -> Parser.parse("deleteDeck d/Math"));
+        }
+
+        @Test
+        @DisplayName("deleteDeck missing deck prefix throws MISSING_DECK")
+        void deleteDeck_missingDeckPrefix_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("deleteDeck Math"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
+
+        @Test
+        @DisplayName("deleteDeck empty deck name throws MISSING_DECK")
+        void deleteDeck_emptyDeckName_throwsMissingDeck() {
+            FlashException e = assertThrows(FlashException.class,
+                    () -> Parser.parse("deleteDeck d/"));
+            assertEquals(ErrorType.MISSING_DECK, e.getErrorType());
+        }
+    }
+
+    @Nested
     @DisplayName("study Command Tests")
     class StudyTests {
 

@@ -4,6 +4,7 @@ import seedu.flashcli.command.AddCardCommand;
 import seedu.flashcli.command.ClearDeckCommand;
 import seedu.flashcli.command.CreateDeckCommand;
 import seedu.flashcli.command.DeleteCardCommand;
+import seedu.flashcli.command.DeleteDeckCommand;
 import seedu.flashcli.command.ExitCommand;
 import seedu.flashcli.command.HelpCommand;
 import seedu.flashcli.command.ListCardsCommand;
@@ -27,7 +28,7 @@ public class Parser {
 
     private static final String[] VALID_COMMANDS = {
         "addCard", "listCards", "deleteCard", "createDeck",
-        "listDecks", "clearDeck", "study", "exit", "help"
+        "listDecks", "clearDeck", "deleteDeck", "study", "exit", "help"
     };
 
     private Parser() {
@@ -104,6 +105,8 @@ public class Parser {
             return requireEmpty(arguments, new ListDecksCommand());
         case "clearDeck":
             return parseClearDeckCommand(arguments);
+        case "deleteDeck":
+            return parseDeleteDeckCommand(arguments);
         case "study":
             return parseStudyCommand(arguments);
         case "exit":
@@ -143,6 +146,12 @@ public class Parser {
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
         return new ClearDeckCommand(args.getDeckName());
+    }
+
+    // Parses arguments and returns a DeleteDeckCommand.
+    private static Command parseDeleteDeckCommand(String arguments) throws FlashException {
+        DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
+        return new DeleteDeckCommand(args.getDeckName());
     }
 
     // Parses arguments and returns a StudyCommand.

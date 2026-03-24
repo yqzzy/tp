@@ -3,10 +3,12 @@ package seedu.flashcli.study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import seedu.flashcli.deck.Deck;
+import seedu.flashcli.exception.ErrorType;
 import seedu.flashcli.exception.FlashException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class StudySessionTest {
@@ -21,10 +23,25 @@ public class StudySessionTest {
     }
 
     @Test
+    public void constructor_nullDeck_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> new StudySession(null));
+    }
+
+    @Test
     public void getCurrentCard_initialState_returnsFirstCard() throws FlashException {
         StudySession session = new StudySession(sampleDeck);
-        // currentIndex starts at 0
         assertEquals("Q1", session.getCurrentCard().getQuestion());
+    }
+
+    @Test
+    public void getCurrentCard_pastEnd_throwsException() throws FlashException {
+        StudySession session = new StudySession(sampleDeck);
+        session.nextCard();
+        session.nextCard(); // index is now 2, past end of 2-card deck
+
+        FlashException ex = assertThrows(FlashException.class, () ->
+                session.getCurrentCard());
+        assertEquals(ErrorType.CARD_NOT_FOUND, ex.getErrorType());
     }
 
     @Test
@@ -44,10 +61,24 @@ public class StudySessionTest {
     @Test
     public void finish_activeSession_returnsCorrectCount() {
         StudySession session = new StudySession(sampleDeck);
-        session.nextCard(); // Move to index 1
+        session.nextCard(); // move to index 1
 
         // finish() calculates (currentIndex + 1), which is (1 + 1) = 2
         int count = session.finish();
         assertEquals(2, count);
+    }
+
+    @Test
+    public void isFinished_initialState_returnsFalse() {
+        StudySession session = new StudySession(sampleDeck);
+        assertFalse(session.isFinished());
+    }
+
+    @Test
+    public void isFinished_afterAllCards_returnsTrue() {
+        StudySession session = new StudySession(sampleDeck);
+        session.nextCard();
+        session.nextCard(); // index now equals deck size
+        assertTrue(session.isFinished());
     }
 }
