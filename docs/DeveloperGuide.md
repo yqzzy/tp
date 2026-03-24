@@ -20,10 +20,23 @@
 
 ## User Stories
 
-|Version| As a ... | I want to ... | So that I can ...|
-|--------|----------|---------------|------------------|
-|v1.0|new user|see usage instructions|refer to them when I forget how to use the application|
-|v2.0|user|find a to-do item by name|locate a to-do without having to go through the entire list|
+## User Stories
+
+| Version | As a ...                    | I want to ...                                        | So that I can ...                                  |
+|---------|-----------------------------|------------------------------------------------------|----------------------------------------------------|
+| v1.0    | Student starting revision   | create subjects for my modules                       | my flashcards are clearly separated                |
+| v1.0    | Student starting revision   | see an overview of all my subjects                   | I know what I am currently revising                |
+| v1.0    | Student starting revision   | start with a clean revision space                    | I can organise my own material from scratch        |
+| v1.0    | Student learning new content| quickly add a question and answer                    | I can capture important points while studying      |
+| v1.0    | Student starting revision   | see how many flashcards I have under each subject    | I can gauge revision workload                      |
+| v1.0    | Student                     | have the app work without internet access            | I can revise anywhere                              |
+| v1.0    | Student revising for an exam| test myself using my flashcards                      | I can practise active recall                       |
+| v1.0    | Student revising for an exam| see questions before answers                         | I am forced to think before checking               |
+| v1.0    | Student revising for an exam| reveal answers only when I choose to                 | I can assess my recall honestly                    |
+| v1.0    | Student                     | focus my revision on one subject at a time           | I am not overwhelmed                               |
+| v1.0    | Student                     | revise flashcards quickly without leaving my CLI workflow | I maintain my productivity environment        |
+| v1.0    | Student                     | have my data stored locally                          | I remain in control of my revision material        |
+| v1.0    | Student learning new content| delete flashcards that are no longer useful          | outdated content does not distract me              |
 
 ## Non-Functional Requirements
 
