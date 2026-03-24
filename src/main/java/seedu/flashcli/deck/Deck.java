@@ -66,4 +66,8 @@ public class Deck {
     public void clearCards(){
         cardList.clear();
     }
+
+    public void setCards(ArrayList<Card> cardList){
+        this.cardList = cardList;
+    }
 }

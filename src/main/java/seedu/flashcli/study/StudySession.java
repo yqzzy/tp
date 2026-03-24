@@ -1,5 +1,8 @@
 package seedu.flashcli.study;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.exception.ErrorType;
@@ -10,7 +13,11 @@ public class StudySession {
     private int currentIndex = 0;
 
     public StudySession(Deck deck) {
-        this.deck = deck;
+        ArrayList<Card> tempCards = deck.listCards();
+        Deck tempDeck = new Deck();
+        tempCards.sort(Comparator.comparing(Card::getConfidenceLevel));
+        tempDeck.setCards(tempCards);
+        this.deck = tempDeck;
     }
 
     /**
