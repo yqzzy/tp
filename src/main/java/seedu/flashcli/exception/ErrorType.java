@@ -19,7 +19,8 @@ public enum ErrorType {
     CARD_NOT_FOUND("Card index out of bounds. Use listCards to see valid indices."),
     SESSION_ALREADY_IN_PROGRESS("A study session is already running. Please finish it before starting a new one."),
     NO_ACTIVE_SESSION("No study session is currently active. Use the 'study' command first."),
-    DUPLICATE_NAME("A deck with this name already exists. Please choose a unique name.");
+    DUPLICATE_NAME("A deck with this name already exists. Please choose a unique name."),
+    INVALID_CONFIDENCE("Invalid confidence level. Please enter an integer between 1 and 5. ");
 
     private final String message;
 

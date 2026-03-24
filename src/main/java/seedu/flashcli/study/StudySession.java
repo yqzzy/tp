@@ -1,5 +1,8 @@
 package seedu.flashcli.study;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.exception.ErrorType;
@@ -25,7 +28,11 @@ public class StudySession {
             throw new IllegalArgumentException("StudySession: deck must not be null");
         }
 
-        this.deck = deck;
+        ArrayList<Card> tempCards = deck.listCards();
+        Deck tempDeck = new Deck(deck.getDeckName());
+        tempCards.sort(Comparator.comparing(Card::getConfidenceLevel));
+        tempDeck.setCards(tempCards);
+        this.deck = tempDeck;
 
         // Post-condition: index must start at 0
         assert currentIndex == 0 : "currentIndex must be initialised to 0";
@@ -125,5 +132,9 @@ public class StudySession {
      */
     public Deck getDeck() {
         return deck;
+    }
+
+    public String getDeckName(){
+        return deck.getDeckName();
     }
 }

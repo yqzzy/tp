@@ -216,4 +216,8 @@ public class Ui {
                 + "User Input: " + userInput
         );
     }
+
+    public void showConfidencePrompt(){
+        System.out.println("Please rate your confidence (1-5): ");
+    }
 }

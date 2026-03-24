@@ -47,7 +47,7 @@ public class SessionManager {
 
         // Post-condition: session must now be active
         assert hasActiveSession() : "activeSession is null immediately after startSession";
-        assert activeSession.getDeck() == deck : "Active session deck does not match the provided deck";
+        assert activeSession.getDeckName().equals(deck.getDeckName()) : "Active session deck does not match the provided deck";
 
         LOGGER.log(Level.INFO, "Study session started for deck: {0}", deck.getDeckName());
     }

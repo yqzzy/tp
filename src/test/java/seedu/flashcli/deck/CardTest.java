@@ -37,5 +37,6 @@ public class CardTest {
         Card card = new Card();
         assertNull(card.getQuestion());
         assertNull(card.getAnswer());
+        assertEquals(card.getConfidenceLevel(),0);
     }
 }
