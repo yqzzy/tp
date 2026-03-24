@@ -1,0 +1,67 @@
+@startuml parser_class
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 5
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+
+together {
+    class Parser <<Facade>> {
+        {static} +parse(userInput: String): Command
+    }
+    interface Command {
+        +execute(deckManager: DeckManager,\n  ui: Ui, in: Scanner): boolean
+    }
+}
+
+together {
+    class ArgumentExtractor {
+        {static} +parseDeckArgs(arguments: String): DeckArgs
+        {static} +parseAddCardArgs(arguments: String): AddCardArgs
+        {static} +parseDeleteCardArgs(arguments: String): DeleteCardArgs
+    }
+    class FlashException {
+        -errorType: ErrorType
+        +getErrorType(): ErrorType
+    }
+}
+
+together {
+    class AddCardArgs {
+        -deckName: String
+        -question: String
+        -answer: String
+    }
+    class DeleteCardArgs {
+        -deckName: String
+        -cardIndex: int
+    }
+    class DeckArgs {
+        -deckName: String
+    }
+    enum ErrorType <<enumeration>> {
+        NULL_INPUT
+        INVALID_COMMAND
+        INVALID_ARGUMENTS
+        MISSING_DECK
+        MISSING_QUESTION
+        MISSING_ANSWER
+        MISSING_INDEX
+        DUPLICATE_PREFIX
+        INVALID_INDEX
+        --
+    }
+}
+
+Parser --> "1" ArgumentExtractor : uses
+Parser --> "0..1" Command : creates >
+Parser .> "0..1" FlashException : throws >
+
+ArgumentExtractor --> "0..1" AddCardArgs : creates >
+ArgumentExtractor --> "0..1" DeleteCardArgs : creates >
+ArgumentExtractor --> "0..1" DeckArgs : creates >
+ArgumentExtractor .> "0..1" FlashException : throws >
+
+FlashException *--ErrorType : uses >
+@enduml
