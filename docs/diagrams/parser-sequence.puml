@@ -1,0 +1,43 @@
+@startuml parser_main
+!pragma teoz true
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 80
+skinparam style strictuml
+skinparam SequenceGroupBodyBackgroundColor transparent
+skinparam SequenceReferenceBackgroundColor white
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam SequenceBoxBackgroundColor transparent
+skinparam sequenceParticipantBackgroundColor white
+skinparam sequenceLifeLineBorderColor black
+
+participant ":FlashCLI\n" as FlashCLI
+participant "<<class>>\nParser" as Parser
+participant "<<class>>\nArgumentExtractor" as ArgumentExtractor
+
+FlashCLI -> Parser : parse(userInput)
+activate Parser
+
+Parser -> Parser : validateInput()
+activate Parser
+deactivate Parser
+
+Parser -> Parser : validateCommandName()
+activate Parser
+deactivate Parser
+
+|||
+
+alt invalid input or invalid arguments
+    Parser --> FlashCLI : exception
+else valid input
+    ref over Parser, ArgumentExtractor
+        dispatch
+    end ref
+
+    Parser --> FlashCLI : Command
+end
+
+deactivate Parser
+@enduml

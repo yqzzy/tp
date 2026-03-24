@@ -1,0 +1,48 @@
+@startuml parser_dispatch
+!pragma teoz true
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 80
+skinparam style strictuml
+skinparam SequenceGroupBodyBackgroundColor transparent
+skinparam SequenceReferenceBackgroundColor white
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+skinparam SequenceBoxBackgroundColor transparent
+skinparam sequenceParticipantBackgroundColor white
+skinparam sequenceLifeLineBorderColor black
+
+hide unlinked
+
+group sd dispatch
+    |||
+    Parser -> Parser : parse*Command(...)
+    activate Parser
+    deactivate Parser
+
+    note right of Parser : e.g. parseAddCardCommand(...),\nparseDeckCommand(...), requireEmpty(...)
+
+    |||
+
+    Parser -> ArgumentExtractor : parse*Args(...)
+    activate ArgumentExtractor
+
+    ArgumentExtractor -> ArgumentExtractor : validatePrefixes()
+    activate ArgumentExtractor
+    deactivate ArgumentExtractor
+
+    ArgumentExtractor -> ArgumentExtractor : validatePrefixOrder()
+    activate ArgumentExtractor
+    deactivate ArgumentExtractor
+
+    ArgumentExtractor --> Parser : *Args
+    deactivate ArgumentExtractor
+
+    |||
+
+    Parser -> Parser : new *Command(args)
+    activate Parser
+    deactivate Parser
+    |||
+end
+@enduml
