@@ -28,8 +28,13 @@ public class Deck {
     // takes in the card question and answer, creates a new Card object 
     // and adds it to the cardList
     public Card addCard(String question, String answer){
+        int oldSize = cardList.size();
         Card newCard = new Card(question, answer);
         cardList.add(newCard);
+        
+        assert cardList.size() == oldSize + 1;
+        assert cardList.contains(newCard);
+
         return newCard;
     }
 
@@ -43,8 +48,13 @@ public class Deck {
         if (cardIndex >= cardList.size() || cardIndex < 0){
             throw new FlashException(ErrorType.INVALID_INDEX);
         } else { 
+            int oldSize = cardList.size();
             Card removed = cardList.get(cardIndex);
             cardList.remove(cardIndex);
+
+            assert cardList.size() == oldSize -1;
+            assert !cardList.contains(removed);
+
             return removed;
         }
     }
@@ -54,7 +64,11 @@ public class Deck {
         if (cardIndex >= cardList.size() || cardIndex < 0){
             throw new FlashException(ErrorType.INVALID_INDEX);
         } else { 
-            return cardList.get(cardIndex);
+            Card card = cardList.get(cardIndex);
+
+            assert card != null; 
+
+            return card;
         }
         
     }
