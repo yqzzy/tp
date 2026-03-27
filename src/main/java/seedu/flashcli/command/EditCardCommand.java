@@ -16,17 +16,17 @@ public class EditCardCommand implements Command{
     private final String answer;
 
     public EditCardCommand(EditCardArgs args){
-      this.deckName = args.getDeckName();
-      this.cardIndex = args.getCardIndex();
-      this.question = args.getQuestion();
-      this.answer = args.getAnswer();
+        this.deckName = args.getDeckName();
+        this.cardIndex = args.getCardIndex();
+        this.question = args.getQuestion();
+        this.answer = args.getAnswer();
     }
 
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException{
-      Deck deck = deckManager.getDeck(deckName);
-      Card card = deck.editCard(cardIndex, question, answer);
-      ui.showCardEdited(card, deckName);
-      return false;
+        Deck deck = deckManager.getDeck(deckName);
+        Card card = deck.editCard(cardIndex, question, answer);
+        ui.showCardEdited(card, deckName);
+        return false;
     }
 }
