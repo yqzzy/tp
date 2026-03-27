@@ -1,0 +1,58 @@
+@startuml storage_save_sequence
+skinparam style strictuml
+skinparam backgroundColor #FEFEFE
+skinparam sequence {
+  ArrowColor #333
+  ActorBorderColor #333
+  LifeLineBorderColor #999
+  LifeLineBackgroundColor #FFF
+  ParticipantBorderColor #333
+  ParticipantBackgroundColor #FFF
+  ParticipantFontName Arial
+  ParticipantFontSize 14
+  ActorFontStyle bold
+}
+
+actor User
+participant ":Command" as Command
+participant ":Storage" as Storage
+participant ":HistoryManager" as HistoryManager
+participant ":FileSystem" as FS
+
+User -> Command : execute() succeeds
+activate Command
+Command -> Storage : save(currentDeckManager)
+activate Storage
+
+Storage -> FS : createDirectories(filePath.getParent())
+activate FS
+FS --> Storage
+deactivate FS
+
+alt [Files.exists(filePath) && historyManager != null]
+    Storage -> Storage : load() as currentDataOnDisk
+    Storage -> HistoryManager : saveVersion(currentDataOnDisk)
+    activate HistoryManager
+
+    HistoryManager -> HistoryManager : generate filename\n{base}_{date}_{seq}.json
+    HistoryManager -> HistoryManager : gson.toJson(currentDataOnDisk)
+    HistoryManager -> FS : writeString(historyFile, jsonData)
+    activate FS
+    FS --> HistoryManager
+    deactivate FS
+    HistoryManager --> Storage
+    deactivate HistoryManager
+end
+
+Storage -> Storage : gson.toJson(currentDeckManager)
+Storage -> FS : writeString(filePath, jsonData)
+activate FS
+FS --> Storage
+deactivate FS
+
+Storage --> Command
+deactivate Storage
+Command --> User
+deactivate Command
+
+@enduml
