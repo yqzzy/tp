@@ -80,7 +80,7 @@ public class Deck {
         this.cardList = cardList;
     }
 
-    public Card editCard(int cardIndex, String newQuestion, String newAnswer){
+    public Card editCard(int cardIndex, String newQuestion, String newAnswer) throws FlashException{
         if (cardIndex >= cardList.size() || cardIndex < 0){
             throw new FlashException(ErrorType.INVALID_INDEX);
         }
