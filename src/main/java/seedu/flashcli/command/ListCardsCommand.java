@@ -18,6 +18,7 @@ public class ListCardsCommand implements Command {
      * @param deckName The name (identifier) of the deck from which to list all the cards.
      */
     public ListCardsCommand(String deckName) {
+        assert deckName != null : "Deck name should not be null";
         this.deckName = deckName;
     }
 

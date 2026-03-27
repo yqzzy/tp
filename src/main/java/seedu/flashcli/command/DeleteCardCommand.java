@@ -19,6 +19,9 @@ public class DeleteCardCommand implements Command {
      * @param deleteCardArgs Dataclass contains all attributes of an DeleteCardCommand object.
      */
     public DeleteCardCommand(DeleteCardArgs deleteCardArgs) {
+        assert deleteCardArgs != null : "deleteCardArgs should not be null";
+        assert deleteCardArgs.getDeckName() != null : "deleteCardArgs.deckName should not be null";
+
         this.deckName = deleteCardArgs.getDeckName();
         this.cardIndex = deleteCardArgs.getCardIndex();
     }

@@ -11,6 +11,7 @@ public class ClearDeckCommand implements Command {
     private String deckName;
 
     public ClearDeckCommand(String deckName) {
+        assert deckName != null : "Deck name should not be null";
         this.deckName = deckName;
     }
 
