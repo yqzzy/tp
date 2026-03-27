@@ -25,8 +25,6 @@ public class Deck {
         return cardList.size();
     }
     
-    // takes in the card question and answer, creates a new Card object 
-    // and adds it to the cardList
     public Card addCard(String question, String answer){
         int oldSize = cardList.size();
         Card newCard = new Card(question, answer);
@@ -38,12 +36,10 @@ public class Deck {
         return newCard;
     }
 
-    //prints out the index and question of every question in the deck
     public ArrayList<Card> listCards(){
         return cardList;
     }
     
-    //deletes the card at the index specified by the user
     public Card deleteCard(int cardIndex) throws FlashException{
         if (cardIndex >= cardList.size() || cardIndex < 0){
             throw new FlashException(ErrorType.INVALID_INDEX);
@@ -59,7 +55,6 @@ public class Deck {
         }
     }
 
-    //returns the Card object at the specified index of the cardList
     public Card getCard(int cardIndex) throws FlashException{
         if (cardIndex >= cardList.size() || cardIndex < 0){
             throw new FlashException(ErrorType.INVALID_INDEX);
@@ -83,5 +78,16 @@ public class Deck {
 
     public void setCards(ArrayList<Card> cardList){
         this.cardList = cardList;
+    }
+
+    public Card editCard(int cardIndex, String newQuestion, String newAnswer){
+        if (cardIndex >= cardList.size() || cardIndex < 0){
+            throw new FlashException(ErrorType.INVALID_INDEX);
+        }
+
+        Card card = cardList.get(cardIndex);
+        card.setQuestion(newQuestion);
+        card.setAnswer(newAnswer);
+        return card;
     }
 }

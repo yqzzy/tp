@@ -220,4 +220,12 @@ public class Ui {
     public void showConfidencePrompt(){
         System.out.println("Please rate your confidence (1-5): ");
     }
+
+    public void showCardEdited(Card card, String deckName){
+        System.out.println(LINE);
+        System.out.println("Edited card in deck " + deckName + ":\n" 
+            + card.getQuestion() + "\n" 
+            + card.getAnswer());
+        System.out.println(LINE); 
+    }
 }

@@ -92,6 +92,24 @@ public class ArgumentExtractor {
         return new DeleteCardArgs(deckName, cardIndex);
     }
 
+    // edit card args
+    public static EditCardArgs parseEditCardArgs(String arguments) throws FlashException{
+        logger.log(Level.FINE, "parseEditCardArgs called with: \"{0}\"", arguments);
+        validatePrefixes(arguments, DECK_PREFIX, INDEX_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
+        validatePrefixOrder(arguments, DECK_PREFIX, INDEX_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
+        String deckName = extractBetween(arguments, DECK_PREFIX, INDEX_PREFIX);
+        String indexStr = extractBetween(arguments, INDEX_PREFIX, QUESTION_PREFIX);
+        String question = extractBetween(arguments, QUESTION_PREFIX, ANSWER_PREFIX);
+        String answer = extractAfter(arguments, ANSWER_PREFIX);
+        validateNonEmpty(deckName, ErrorType.MISSING_DECK);
+        validateNonEmpty(indexStr, ErrorType.MISSING_INDEX);
+        validateNonEmpty(question, ErrorType.MISSING_QUESTION);
+        validateNonEmpty(answer, ErrorType.MISSING_ANSWER);
+        int cardIndex = parseIndex(indexStr);
+        logger.log(Level.FINE, "parseEditCardArgs succeeded");
+        return new EditCardArgs(deckName, cardIndex, question, answer);
+    }
+
     /**
      * Converts a one-based index string from the user into a zero-based integer.
      *
@@ -203,4 +221,5 @@ public class ArgumentExtractor {
         int start = arguments.indexOf(prefix) + PREFIX_LEN;
         return arguments.substring(start).trim();
     }
+
 }

@@ -13,8 +13,16 @@ public class Card {
 
     public Card(){}
 
-    public void setConfidenceLevel(Integer confidenceLevel){
+    public void setConfidenceLevel(int confidenceLevel){
         this.confidenceLevel = confidenceLevel;
+    }
+
+    public void setQuestion(String question){
+        this.question = question;
+    }
+
+    public void setAnswer(String answer){
+        this.answer = answer; 
     }
 
     public String getQuestion(){

@@ -5,6 +5,7 @@ import seedu.flashcli.command.ClearDeckCommand;
 import seedu.flashcli.command.CreateDeckCommand;
 import seedu.flashcli.command.DeleteCardCommand;
 import seedu.flashcli.command.DeleteDeckCommand;
+import seedu.flashcli.command.EditCardCommand;
 import seedu.flashcli.command.ExitCommand;
 import seedu.flashcli.command.HelpCommand;
 import seedu.flashcli.command.ListCardsCommand;
@@ -27,7 +28,7 @@ public class Parser {
     private static final Logger logger = Logger.getLogger("Parser");
 
     private static final String[] VALID_COMMANDS = {
-        "addCard", "listCards", "deleteCard", "createDeck",
+        "addCard", "listCards", "deleteCard", "createDeck", "editCard",
         "listDecks", "clearDeck", "deleteDeck", "study", "exit", "help"
     };
 
@@ -99,6 +100,8 @@ public class Parser {
             return parseListCardsCommand(arguments);
         case "deleteCard":
             return parseDeleteCardCommand(arguments);
+        case "editCard":
+            return parseEditCardCommand(arguments);
         case "createDeck":
             return parseCreateDeckCommand(arguments);
         case "listDecks":
@@ -158,6 +161,12 @@ public class Parser {
     private static Command parseStudyCommand(String arguments) throws FlashException {
         DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
         return new StudyCommand(args.getDeckName());
+    }
+
+    // Parses arguments and returns an EditCardCommand
+    private static Command parseEditCardCommand(String arguments) throws FlashException{
+        EditCardArgs args = ArgumentExtractor.parseEditCardArgs(arguments);
+        return new EditCardCommand(args);
     }
 
     /**
