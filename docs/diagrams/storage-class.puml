@@ -1,0 +1,56 @@
+@startuml storage_class_diagram
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 5
+skinparam linetype ortho
+skinparam nodesep 50
+skinparam ranksep 50
+
+together {
+    class Storage {
+        - filePath: Path
+        - gson: Gson
+        - historyManager: HistoryManager
+        --
+        + Storage(storageFilePath: String)
+        + load(): DeckManager
+        + save(list: DeckManager): void
+        + getHistoryVersions(): List<String>
+        + retrieveHistoryByIndex(index: int): DeckManager
+        + retrieveHistoryByTimestamp(timestamp: String): DeckManager
+        + cleanAllHistory(): void
+        + cleanSelectHistory(timestamps: List<String>): void
+    }
+
+    class HistoryManager {
+        - dataDir: Path
+        - historyDir: Path
+        - wasteDir: Path
+        - baseFileName: String
+        - gson: Gson
+        --
+        + HistoryManager(dataDirectoryPath: String,\n  baseFileName: String)
+        + saveVersion(currentData: DeckManager): void
+        + listVersions(): List<String>
+        + retrieveByIndex(index: int): DeckManager
+        + retrieveByTime(versionId: String): DeckManager
+        + deleteAllHistory(): void
+        + deleteSelectHistory(versionIds: List<String>): void
+    }
+}
+
+together {
+    class DeckManager
+    class Gson
+    class IOException <<exception>>
+    class JsonSyntaxException <<exception>>
+}
+
+Storage "1" *-- "1" HistoryManager : manages >
+Storage ..> DeckManager : serializes >
+Storage ..> Gson : uses >
+Storage ..> IOException : may throw >
+Storage ..> JsonSyntaxException : catches >
+HistoryManager ..> IOException : may throw >
+
+@enduml

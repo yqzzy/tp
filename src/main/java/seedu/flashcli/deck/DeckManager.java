@@ -31,7 +31,7 @@ public class DeckManager {
         }
 
         if (deckMap.containsKey(deckName)) {
-            LOGGER.log(Level.WARNING, "createDeck failed — duplicate deck name: {0}", deckName);
+            LOGGER.log(Level.WARNING, "createDeck failed - duplicate deck name: {0}", deckName);
             throw new FlashException(ErrorType.DUPLICATE_NAME);
         }
 
