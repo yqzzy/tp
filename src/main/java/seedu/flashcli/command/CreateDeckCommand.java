@@ -10,6 +10,7 @@ public class CreateDeckCommand implements Command {
     private final String deckName;
 
     public CreateDeckCommand(String deckName) {
+        assert deckName != null : "Deck name should not be null";
         this.deckName = deckName;
     }
 

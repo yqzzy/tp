@@ -15,6 +15,7 @@ public class DeleteDeckCommand implements Command {
      * @param deckName the name of the deck to delete; must not be null or blank
      */
     public DeleteDeckCommand(String deckName) {
+        assert deckName != null : "Deck name should not be null";
         this.deckName = deckName;
     }
 

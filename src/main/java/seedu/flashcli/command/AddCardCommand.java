@@ -20,6 +20,11 @@ public class AddCardCommand implements Command {
      * @param addCardArgs Dataclass contains all attributes of an AddCardCommand object.
      */
     public AddCardCommand(AddCardArgs addCardArgs) {
+        assert addCardArgs != null : "AddCardArgs should not be null";
+        assert addCardArgs.getDeckName() != null : "addCardArgs.deckName should not be null";
+        assert addCardArgs.getQuestion() != null : "addCardArgs.question should not be null";
+        assert addCardArgs.getAnswer() != null : "addCardArgs.answer should not be null";
+
         this.deckName = addCardArgs.getDeckName();
         this.question = addCardArgs.getQuestion();
         this.answer = addCardArgs.getAnswer();

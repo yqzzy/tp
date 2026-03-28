@@ -15,6 +15,7 @@ public class StudyCommand implements Command {
     private final String deckName;
 
     public StudyCommand(String deckName) {
+        assert deckName != null : "Deck name should not be null";
         this.deckName = deckName;
     }
 
