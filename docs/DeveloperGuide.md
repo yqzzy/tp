@@ -166,6 +166,11 @@ The sequence diagram below shows the enhanced flow when the application saves da
 | v1.0    | Student                     | revise flashcards quickly without leaving my CLI workflow | I maintain my productivity environment        |
 | v1.0    | Student                     | have my data stored locally                          | I remain in control of my revision material        |
 | v1.0    | Student learning new content| delete flashcards that are no longer useful          | outdated content does not distract me              |
+| v2.0    | Student revising for an exam| quiz myself with a random subset of the cards        | I can vary my practice                             |
+| v2.0    | Student revising for an exam| revisit flashcards I struggled with                  | I can focus on weak areas                          |
+| v2.0    | Student learning new content| edit flashcards                                      | I can refine wording as my understanding improves  |
+| v2.0    | Student starting revision   | mark my confidence when inputting flashcards         | I can see how my confidence level changed during revision |
+| v2.0    | Student revising for an exam| see statistics about my flashcard collection         | I can track my study progress                      |
 
 ## Non-Functional Requirements
 
