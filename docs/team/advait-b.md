@@ -22,3 +22,9 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 - **What it does:** Introduces a custom exception class (`FlashCLIException`) and an `ErrorType` enum that categorises all anticipated error conditions in the application. 
 - **Justification:** A typed enum-based approach ensures that every error scenario is explicitly defined, making the system more robust and easier to debug.
 - **Highlights:** Designing the `ErrorType` enum required an upfront audit of all possible failure modes across every command and subsystem.
+
+### Enhancements to Existing Features
+
+- Wrote JUnit tests for the `Parse` component, increasing its line coverage to 98%.
+- Created barebone command classes to establish the inheritance hierarchy, ensuring all commands share a consistent interface and can be extended without duplication.
+- Refactored print statements out of the core `FlashCLI` class and into a dedicated `UI` class to improve modularity, and made corresponding amendments in `StudySession` to maintain consistency.
