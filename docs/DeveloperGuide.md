@@ -26,7 +26,7 @@ The architecture diagram below shows the relationships between all major classes
   every command. `HistoryManager` maintains versioned snapshots in `data/history/`.
 - **Exception** - `FlashException` wraps an `ErrorType` enum value, giving every error a
   consistent message and a single catch point in `FlashCLI.executeCommand()`.
-### Parser
+### Parser Module
 
 The Parser component is responsible for converting raw user input into executable `Command` objects.
 It is designed as a `<<Facade>>`, exposing a single static entry point `Parser.parse(userInput)`

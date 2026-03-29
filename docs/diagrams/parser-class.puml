@@ -3,8 +3,8 @@ skinparam style strictuml
 skinparam classAttributeIconSize 0
 skinparam roundcorner 5
 skinparam linetype ortho
-skinparam nodesep 60
-skinparam ranksep 60
+skinparam nodesep 80
+skinparam ranksep 70
 
 together {
     class Parser <<Facade>> {
@@ -20,6 +20,7 @@ together {
         {static} +parseDeckArgs(arguments: String): DeckArgs
         {static} +parseAddCardArgs(arguments: String): AddCardArgs
         {static} +parseDeleteCardArgs(arguments: String): DeleteCardArgs
+        {static} +parseEditCardArgs(arguments: String): EditCardArgs
     }
     class FlashException {
         -errorType: ErrorType
@@ -37,20 +38,26 @@ together {
         -deckName: String
         -cardIndex: int
     }
+    class EditCardArgs {
+        -deckName: String
+        -cardIndex: int
+        -question: String
+        -answer: String
+    }
     class DeckArgs {
         -deckName: String
     }
     enum ErrorType <<enumeration>> {
-        NULL_INPUT
-        INVALID_COMMAND
-        INVALID_ARGUMENTS
-        MISSING_DECK
-        MISSING_QUESTION
-        MISSING_ANSWER
-        MISSING_INDEX
         DUPLICATE_PREFIX
+        INVALID_ARGUMENTS
+        INVALID_COMMAND
+        INVALID_EDIT
         INVALID_INDEX
-        --
+        MISSING_ANSWER
+        MISSING_DECK
+        MISSING_INDEX
+        MISSING_QUESTION
+        NULL_INPUT
     }
 }
 
@@ -60,8 +67,9 @@ Parser .> "0..1" FlashException : throws >
 
 ArgumentExtractor --> "0..1" AddCardArgs : creates >
 ArgumentExtractor --> "0..1" DeleteCardArgs : creates >
+ArgumentExtractor --> "0..1" EditCardArgs : creates >
 ArgumentExtractor --> "0..1" DeckArgs : creates >
 ArgumentExtractor .> "0..1" FlashException : throws >
 
-FlashException *--ErrorType : uses >
+FlashException *-- ErrorType : uses >
 @enduml
