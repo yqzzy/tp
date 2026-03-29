@@ -17,7 +17,7 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 - **Justification:** Without a robust parser, the application would be unable to correctly interpret varied user inputs, making reliable command execution impossible. Centralising this logic ensures all commands are handled consistently and predictably.
 - **Highlights:** The parser was designed as a stateless utility class, adhering to the single responsibility principle by handling only parsing concerns. Implementing it required careful consideration of edge cases.
 
-### New Feature: FlashCLIException Class and ErrorType Enum
+### New Feature: Exception Handling
 
 - **What it does:** Introduces a custom exception class (`FlashCLIException`) and an `ErrorType` enum that categorises all anticipated error conditions in the application. 
 - **Justification:** A typed enum-based approach ensures that every error scenario is explicitly defined, making the system more robust and easier to debug.
@@ -25,6 +25,14 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 ### Enhancements to Existing Features
 
-- Wrote JUnit tests for the `Parse` component, increasing its line coverage to 98%.
+- Wrote JUnit tests for the `Parser` component, increasing its line coverage to 98%.
 - Created barebone command classes to establish the inheritance hierarchy, ensuring all commands share a consistent interface and can be extended without duplication.
-- Refactored print statements out of the core `FlashCLI` class and into a dedicated `UI` class to improve modularity, and made corresponding amendments in `StudySession` to maintain consistency.
+- Refactored print statements out of the core `FlashCLI` class and into a dedicated `UI` class to improve modularity, and made corresponding amendments in `StudySession` to maintain consistency ([#61](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/61))
+
+### Contributions to Team-Based Tasks
+
+- Created the milestone for **v1.0** on GitHub and populated it with **all** the user stories.
+- Created the milestone for **v2.0** on GitHub and populated it with **all** the user stories.
+- Added deadlines to all milestones to keep the team on schedule.
+- Fixed general bugs to ensure the project consistently passed automated build tests throughout development ([#62](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/62), [#64](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/64), [#65](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/65))
+- Managed GitHub releases for v2.0.
