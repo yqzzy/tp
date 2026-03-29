@@ -1,7 +1,7 @@
 package seedu.flashcli.parser;
 
 /**
- * Immutable object grouping the two arguments needed for the deleteCard comment.
+ * Immutable object grouping the two arguments needed for the deleteCard command.
  */
 public class DeleteCardArgs {
 

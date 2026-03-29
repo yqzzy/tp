@@ -1,7 +1,7 @@
 package seedu.flashcli.parser;
 
 /**
- * Immutable object grouping the three arguments needed for the addCard comment.
+ * Immutable object grouping the three arguments needed for the addCard command.
  */
 public class AddCardArgs {
 
