@@ -163,7 +163,7 @@ public class Parser {
     }
 
     /** Parses arguments and returns an EditCardCommand. */
-    private static Command parseEditCardCommand(String arguments) throws FlashException{
+    private static Command parseEditCardCommand(String arguments) throws FlashException {
         EditCardArgs args = ArgumentExtractor.parseEditCardArgs(arguments);
         return new EditCardCommand(args);
     }
