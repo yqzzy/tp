@@ -66,6 +66,27 @@ For commands that require arguments, the helper delegates to `ArgumentExtractor.
 which validates prefixes, validates their order, extracts the values, and returns a typed args object.
 `Parser` then constructs and returns the appropriate `Command`.
 
+### Parser Design Rationale
+
+The `Parser` and `ArgumentExtractor` classes were designed with the following principles in mind:
+
+* **Single Responsibility Principle (SRP):** `Parser` focuses solely on converting raw user input
+  into a typed `Command` object. It has no knowledge of how `Ui` displays output, how `DeckManager`
+  stores data, or how `Storage` persists state. `ArgumentExtractor` is further split out to handle
+  all prefix validation and value extraction, keeping `Parser` itself thin. This separation makes
+  both classes independently testable and reusable.
+
+* **Defensive Programming:** `Parser` is the application's first line of defence against malformed
+  input. It validates that input is non-blank, that the command keyword is recognised, that all
+  required prefixes are present exactly once, and that prefixes appear in the correct order - all
+  before any command logic executes. Any violation throws a `FlashException` immediately. This means
+  every `Command` object that reaches `FlashCLI.executeCommand()` is guaranteed to be well-formed,
+  and no downstream class needs to re-validate its inputs.
+
+* **Stateless Utility:** `Parser` and `ArgumentExtractor` are implemented as stateless classes with
+  a `private` constructor and all-`static` methods. There is no need to instantiate either class,
+  which simplifies the design and makes the parsing pipeline easy to reason about - given the same
+  input string, `Parser.parse()` always produces the same `Command`.
 
 ### Storage
 
