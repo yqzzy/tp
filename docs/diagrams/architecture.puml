@@ -1,0 +1,142 @@
+@startuml architecture
+hide footbox
+hide circle
+hide fields
+hide methods
+left to right direction
+skinparam style strictuml
+skinparam linetype ortho
+skinparam nodesep 60
+skinparam ranksep 60
+skinparam ArrowColor #444444
+skinparam ArrowThickness 1.5
+
+skinparam class {
+    BackgroundColor white
+    BorderColor #888888
+    FontName Arial
+    FontSize 12
+}
+
+skinparam ClassBackgroundColor<<entry>>     #37474F
+skinparam ClassBorderColor<<entry>>         #37474F
+skinparam ClassFontColor<<entry>>           white
+
+skinparam ClassBackgroundColor<<ui>>        #5C6BC0
+skinparam ClassBorderColor<<ui>>            #3949AB
+skinparam ClassFontColor<<ui>>              white
+
+skinparam ClassBackgroundColor<<parser>>    #EF6C00
+skinparam ClassBorderColor<<parser>>        #E65100
+skinparam ClassFontColor<<parser>>          white
+
+skinparam ClassBackgroundColor<<command>>   #29B6F6
+skinparam ClassBorderColor<<command>>       #0288D1
+skinparam ClassFontColor<<command>>         white
+
+skinparam ClassBackgroundColor<<deck>>      #66BB6A
+skinparam ClassBorderColor<<deck>>          #388E3C
+skinparam ClassFontColor<<deck>>            white
+
+skinparam ClassBackgroundColor<<study>>     #AB47BC
+skinparam ClassBorderColor<<study>>         #7B1FA2
+skinparam ClassFontColor<<study>>           white
+
+skinparam ClassBackgroundColor<<storage>>   #EF5350
+skinparam ClassBorderColor<<storage>>       #C62828
+skinparam ClassFontColor<<storage>>         white
+
+skinparam ClassBackgroundColor<<exception>> #FFA726
+skinparam ClassBorderColor<<exception>>     #E65100
+skinparam ClassFontColor<<exception>>       white
+
+' ══════════════════════════════════════════════════════════════
+'  CLASSES
+' ══════════════════════════════════════════════════════════════
+
+class FlashCLI <<entry>>
+
+class Ui <<ui>>
+
+together {
+    class Parser <<parser>>
+    class ArgumentExtractor <<parser>>
+}
+
+together {
+    interface Command <<command>>
+    class StudyCommand <<command>>
+}
+
+together {
+    class DeckManager <<deck>>
+    class Deck <<deck>>
+    class Card <<deck>>
+}
+
+together {
+    class SessionManager <<study>>
+    class StudySession <<study>>
+}
+
+together {
+    class Storage <<storage>>
+    class HistoryManager <<storage>>
+}
+
+together {
+    class FlashException <<exception>>
+    enum ErrorType <<exception>>
+}
+
+' ══════════════════════════════════════════════════════════════
+'  HIDDEN SPACERS
+' ══════════════════════════════════════════════════════════════
+
+FlashCLI -[hidden]up- Storage
+FlashCLI -[hidden]down- Parser
+
+Parser -[hidden]down- ArgumentExtractor
+Command -[hidden]down- StudyCommand
+DeckManager -[hidden]down- Deck
+Deck -[hidden]down- Card
+SessionManager -[hidden]down- StudySession
+Storage -[hidden]down- HistoryManager
+FlashException -[hidden]down- ErrorType
+
+Ui -[hidden]right- Command
+Command -[hidden]right- DeckManager
+DeckManager -[hidden]right- SessionManager
+Storage -[hidden]right- HistoryManager
+
+' ══════════════════════════════════════════════════════════════
+'  RELATIONSHIPS
+' ══════════════════════════════════════════════════════════════
+
+FlashCLI "1 " --> " 1" Ui
+FlashCLI "1 " --> " 1" Parser
+FlashCLI "1 " --> " 1" DeckManager
+FlashCLI "1 " --> " 1" Storage
+
+Parser "1 " ..> " 1" ArgumentExtractor
+Parser ..> Command
+Parser ..> FlashException
+
+ArgumentExtractor ..> FlashException
+
+StudyCommand ..|> Command
+Command "1 " --> " 1" DeckManager
+Command "1 " --> " 1" Ui
+StudyCommand "1 " --> " 1" SessionManager
+
+DeckManager "1 " *-- " 0..*" Deck
+Deck "1 " *-- " 0..*" Card
+
+SessionManager "1 " *-- " 0..1" StudySession
+StudySession "1 " --> " 1" Deck
+
+Storage "1 " *-- " 1" HistoryManager
+
+FlashException "1 " *-- " 1" ErrorType
+
+@enduml
