@@ -99,7 +99,7 @@ public class ArgumentExtractor {
      * @return EditCardArgs containing deck name, index, question, and answer.
      * @throws FlashException If any prefix or extracted value issue detected.
      */
-    public static EditCardArgs parseEditCardArgs(String arguments) throws FlashException{
+    public static EditCardArgs parseEditCardArgs(String arguments) throws FlashException {
         logger.log(Level.FINE, "parseEditCardArgs called with: \"{0}\"", arguments);
         validatePrefixes(arguments, DECK_PREFIX, INDEX_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
         validatePrefixOrder(arguments, DECK_PREFIX, INDEX_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
@@ -148,11 +148,13 @@ public class ArgumentExtractor {
         assert arguments != null : "validatePrefixes called with null arguments";
         for (String prefix : prefixes) {
             if (!arguments.contains(prefix)) {
-                logger.log(Level.WARNING, "validatePrefixes failed: prefix \"{0}\" not found in \"{1}\"");
+                logger.log(Level.WARNING, "validatePrefixes failed: prefix \"{0}\" not found in \"{1}\"",
+                        new Object[]{prefix, arguments});
                 throw missingErrorFor(prefix);
             }
             if (arguments.indexOf(prefix) != arguments.lastIndexOf(prefix)) {
-                logger.log(Level.WARNING, "validatePrefixes failed: prefix \"{0}\" appears more than once");
+                logger.log(Level.WARNING, "validatePrefixes failed: prefix \"{0}\" appears more than once",
+                        new Object[]{prefix, arguments});
                 throw new FlashException(ErrorType.DUPLICATE_PREFIX);
             }
         }
@@ -170,7 +172,8 @@ public class ArgumentExtractor {
         for (String prefix : prefixes) {
             int index = arguments.indexOf(prefix);
             if (index <= last) {
-                logger.log(Level.WARNING, "validatePrefixOrder failed: prefix \"{0}\" out of order in \"{1}\"");
+                logger.log(Level.WARNING, "validatePrefixOrder failed: prefix \"{0}\" out of order in \"{1}\"",
+                        new Object[]{prefix, arguments});
                 throw new FlashException(ErrorType.INVALID_ARGUMENTS);
             }
             last = index;
