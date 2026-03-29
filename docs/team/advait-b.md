@@ -41,3 +41,19 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 - Added non-trivial PR review feedback on these PRs: [#2](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/2), [#5](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/5), [#54](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/54), [#79](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/79)
 - Proactively identified code design issues prior to v2.0 and documented actionable recommendations for adhering to SRP, SOC, LSP in a shared Google Doc distributed to the team.
+
+### Documentation
+
+#### User Guide
+
+- Wrote the product introduction section.
+- Wrote the quick start guide.
+- Added the command summary table for quick reference.
+- Added user stories for v1.0.
+
+#### Developer Guide
+
+- Wrote the design and implementation section describing the architecture of FlashCLI.
+- Created the architecture class diagram showing relationships between all major components.
+- Added a Parser class diagram and sequence diagram illustrating the parsing flow.
+- Documented the Parser design rationale.
