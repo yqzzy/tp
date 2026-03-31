@@ -1,0 +1,33 @@
+@startuml
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 5
+skinparam linetype ortho
+
+class Command <<interface>> {
+    +execute(deckManager: DeckManager, ui: Ui, in: Scanner): boolean
+}
+
+class DeleteCardCommand {
+    -deckName: String
+    -cardIndex: int
+    +execute(deckManager: DeckManager, ui: Ui, in: Scanner): boolean
+}
+
+class DeleteCardArgs {
+    -deckName: String
+    -cardIndex: int
+}
+
+class DeckManager
+class Deck
+class Ui
+class FlashException <<exception>>
+
+DeleteCardCommand ..|> Command
+DeleteCardCommand ..> DeleteCardArgs
+DeleteCardCommand ..> DeckManager
+DeleteCardCommand ..> Deck
+DeleteCardCommand ..> Ui
+DeleteCardCommand ..> FlashException
+@enduml

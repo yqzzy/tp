@@ -1,0 +1,76 @@
+@startuml add_card_sequence_diagram
+!pragma teoz true
+hide footbox
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 60
+skinparam style strictuml
+skinparam SequenceGroupBodyBackgroundColor transparent
+skinparam SequenceReferenceBackgroundColor white
+skinparam SequenceBoxBackgroundColor transparent
+skinparam sequenceParticipantBackgroundColor white
+skinparam sequenceLifeLineBorderColor black
+skinparam sequenceArrowThickness 1.5
+skinparam roundcorner 5
+
+actor User
+participant ":FlashCLI\n" as FlashCLI
+participant "<<class>>\nParser" as Parser
+participant "<<class>>\nArgumentExtractor" as ArgumentExtractor
+participant "AddCardCommand" as AddCardCommand
+participant "DeckManager" as DeckManager
+participant "Deck" as Deck
+participant "Ui" as Ui
+participant "Storage" as Storage
+participant "Card" as Card
+
+User -> FlashCLI : enters addcard command
+activate FlashCLI
+FlashCLI -> Parser : parse(userInput)
+activate Parser
+
+Parser -> ArgumentExtractor : parseAddCardArgs(arguments)
+activate ArgumentExtractor
+ArgumentExtractor --> Parser : addCardArgs
+deactivate ArgumentExtractor
+
+Parser --> FlashCLI : addCardCommand
+deactivate Parser
+
+FlashCLI -> AddCardCommand : execute(deckManager, ui, in)
+activate AddCardCommand
+
+AddCardCommand -> DeckManager : getDeck(deckName)
+activate DeckManager
+DeckManager --> AddCardCommand : deck / null
+deactivate DeckManager
+
+alt deck exists
+    AddCardCommand -> Card : new Card(question, answer)
+    activate Card
+    Card --> AddCardCommand
+    deactivate Card
+
+    AddCardCommand -> Deck : addCard(card)
+    activate Deck
+    Deck --> AddCardCommand
+    deactivate Deck
+
+    AddCardCommand -> Ui : showAddedCard(card, deckName)
+    activate Ui
+    Ui --> AddCardCommand
+    deactivate Ui
+
+    AddCardCommand --> FlashCLI
+
+    FlashCLI -> Storage : save(deckManager)
+    activate Storage
+    Storage --> FlashCLI
+    deactivate Storage
+
+else deck does not exist
+    AddCardCommand --> FlashCLI : throws FlashException
+    deactivate AddCardCommand
+end
+FlashCLI --> User : card deleted message shown
+deactivate FlashCLI
+@enduml

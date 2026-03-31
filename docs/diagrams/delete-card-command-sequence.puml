@@ -1,0 +1,63 @@
+@startuml
+skinparam style strictuml
+hide footbox
+
+actor User
+participant ":FlashCLI" as FlashCLI
+participant "«class»\nParser" as Parser
+participant "«class»\nArgumentExtractor" as ArgumentExtractor
+participant "DeleteCardCommand" as DeleteCardCommand
+participant "DeckManager" as DeckManager
+participant "Deck" as Deck
+participant "Ui" as Ui
+participant "Storage" as Storage
+
+User -> FlashCLI : enters deletecard command
+activate FlashCLI
+FlashCLI -> Parser : parse(userInput)
+activate Parser
+
+Parser -> ArgumentExtractor : parseDeleteCardArgs(arguments)
+activate ArgumentExtractor
+ArgumentExtractor --> Parser : deleteCardArgs
+deactivate ArgumentExtractor
+
+Parser --> FlashCLI : DeleteCardCommand
+deactivate Parser
+
+FlashCLI -> DeleteCardCommand : execute(deckManager, ui, in)
+activate DeleteCardCommand
+
+DeleteCardCommand -> DeckManager : getDeck(deckName)
+activate DeckManager
+DeckManager --> DeleteCardCommand : deck / null
+deactivate DeckManager
+
+alt deck exists && index valid
+    DeleteCardCommand -> Deck : deleteCard(cardIndex)
+    activate Deck
+    Deck --> DeleteCardCommand : card
+    deactivate Deck
+
+    DeleteCardCommand -> Ui : showCardDeleted(card, deckName)
+    activate Ui
+    Ui --> DeleteCardCommand
+    deactivate Ui
+
+    DeleteCardCommand --> FlashCLI
+
+    FlashCLI -> Storage : save(deckManager)
+    activate Storage
+    Storage --> FlashCLI
+    deactivate Storage
+
+else else
+    DeleteCardCommand --> FlashCLI : throws FlashException
+    deactivate DeleteCardCommand
+end
+
+deactivate DeleteCardCommand
+
+FlashCLI --> User : card deleted message shown
+deactivate FlashCLI
+@enduml
