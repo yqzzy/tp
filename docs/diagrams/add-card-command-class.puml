@@ -1,0 +1,37 @@
+@startuml add_card_command_class
+skinparam style strictuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 5
+skinparam linetype ortho
+
+class Command <<interface>> {
+    +execute(deckManager: DeckManager, ui: Ui, in: Scanner): boolean
+}
+
+class AddCardCommand {
+    -deckName: String
+    -question: String
+    -answer: String
+    --
+    +execute(deckManager: DeckManager, ui: Ui, in: Scanner): boolean
+}
+
+class AddCardArgs {
+    -deckName: String
+    -question: String
+    -answer: String
+}
+
+class DeckManager
+class Deck
+class Ui
+class FlashException <<exception>>
+
+Command <|-- AddCardCommand
+AddCardCommand ..> AddCardArgs
+AddCardCommand ..> DeckManager
+AddCardCommand ..> Deck
+AddCardCommand ..> Ui
+AddCardCommand ..> FlashException
+
+@enduml

@@ -303,6 +303,173 @@ leaving the deck's authoritative order intact.
 | Use an iterator pattern over `Deck` | Cleaner API but adds infrastructure to the Deck layer unnecessarily |
 | Sort the original `cardList` in `Deck` | Corrupts card indices used by other commands |
 
+
+## Add Card
+
+The `AddCardCommand` feature allows the user to add a new flashcard to an existing deck by
+supplying a deck name, question, and answer. This feature spans both the parsing and execution
+phases of the application: the `Parser` first converts the raw user input into an
+`AddCardCommand`, after which the command executes the business logic and the updated
+`DeckManager` state is persisted to storage.
+
+#### Class Structure
+
+The diagram below shows the main classes involved in the `AddCardCommand` feature and their
+relationships.
+
+![AddCardCommand Class Diagram](diagrams/add_card_command_class.png)
+
+**Key classes:**
+
+* `Command` - interface that defines the common `execute(deckManager, ui, in)` method
+* `AddCardCommand` - concrete command that stores the parsed `deckName`, `question`, and `answer`
+  needed to perform the add-card operation
+* `AddCardArgs` - temporary parsed data object returned by the parser before the
+  `AddCardCommand` is constructed
+* `DeckManager` - provides access to the target `Deck`
+* `Deck` - owns the list of `Card` objects and performs the actual insertion
+* `Ui` - displays the success message after the card is added
+* `Storage` - persists the updated `DeckManager` after execution
+* `FlashException` - thrown when the specified deck does not exist
+
+The class diagram highlights that `AddCardCommand` is the central coordinator for this feature.
+It depends on the parser-side `AddCardArgs` object during construction, and during execution it
+interacts with the domain layer (`DeckManager`, `Deck`, `Card`) and the UI layer.
+
+#### Sequence Flow
+
+The sequence diagram below shows the full flow of the `addcard` feature, from user input to
+data persistence.
+
+![AddCardCommand Sequence Diagram](diagrams/add_card_sequence.png)
+
+The flow can be divided into three stages:
+
+**1. Parsing**
+
+1. The user enters the `addcard` command into `FlashCLI`
+2. `FlashCLI` calls `Parser.parse(userInput)`
+3. `Parser` delegates argument extraction to `ArgumentExtractor.parseAddCardArgs(...)`
+4. `ArgumentExtractor` validates prefixes and extracts values into an `AddCardArgs` object
+5. `Parser` constructs and returns an `AddCardCommand`
+
+At the end of this stage, a fully validated `AddCardCommand` is ready for execution.
+
+**2. Execution**
+
+1. `FlashCLI` calls `AddCardCommand.execute(deckManager, ui, in)`
+2. `AddCardCommand` calls `deckManager.getDeck(deckName)`
+3. An `alt` branch is evaluated:
+
+  * **If the deck exists:**
+
+    1. A new `Card(question, answer)` is created
+    2. `deck.addCard(card)` is called to insert the card
+    3. `ui.showAddedCard(card, deckName)` displays a success message
+  * **If the deck does not exist:**
+
+    * A `FlashException` is thrown and propagated back to `FlashCLI`
+
+This ensures that invalid operations are rejected early while valid operations modify only the
+necessary part of the data model.
+
+**3. Persistence**
+
+After successful execution:
+
+1. `FlashCLI` calls `storage.save(deckManager)`
+2. `Storage` writes the updated state to disk (and triggers history backup if enabled)
+
+This guarantees that all changes made by `AddCardCommand` are durable across sessions.
+
+#### Design Rationale
+
+**Encapsulation of Command Logic**
+
+All logic related to adding a card is encapsulated within `AddCardCommand`. This follows the
+Command pattern, ensuring that each user action is self-contained and independent. 
+
+**Separation of Concerns**
+
+* `Parser` handles input validation and object construction
+* `AddCardCommand` handles business logic
+* `DeckManager` and `Deck` handle data storage
+* `Ui` handles output formatting
+* `Storage` handles persistence
+
+This separation improves modularity and makes each component easier to test and maintain.
+
+**Defensive Programming**
+
+* All inputs are validated during parsing, so `AddCardCommand` receives only valid data
+* `deckManager.getDeck(deckName)` returning `null` is explicitly handled
+* A `FlashException` is thrown for invalid deck names, ensuring consistent error handling
+
+**Consistency with Other Commands**
+
+`AddCardCommand` follows the same execution pattern as other commands:
+
+1. Retrieve required data from `DeckManager`
+2. Perform the operation on the domain model
+3. Display output via `Ui`
+4. Persist changes via `Storage`
+
+This consistent structure simplifies understanding and extending the system with new commands.
+
+### Additional Design Considerations
+
+**Early Validation via Parser**
+
+All argument validation is performed in the `Parser` and `ArgumentExtractor` before the
+`AddCardCommand` is constructed. This ensures that the command operates only on valid,
+well-formed data and does not need to handle parsing-related errors.
+
+An alternative approach would be to perform validation inside `AddCardCommand.execute()`,
+but this was rejected as it would duplicate validation logic across commands and violate
+the Single Responsibility Principle.
+
+---
+
+**Delegation to Domain Classes**
+
+`AddCardCommand` delegates data-related operations to `DeckManager` and `Deck` instead of
+directly modifying internal data structures. This ensures that each class maintains clear
+ownership of its responsibilities and preserves encapsulation.
+
+---
+
+**Persistence Outside Command**
+
+Data persistence is handled by `FlashCLI` after command execution, rather than within
+`AddCardCommand`. This design keeps command classes focused purely on business logic and
+avoids coupling them with storage concerns.
+
+This also makes it easier to change the storage implementation in the future without
+modifying command logic.
+
+### Future Improvements
+
+**Duplicate Card Detection**
+
+Currently, duplicate cards can be added to a deck. A future enhancement could check for
+existing cards with the same question and answer and either prevent duplication or prompt
+the user for confirmation.
+
+---
+
+**Richer Card Metadata**
+
+The `Card` model currently stores only a question and answer. It can be extended to include
+additional attributes such as tags, enabling more advanced
+features like filtering and improved study strategies.
+
+---
+
+**Batch Card Addition**
+
+Support for adding multiple cards in a single command (e.g. via file input) could improve
+usability for users importing large sets of flashcards.
+
 ## Product scope
 ### Target user profile
 
