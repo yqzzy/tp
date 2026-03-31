@@ -1,0 +1,81 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 13
+skinparam arrowFontSize 11
+skinparam defaultFontSize 12
+hide circle
+
+class StudyCommand {
+    - deckName : String
+    + execute(dm, ui, in) : boolean
+}
+
+class SessionManager {
+    - activeSession : StudySession
+    + startSession(deck : Deck) : void
+    + nextCard() : boolean
+    + finishSession() : int
+    + hasActiveSession() : boolean
+    + getCurrentCard() : Card
+    + getCurrentSession() : StudySession
+}
+
+class StudySession {
+    - deck : Deck
+    - currentIndex : int
+    + getCurrentCard() : Card
+    + nextCard() : boolean
+    + finish() : int
+    + isFinished() : boolean
+    + getDeck() : Deck
+    + getDeckName() : String
+}
+
+class DeckManager {
+    + getDeck(deckName : String) : Deck
+}
+
+class Deck {
+    - deckName : String
+    - cardList : ArrayList<Card>
+    + getCard(index : int) : Card
+    + getSize() : int
+    + getDeckName() : String
+    + listCards() : ArrayList<Card>
+    + setCards(cardList : ArrayList<Card>) : void
+}
+
+class Card {
+    - question : String
+    - answer : String
+    - confidenceLevel : int
+    + getQuestion() : String
+    + getAnswer() : String
+    + getConfidenceLevel() : Integer
+    + setConfidenceLevel(level : int) : void
+}
+
+class Ui {
+    + showStudyQuestion(question : String) : void
+    + showStudyAnswer(answer : String) : void
+    + showConfidencePrompt() : void
+    + showStudySessionEnd(reviewed : int) : void
+    + showStudySessionQuit(reviewed : int) : void
+    + showEmptyDeck() : void
+}
+
+StudyCommand --> SessionManager : creates and uses
+StudyCommand --> DeckManager : getDeck()
+StudyCommand --> Ui : displays via
+
+SessionManager "1" *-- "0..1" StudySession : manages
+
+StudySession --> Deck : studies
+note on link
+  sorts cards by
+  confidenceLevel on init
+end note
+
+Deck "1" *-- "0..*" Card : contains
+
+@enduml
