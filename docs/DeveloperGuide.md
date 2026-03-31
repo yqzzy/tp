@@ -754,3 +754,149 @@ powerful and user-friendly.
 
 
 ## Instructions for Manual Testing
+
+This section provides a step-by-step path for a manual tester to verify the core functionalities of FlashCLI. The instructions are designed to be followed sequentially, building upon the state created by previous steps. All command formats and expected outputs are derived from the current implementation.
+
+**Prerequisites for all tests:**
+1.  Ensure you are in the project's root directory.
+2.  Compile and run FlashCLI using `` or your preferred method.
+3.  The `./data/` directory should be empty or non-existent at the start of testing.
+
+### E.1 Testing Basic Deck Management
+
+#### Creating and Listing Decks
+1.  **Creating a deck**
+  *   **Command:** `createDeck d/Mathematics`
+  *   **Expected Output:** `Deck created successfully: Mathematics`
+
+2.  **Listing all decks**
+  *   **Command:** `listDecks`
+  *   **Expected Output:** `Here are all the decks you have currently: 1.Mathematics`
+
+3. **Create another deck and verify:**
+*   **Command:** `createDeck d/Sci./gradlew runence` and then `listDecks`
+*   **Expected Output:** `Here are all the decks you have currently: 1.Mathematics 2.Science`
+
+#### Adding and Managing Cards
+1. **Add a card to a deck:**
+*   **Command:** `addCard d/Mathematics q/What is 2+2? a/4`
+*   **Expected Output:** `Added Card: What is 2+2?  4  to deck Mathematics`
+
+2.  **Add a second card with different content:**
+*   **Command:** `addCard d/Mathematics q/What is the capital of France? a/Paris`
+*   **Expected Output:** `Added Card: What is the capital of France?  Paris  to deck Mathematics`
+
+3.  **List cards in a deck:**
+*   **Command:** `listCards d/Mathematics`
+*   **Expected Output:** `Here are all the cards in the deck Mathematics:` + cards
+
+4.  **Edit an existing card:**
+*   **Command:** `editCard d/Mathematics i/1 q/What is 5+7? a/12`
+*   **Expected Output:** `Edited card in deck Mathematics:` + new card
+
+5.  **Delete a card:**
+*   **Command:** `deleteCard d/Mathematics i/2`
+*   **Expected Output:** `Delete Card:` + card information + `from deck Deckname`
+
+6.  **Delete a card:**
+*   **Command:** `clearDeck d/Mathematics`
+*   **Expected Output:** `Cleared deck: Mathematics`
+
+### E.2 Testing Study Sessions
+
+1. **Start a study session with a deck that has cards:**
+*   **Command:** `study d/Mathematics`
+*   **Expected Output:** Shows the first question with instructions to press Enter for answer or 'q' to quit.
+
+2. **Reveal the answer:**
+*   **Command:** Press `Enter` (empty input)
+*   **Expected Output:** Shows the answer to the current question.
+
+3. **Rate confidence level:**
+*   **Command:** `input 1-5`
+*   **Expected Output:**  None (move to next question)
+
+3. **Move to the next card:**
+*   **Command:** Press `Enter` again
+*   **Expected Output:** Shows the next question or indicates end of deck.
+
+4. **Quit a study session early:**
+*   **Command:** Type `q` and press Enter during a study session
+*   **Expected Output:** Returns to normal command mode with a summary.
+
+5. **Study an empty deck:**
+*   **Command:** `study d/Mathematics`
+*   **Expected Output:** Appropriate message indicating the deck has no cards.
+
+### E.3 Testing Data Persistence and Automatic Backup
+
+These tests verify that data is automatically saved and historical versions are created in the background.
+
+1. **Initial data file creation:**
+- Start with no `./data/` directory
+- Create a deck and add a card
+- Check that `./data/flashcards.json` is created
+
+2. **Automatic backup on subsequent saves:**
+- Ensure `./data/flashcards.json` exists
+- Make another change (add card, edit card, etc.)
+- Check that `./data/history/` directory is created
+- Verify a backup file exists with format `flashcards_YYYYMMDD_NNN.json`
+
+3. **Data persistence across sessions:**
+- Create some decks and cards
+- Exit the application using `exit` command
+- Restart the application
+- Use `listDecks` to verify data was loaded correctly
+
+4. **Handling corrupted data files:**
+- Manually edit `./data/flashcards.json` to make it invalid JSON
+- Restart the application
+- Expected: Application starts without crashing, may show a warning but continues with empty data
+
+### E.4 Testing Error Handling
+
+1. **Unknown command:**
+*   **Command:** `invalid commands here`
+*   **Expected Output:** `Error msg: Invalid command format. Use "help" to see the list of all commands.`
+
+2. **Missing required prefixes:**
+*   **Command:** `addCard q/Question only`
+*   **Expected Output:** `Error msg: Deck name is required. Use prefix d/.`
+
+3. **Invalid card index:**
+*   **Command:** `deleteCard d/Mathematics i/100`
+*   **Expected Output:** `Error msg: Input an integer index number`
+
+4. **Duplicate deck creation:**
+*   **Command:** `createDeck d/Mathematics` repeat twice
+*   **Expected Output:** `Error msg: A deck with this name already exists. Please choose a unique name.`
+
+5. **Operating on non-existent deck:**
+*   **Command:** `addCard d/NonExistent q/Test? a/Test`
+*   **Expected Output:** `Error msg: Deck not found. Use listDecks to see available decks.`
+
+### E.5 Testing Utility Commands
+
+1. **Help command:**
+*   **Command:** `help`
+*   **Expected Output:** Expected: Shows list of available commands with their formats
+
+2. **Exit command:**
+*   **Command:** `exit`
+*   **Expected Output:** Application closes with goodbye message
+
+### E.6 Recommended Test Sequence
+
+For comprehensive testing, follow this sequence:
+
+1. Start with a clean state (no `./data/` directory)
+2. Test deck creation and listing (E.1.1-3)
+3. Test card operations (E.1.4-6)
+4. Test study sessions (E.2)
+5. Test data persistence by exiting and restarting (E.3.3)
+6. Test error cases (E.4)
+7. Test automatic backup by making multiple changes (E.3.2)
+
+Note: The automatic backup feature (E.3.2) creates historical versions in the background. You can verify this by checking the `./data/history/` directory after making changes to your data.
+

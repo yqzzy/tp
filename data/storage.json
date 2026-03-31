@@ -9,7 +9,23 @@
       "cardList": [
         {
           "question": "test1",
-          "answer": "answer1"
+          "answer": "answer1",
+          "confidenceLevel": 0
+        }
+      ]
+    },
+    "Mathematics": {
+      "deckName": "Mathematics",
+      "cardList": [
+        {
+          "question": "What is 2+2?",
+          "answer": "4",
+          "confidenceLevel": 5
+        },
+        {
+          "question": "What is the capital of France?",
+          "answer": "Paris",
+          "confidenceLevel": 4
         }
       ]
     }
