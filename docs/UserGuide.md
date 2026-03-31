@@ -1,8 +1,33 @@
-# User Guide
+# FlashCLI User Guide
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Quick Start](#quick-start)
+- [Notes on Command Format](#notes-on-command-format)
+- [Features](#features)
+   - [Viewing help: `help`](#viewing-help--help)
+   - [Creating a deck: `createDeck`](#creating-a-deck--createdeck)
+   - [Listing all decks: `listDecks`](#listing-all-decks--listdecks)
+   - [Deleting a deck: `deleteDeck`](#deleting-a-deck--deletedeck)
+   - [Clearing a deck: `clearDeck`](#clearing-a-deck--cleardeck)
+   - [Adding a card: `addCard`](#adding-a-card--addcard)
+   - [Listing all cards: `listCards`](#listing-all-cards--listcards)
+   - [Deleting a card: `deleteCard`](#deleting-a-card--deletecard)
+   - [Editing a card: `editCard`](#editing-a-card--editcard)
+   - [Studying a deck: `study`](#studying-a-deck--study)
+   - [Exiting the program: `exit`](#exiting-the-program--exit)
+   - [Saving data](#saving-data)
+- [FAQ](#faq)
+- [Command Summary](#command-summary)
+
+---
 
 ## Introduction
 
 FlashCLI is a lightweight command-line flashcard application for students who prefer a fast, keyboard-first study workflow. You organise your flashcards into named decks, add question-and-answer cards to each deck, and run interactive study sessions that adapt to your self-reported confidence level - showing the cards you are least confident about first. This guide walks you through how to install and use FlashCLI.
+
+---
 
 ## Quick Start
 
@@ -26,29 +51,65 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 **Data persistence:** FlashCLI automatically saves all your decks and cards to `data/storage.json` after every command. You do not need to save manually.
 
+---
+
 ## Features 
 
 {Give detailed description of each feature}
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+---
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+### Viewing help : `help`
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+---
 
-Example of usage: 
+### Creating a deck : `createDeck`
 
-`todo n/Write the rest of the User Guide d/next week`
+---
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+### Listing all decks : `listDecks`
+
+---
+
+### Deleting a deck : `deleteDeck`
+
+---
+
+### Clearing a deck : `clearDeck`
+
+---
+
+### Adding a card : `addCard`
+
+---
+
+### Listing all cards : `listCards`
+
+---
+
+### Deleting a card : `deleteCard`
+
+---
+
+### Editing a card : `editCard`
+
+---
+
+### Studying a deck : `study`
+
+---
+
+### Exiting the program : `exit`
+
+---
 
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
 
 **A**: {your answer here}
+
+---
 
 ## Command Summary
 
