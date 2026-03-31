@@ -96,6 +96,72 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 ---
 
 ### Studying a deck : `study`
+Starts an interactive study session for the specified deck.
+
+Format: `study d/DECK_NAME`
+
+- The deck must exist and contain at least one card.
+- Cards are shown in order of ascending confidence level — cards you are least confident
+  about appear first. Cards that have never been studied (default confidence `0`) always
+  appear before any rated card.
+- During a session, only the study session controls listed below are valid. Regular
+  FlashCLI commands (e.g. `addCard`, `listDecks`) cannot be used mid-session.
+
+**Study session controls:**
+
+| Input | Action |
+|-------|--------|
+| Enter (empty line) | Reveal the current card's answer |
+| `1` – `5` | Submit your confidence rating after the answer is shown |
+| `q` | Quit the session early |
+
+**Study session flow:**
+
+1. FlashCLI displays the first card's question.
+2. Press **Enter** to reveal the answer.
+3. Rate your confidence from **1** (lowest) to **5** (highest) and press **Enter**.
+    - `1` — Did not know at all
+    - `2` — Barely remembered
+    - `3` — Remembered with difficulty
+    - `4` — Remembered well
+    - `5` — Knew it perfectly
+4. FlashCLI advances to the next card. Repeat steps 2–3 until all cards are reviewed
+   or you type `q` to quit.
+5. At the end of the session, FlashCLI displays the number of cards reviewed.
+
+> **Note:** Your confidence ratings are saved automatically. The next time you study the
+> same deck, cards with lower confidence ratings will appear first.
+
+Example:
+```
+study d/CS2113 Finals
+```
+```
+Q: What does OOP stand for?
+(Press Enter to reveal answer, or type 'q' to quit)
+
+A: Object-Oriented Programming
+Please rate your confidence (1-5):
+4
+Q: What is polymorphism?
+(Press Enter to reveal answer, or type 'q' to quit)
+q
+Session ended. Cards reviewed: 1
+```
+
+**Quitting mid-session:**
+
+Typing `q` at any point — whether at a question prompt or at the confidence rating prompt —
+ends the session immediately and displays how many cards were reviewed.
+
+**Studying an empty deck:**
+
+If you attempt to study a deck that has no cards, FlashCLI will display:
+```
+_______________________________
+Deck is empty. Add cards before studying.
+_______________________________
+```
 
 ---
 
