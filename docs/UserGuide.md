@@ -1,8 +1,33 @@
-# User Guide
+# FlashCLI User Guide
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Quick Start](#quick-start)
+- [Notes on Command Format](#notes-on-command-format)
+- [Features](#features)
+   - [Viewing help: `help`](#viewing-help--help)
+   - [Creating a deck: `createDeck`](#creating-a-deck--createdeck)
+   - [Listing all decks: `listDecks`](#listing-all-decks--listdecks)
+   - [Deleting a deck: `deleteDeck`](#deleting-a-deck--deletedeck)
+   - [Clearing a deck: `clearDeck`](#clearing-a-deck--cleardeck)
+   - [Adding a card: `addCard`](#adding-a-card--addcard)
+   - [Listing all cards: `listCards`](#listing-all-cards--listcards)
+   - [Deleting a card: `deleteCard`](#deleting-a-card--deletecard)
+   - [Editing a card: `editCard`](#editing-a-card--editcard)
+   - [Studying a deck: `study`](#studying-a-deck--study)
+   - [Exiting the program: `exit`](#exiting-the-program--exit)
+   - [Saving data](#saving-data)
+- [FAQ](#faq)
+- [Command Summary](#command-summary)
+
+---
 
 ## Introduction
 
 FlashCLI is a lightweight command-line flashcard application for students who prefer a fast, keyboard-first study workflow. You organise your flashcards into named decks, add question-and-answer cards to each deck, and run interactive study sessions that adapt to your self-reported confidence level - showing the cards you are least confident about first. This guide walks you through how to install and use FlashCLI.
+
+---
 
 ## Quick Start
 
@@ -26,29 +51,131 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 **Data persistence:** FlashCLI automatically saves all your decks and cards to `data/storage.json` after every command. You do not need to save manually.
 
+---
+
 ## Features 
 
 {Give detailed description of each feature}
 
-### Adding a todo: `todo`
-Adds a new item to the list of todo items.
+---
 
-Format: `todo n/TODO_NAME d/DEADLINE`
+### Viewing help : `help`
 
-* The `DEADLINE` can be in a natural language format.
-* The `TODO_NAME` cannot contain punctuation.  
+---
 
-Example of usage: 
+### Creating a deck : `createDeck`
 
-`todo n/Write the rest of the User Guide d/next week`
+---
 
-`todo n/Refactor the User Guide to remove passive voice d/13/04/2020`
+### Listing all decks : `listDecks`
+
+---
+
+### Deleting a deck : `deleteDeck`
+
+---
+
+### Clearing a deck : `clearDeck`
+
+---
+
+### Adding a card : `addCard`
+
+---
+
+### Listing all cards : `listCards`
+
+---
+
+### Deleting a card : `deleteCard`
+
+---
+
+### Editing a card : `editCard`
+
+---
+
+### Studying a deck : `study`
+Starts an interactive study session for the specified deck.
+
+Format: `study d/DECK_NAME`
+
+- The deck must exist and contain at least one card.
+- Cards are shown in order of ascending confidence level — cards you are least confident
+  about appear first. Cards that have never been studied (default confidence `0`) always
+  appear before any rated card.
+- During a session, only the study session controls listed below are valid. Regular
+  FlashCLI commands (e.g. `addCard`, `listDecks`) cannot be used mid-session.
+
+**Study session controls:**
+
+| Input | Action |
+|-------|--------|
+| Enter (empty line) | Reveal the current card's answer |
+| `1` – `5` | Submit your confidence rating after the answer is shown |
+| `q` | Quit the session early |
+
+**Study session flow:**
+
+1. FlashCLI displays the first card's question.
+2. Press **Enter** to reveal the answer.
+3. Rate your confidence from **1** (lowest) to **5** (highest) and press **Enter**.
+    - `1` — Did not know at all
+    - `2` — Barely remembered
+    - `3` — Remembered with difficulty
+    - `4` — Remembered well
+    - `5` — Knew it perfectly
+4. FlashCLI advances to the next card. Repeat steps 2–3 until all cards are reviewed
+   or you type `q` to quit.
+5. At the end of the session, FlashCLI displays the number of cards reviewed.
+
+> **Note:** Your confidence ratings are saved automatically. The next time you study the
+> same deck, cards with lower confidence ratings will appear first.
+
+Example:
+```
+study d/CS2113 Finals
+```
+```
+Q: What does OOP stand for?
+(Press Enter to reveal answer, or type 'q' to quit)
+
+A: Object-Oriented Programming
+Please rate your confidence (1-5):
+4
+Q: What is polymorphism?
+(Press Enter to reveal answer, or type 'q' to quit)
+q
+Session ended. Cards reviewed: 1
+```
+
+**Quitting mid-session:**
+
+Typing `q` at any point — whether at a question prompt or at the confidence rating prompt —
+ends the session immediately and displays how many cards were reviewed.
+
+**Studying an empty deck:**
+
+If you attempt to study a deck that has no cards, FlashCLI will display:
+```
+_______________________________
+Deck is empty. Add cards before studying.
+_______________________________
+```
+
+---
+
+### Exiting the program : `exit`
+
+---
 
 ## FAQ
 
 **Q**: How do I transfer my data to another computer? 
 
 **A**: {your answer here}
+
+---
 
 ## Command Summary
 
