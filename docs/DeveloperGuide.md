@@ -26,8 +26,8 @@ The architecture diagram below shows the relationships between all major classes
   every command. `HistoryManager` maintains versioned snapshots in `data/history/`.
 - **Exception** - `FlashException` wraps an `ErrorType` enum value, giving every error a
   consistent message and a single catch point in `FlashCLI.executeCommand()`.
-### Parser Module
 
+## Parser
 The Parser component is responsible for converting raw user input into executable `Command` objects.
 It is designed as a `<<Facade>>`, exposing a single static entry point `Parser.parse(userInput)`
 that hides all internal parsing complexity from the rest of the application.
@@ -88,7 +88,7 @@ The `Parser` and `ArgumentExtractor` classes were designed with the following pr
   which simplifies the design and makes the parsing pipeline easy to reason about - given the same
   input string, `Parser.parse()` always produces the same `Command`.
 
-### Storage
+## Storage
 
 The `Storage` and `HistoryManager` components are responsible for saving the application's data (flashcards and decks) to disk and loading it back. A key enhancement is the integrated **version control system**, which automatically creates a historical backup every time data is saved, allowing users to recover from accidental data loss or corruption.
 
@@ -137,6 +137,155 @@ The sequence diagram below shows the enhanced flow when the application saves da
 *   **Decision:** Using the Gson library for JSON serialization/deserialization. The `parse()` method in `Storage` and `parseHistoricalData()` in `HistoryManager` catch `JsonSyntaxException`.
 *   **Rationale:** JSON is a human-readable, debuggable format. Gson handles the complexity of serializing the entire `DeckManager` object graph. Catching `JsonSyntaxException` is crucial for robustness; if the data file becomes corrupted (e.g., edited manually and saved incorrectly), the application will log a warning, return an empty `DeckManager`, and continue running, rather than crashing on startup.
 *   **Error Handling:** Upon catching a `JsonSyntaxException`, the methods print a warning to `System.err` and return a new, empty `DeckManager` object. This provides a clear error signal in the console while allowing the user to continue using the application with a blank state.
+
+## Study
+
+The Study package implements FlashCLI's active-recall workflow: a user selects a deck,
+studies cards one at a time in order of ascending confidence, rates their confidence after
+each answer, and receives a session summary when they finish or quit.
+
+The component consists of three collaborating classes:
+
+| Class | Responsibility |
+|---|---|
+| `StudyCommand` | Entry point — bridges the Command layer to the study subsystem and owns the input loop |
+| `SessionManager` | Owns and lifecycle-manages the single active `StudySession` |
+| `StudySession` | Sorts cards by confidence on construction, tracks position, provides card access |
+
+#### Class Structure
+
+The diagram below shows the Study package and its relationships to the surrounding layers.
+
+![Study Class Diagram](diagrams/study_class.png)
+
+Key design decisions visible in the diagram:
+
+- `SessionManager` **composes** `StudySession` (0..1) — at most one session is active at any
+  time. Calling `startSession()` while a session is already active throws
+  `SESSION_ALREADY_IN_PROGRESS`.
+- `StudySession` holds a **final** reference to a **sorted copy** of the deck — the original
+  deck's order is preserved; only the session's internal view is sorted by confidence.
+- `StudyCommand` depends on `SessionManager`, `DeckManager`, and `Ui` but **not** on
+  `StudySession` directly. All session interaction is mediated through `SessionManager`.
+- `Card` carries a `confidenceLevel` field (default `0`) which `StudyCommand` updates after
+  each answer via `card.setConfidenceLevel(confidence)`. This persists to `Storage` and
+  influences card ordering in future sessions.
+
+#### How a Study Session Works
+
+The sequence diagram below shows the end-to-end flow from `StudyCommand.execute()` being
+called to the session summary being printed.
+
+![Study Sequence Diagram](diagrams/study_sequence.png)
+
+The flow has three phases:
+
+**1. Setup**
+
+`StudyCommand` retrieves the deck from `DeckManager`. If the deck is empty,
+`Ui.showEmptyDeck()` is called and the command returns immediately. Otherwise,
+`SessionManager.startSession(deck)` is called, which creates a new `StudySession`.
+On construction, `StudySession` makes a sorted copy of the deck's cards, ordering them
+by `confidenceLevel` ascending so the cards the user is least confident about are drilled
+first. The first question is shown immediately before entering the loop.
+
+**2. Loop**
+
+On each iteration, the user presses Enter to reveal the current card's answer.
+After the answer is shown, `StudyCommand` prompts the user for a confidence rating (1–5)
+via `Ui.showConfidencePrompt()`. The rating is validated in an inner loop — non-integer
+input and out-of-range values show an error and re-prompt; typing `q` during the confidence
+prompt exits the session immediately. Once a valid rating is received, the card's
+`confidenceLevel` is updated. `SessionManager.nextCard()` then advances the index.
+If the end of the deck is reached, the session ends automatically.
+
+**3. Teardown**
+
+`SessionManager.finishSession()` delegates to `StudySession.finish()`, which calculates
+cards reviewed (capped at deck size), sets `currentIndex = -1` as a consumed sentinel,
+and returns the count. `Ui` prints the session summary.
+
+#### Confidence-Based Card Ordering
+
+The diagram below shows what happens inside `StudySession`'s constructor when
+`startSession(deck)` is called.
+
+![Study Sorting Diagram](diagrams/study_sorting.png)
+
+`StudySession` does not modify the original `Deck` object. Instead it:
+
+1. Retrieves the card list via `deck.listCards()`
+2. Sorts the list in-place by `getConfidenceLevel()` ascending using
+   `Comparator.comparing(Card::getConfidenceLevel)`
+3. Creates a new `Deck` with the same name and assigns the sorted list via `setCards()`
+4. Stores this sorted copy as `this.deck`
+
+This means cards the user rated lowest in previous sessions appear first in the next
+session, implementing a lightweight spaced-repetition policy without requiring any
+additional data structures or scheduling algorithms.
+
+#### Defensive Coding
+
+The Study package applies defensive programming at every public boundary.
+
+**Guards and assertions applied:**
+
+| Method | Guard type | What it checks |
+|---|---|---|
+| `StudySession(deck)` | Explicit null check | `deck != null`; throws `IllegalArgumentException` |
+| `StudySession(deck)` | Post-condition assert | `currentIndex == 0` after construction |
+| `startSession(deck)` | Explicit null check | `deck != null`; throws `INVALID_ARGUMENTS` |
+| `startSession(deck)` | State check | No active session; throws `SESSION_ALREADY_IN_PROGRESS` |
+| `startSession(deck)` | Post-condition assert | `hasActiveSession()` and deck name matches |
+| `getCurrentCard()` | Bounds check | `0 <= currentIndex < deck.getSize()`; throws `CARD_NOT_FOUND` |
+| `getCurrentCard()` | Post-condition assert | returned `card != null` |
+| `nextCard()` | Pre-condition assert | `currentIndex >= 0` (session not already consumed) |
+| `nextCard()` | Post-condition assert | index advanced by exactly 1 |
+| `finish()` | Pre-condition assert | `currentIndex >= 0` (not called twice) |
+| `finish()` | Invariant assert | `0 <= finalCount <= deck.getSize()` |
+| `finishSession()` | Post-condition assert | `activeSession == null` after clearing |
+| `finishSession()` | Post-condition assert | returned count `>= 0` |
+
+All explicit guards throw `FlashException` (user-facing errors) or `IllegalArgumentException`
+(programmer errors). Assertions catch logic errors during development when the JVM is run
+with `-ea` and have no effect in production.
+
+Logging is applied at three levels across `SessionManager` and `StudySession`:
+- `FINE` — normal control flow (method entry, index values)
+- `WARNING` — bad inputs or unexpected state (null deck, no active session, out-of-bounds)
+- `INFO` — significant state changes (session started, session finished with card count)
+
+#### Design Rationale
+
+**Why separate `SessionManager` from `StudySession`?**
+
+An earlier design had `StudyCommand` interact with `StudySession` directly. This was
+rejected because it forced `StudyCommand` to manage session lifecycle — checking for null,
+clearing state after finish — violating the Single Responsibility Principle. With
+`SessionManager` as an intermediary:
+
+- `StudyCommand` only calls high-level operations: `startSession`, `getCurrentCard`,
+  `nextCard`, `finishSession`.
+- `StudySession` only manages index arithmetic and card retrieval.
+- The confidence-sorting logic is entirely contained in `StudySession`'s constructor
+  and can be changed (e.g., switching to a spaced-repetition algorithm) without touching
+  `StudyCommand` or `SessionManager`.
+
+**Why sort a copy of the deck rather than the original?**
+
+Sorting the original deck's `cardList` in `Deck` would change the card order permanently,
+affecting `listCards` output and card indices used by `deleteCard` and `editCard`.
+Creating a sorted copy in `StudySession` isolates ordering to the study subsystem,
+leaving the deck's authoritative order intact.
+
+**Alternatives considered:**
+
+| Alternative | Reason rejected |
+|---|---|
+| Merge `SessionManager` into `StudyCommand` | Mixes command logic with session lifecycle; harder to unit test |
+| Sort cards in `DeckManager` before passing to `StudyCommand` | `DeckManager` should not know about study ordering; violates SRP |
+| Use an iterator pattern over `Deck` | Cleaner API but adds infrastructure to the Deck layer unnecessarily |
+| Sort the original `cardList` in `Deck` | Corrupts card indices used by other commands |
 
 ## Product scope
 ### Target user profile

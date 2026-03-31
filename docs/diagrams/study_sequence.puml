@@ -1,0 +1,75 @@
+@startuml
+skinparam sequenceArrowFontSize 11
+skinparam sequenceParticipantFontSize 12
+skinparam defaultFontSize 12
+
+actor User
+participant ":StudyCommand" as cmd
+participant ":SessionManager" as sm
+participant ":StudySession" as ss
+participant ":Ui" as ui
+
+User -> cmd : execute(dm, ui, in)
+cmd -> cmd : getDeck(deckName)
+
+alt deck is empty
+    cmd -> ui : showEmptyDeck()
+    cmd --> User : return false
+else deck has cards
+    cmd -> sm : startSession(deck)
+    note right of sm
+      sorts cards by confidenceLevel
+      lowest confidence shown first
+    end note
+    sm -> ss : new StudySession(deck)
+
+    cmd -> sm : getCurrentCard()
+    sm --> cmd : first card
+    cmd -> ui : showStudyQuestion(question)
+
+    loop until "q" or finished
+        User -> cmd : [press Enter]
+        cmd -> sm : getCurrentCard()
+        sm --> cmd : current card
+        cmd -> ui : showStudyAnswer(answer)
+        cmd -> ui : showConfidencePrompt()
+
+        loop until valid confidence (1-5)
+            User -> cmd : confidence input
+            alt input is "q"
+                cmd -> sm : finishSession()
+                sm -> ss : finish()
+                ss --> sm : count
+                cmd -> ui : showStudySessionQuit(count)
+                cmd --> User : return false
+            else invalid input
+                cmd -> ui : showError(...)
+            else valid (1-5)
+                cmd -> cmd : card.setConfidenceLevel(confidence)
+            end
+        end
+
+        cmd -> sm : nextCard()
+        sm -> ss : nextCard()
+        ss --> sm : isFinished
+
+        alt isFinished
+            cmd -> sm : finishSession()
+            sm -> ss : finish()
+            ss --> sm : count
+            cmd -> ui : showStudySessionEnd(count)
+            cmd --> User : return false
+        else not finished
+            cmd -> sm : getCurrentCard()
+            sm --> cmd : next card
+            cmd -> ui : showStudyQuestion(next question)
+        end
+    end
+
+    cmd -> sm : finishSession()
+    sm -> ss : finish()
+    ss --> sm : count
+    cmd -> ui : showStudySessionQuit(count)
+    cmd --> User : return false
+end
+@enduml
