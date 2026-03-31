@@ -1,0 +1,42 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontStyle Bold
+skinparam ArrowThickness 1.5
+hide circle
+
+class DeckManager {
+    - deckMap: HashMap<String, Deck>
+    + createDeck(deckName: String): void
+    + deleteDeck(deckName: String): void
+    + getDeck(deckName: String): Deck
+    + listDecks(): List<String>
+}
+
+class Deck {
+    - deckName: String
+    - cardList: ArrayList<Card>
+    + addCard(question: String, answer: String): Card
+    + deleteCard(cardIndex: int): Card
+    + editCard(cardIndex: int, question: String, answer: String): Card
+    + getCard(cardIndex: int): Card
+    + listCards(): ArrayList<Card>
+    + clearCards(): void
+    + getSize(): int
+}
+
+class Card {
+    - question: String
+    - answer: String
+    - confidenceLevel: int
+    + getQuestion(): String
+    + getAnswer(): String
+    + getConfidenceLevel(): Integer
+    + setQuestion(question: String): void
+    + setAnswer(answer: String): void
+    + setConfidenceLevel(level: int): void
+}
+
+DeckManager "1" *-- "0..*" Deck : contains
+Deck "1" *-- "0..*" Card : contains
+
+@enduml

@@ -55,43 +55,135 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 ## Features 
 
-{Give detailed description of each feature}
-
----
 
 ### Viewing help : `help`
 
+Displays a list of possible commands. 
+
+**Format:** `help`
+
+- Takes no arguments.
+
+**Example:**
+```
+help
+```
 ---
 
 ### Creating a deck : `createDeck`
+Creates a new, empty deck with the given name.
 
+**Format:** `createDeck d/DECK_NAME`
+
+- `DECK_NAME` must not be blank.
+- A deck with that exact name must not already exist.
+
+**Example:**
+```
+createDeck d/CS2113 Finals
+```
 ---
 
 ### Listing all decks : `listDecks`
+Displays the names of every deck currently stored.
+
+**Format:** `listDecks`
+
+- Takes no arguments.
+
+**Example:**
+```
+listDecks
+```
 
 ---
 
 ### Deleting a deck : `deleteDeck`
 
+Permanently removes the named deck and all its cards.
+
+**Format:** `deleteDeck d/DECK_NAME`
+
+**Example:**
+```
+deleteDeck d/Linear Algebra
+```
+
 ---
 
 ### Clearing a deck : `clearDeck`
+
+Removes all cards from an existing deck without deleting the deck itself.
+
+**Format:** `clearDeck d/DECK_NAME`
+
+**Example:**
+```
+clearDeck d/CS2113 Finals
+```
 
 ---
 
 ### Adding a card : `addCard`
 
+Adds a new question-and-answer card to an existing deck.
+
+**Format:** `addCard d/DECK_NAME q/QUESTION a/ANSWER`
+
+- Prefixes **must** appear in the order `d/` → `q/` → `a/`.
+- Each of `DECK_NAME`, `QUESTION`, and `ANSWER` must be non-blank.
+- The new card starts with a confidence level of `0` (unreviewed).
+
+**Example:**
+```
+addCard d/CS2113 Finals q/What does OOP stand for? a/Object-Oriented Programming
+```
 ---
 
 ### Listing all cards : `listCards`
+
+Displays every card in a deck, showing each card's index, question, and answer.
+
+**Format:** `listCards d/DECK_NAME`
+
+**Example:**
+```
+listCards d/CS2113 Finals
+```
 
 ---
 
 ### Deleting a card : `deleteCard`
 
+Removes a card at a specified position from a deck.
+
+**Format:** `deleteCard d/DECK_NAME i/INDEX`
+
+- `INDEX` is **1-based** (the first card is `i/1`).
+- Prefixes must appear in the order `d/` → `i/`.
+
+**Example:**
+```
+deleteCard d/CS2113 Finals i/2
+```
+
 ---
 
 ### Editing a card : `editCard`
+
+Replaces the question and answer of an existing card.
+
+**Format:** `editCard d/DECK_NAME i/INDEX q/NEW_QUESTION a/NEW_ANSWER`
+
+- Prefixes **must** appear in the order `d/` → `i/` → `q/` → `a/`.
+- `INDEX` is **1-based**.
+- Both `NEW_QUESTION` and `NEW_ANSWER` must be non-blank.
+- The card's confidence level is not changed by this command.
+
+**Example:**
+```
+editCard d/CS2113 Finals i/1 q/What does OOP stand for? a/Object-Oriented Programming
+```
 
 ---
 

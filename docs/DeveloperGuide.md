@@ -303,6 +303,142 @@ leaving the deck's authoritative order intact.
 | Use an iterator pattern over `Deck` | Cleaner API but adds infrastructure to the Deck layer unnecessarily |
 | Sort the original `cardList` in `Deck` | Corrupts card indices used by other commands |
 
+## Deck
+
+The Deck component is FlashCLI's core data layer. It holds all flashcard data
+at runtime and provides the authoritative storage structure that every other
+component reads from or writes to.
+
+The component consists of three collaborating classes:
+
+| Class | Responsibility |
+|---|---|
+| `DeckManager` | Top-level container — owns and manages the full collection of named `Deck` objects |
+| `Deck` | Mid-level container — owns an ordered list of `Card` objects and exposes CRUD operations on them |
+| `Card` | Leaf data object — holds a question, answer, and a persisted confidence level |
+
+#### Class Structure
+
+The diagram below shows the Deck component's three classes and their
+composition hierarchy.
+
+![Deck Class Diagram](diagrams/deck_class.png)
+
+Key observations from the diagram:
+
+- `DeckManager` uses a `HashMap<String, Deck>` keyed by deck name, giving
+  O(1) lookup by name for all card operations.
+- `Deck` stores cards in an `ArrayList<Card>`, preserving insertion order
+  and supporting stable index-based access used by `deleteCard` and
+  `editCard`.
+- `Card` exposes both getters **and** setters for `question`, `answer`,
+  and `confidenceLevel`. Setters are intentionally narrow — only
+  `EditCardCommand` and `StudyCommand` may mutate a card after creation.
+- The hierarchy is strictly one-directional: `DeckManager` knows about
+  `Deck`, and `Deck` knows about `Card`, but neither child class holds a
+  reference back to its parent.
+
+#### Operations
+
+**Deck management (`DeckManager`)**
+
+`createDeck(deckName)` — Creates a new empty `Deck` and inserts it into
+the map. Throws `DUPLICATE_DECK` if a deck with that name already exists.
+
+`deleteDeck(deckName)` — Removes the deck from the map entirely, along
+with all its cards. Throws `DECK_NOT_FOUND` if the name is not present.
+
+`getDeck(deckName)` — Returns the `Deck` instance for the given name.
+Used by all card-level commands before they delegate down to `Deck`.
+Throws `DECK_NOT_FOUND` on a miss.
+
+`listDecks()` — Returns a sorted `List<String>` of all deck names.
+Sorting ensures a stable, predictable display order.
+
+**Card management (`Deck`)**
+
+`addCard(question, answer)` — Constructs a new `Card` with `confidenceLevel`
+defaulting to `0` and appends it to `cardList`. Returns the created `Card`
+so the caller can confirm or display it.
+
+`deleteCard(cardIndex)` — Removes and returns the `Card` at the given
+0-based index. Throws `INVALID_INDEX` if the index is out of range.
+
+`editCard(cardIndex, question, answer)` — Mutates `question` and `answer`
+on the existing `Card` in-place via `setQuestion()` and `setAnswer()`.
+The card's `confidenceLevel` and position in the list are preserved.
+Returns the updated `Card`.
+
+`getCard(cardIndex)` — Returns the `Card` at the given 0-based index
+without removing it. Throws `INVALID_INDEX` if out of range.
+
+`getSize()` / `listCards()` — Read-only accessors used by display
+commands and the Study subsystem.
+
+`clearCards()` — Empties `cardList`. Used by the history-restore flow
+when `Storage` rebuilds a `Deck` from a JSON snapshot.
+
+#### Edit Card Sequence
+
+The diagram below shows the end-to-end flow for `editCard d/DECK i/INDEX
+q/QUESTION a/ANSWER`, which is the most complex card-level operation as it
+involves index conversion, two mutable fields, and a confirmation display.
+
+![Edit Card Sequence Diagram](diagrams/card_rename.png)
+
+1. The user types `editCard d/DECK i/INDEX q/QUESTION a/ANSWER`.
+2. `FlashCLI` calls `Parser.parse(userInput)`, which delegates to
+   `ArgumentExtractor.parseEditCardArgs(...)`. The extractor validates the
+   `d/`, `i/`, `q/`, `a/` prefixes (in order) and converts the user-facing
+   1-based index to a 0-based `cardIndex` internally.
+3. `Parser` constructs and returns an `EditCardCommand`.
+4. `FlashCLI` calls `editCardCommand.execute(deckManager, ui, in)`.
+5. `EditCardCommand` calls `deckManager.getDeck(deckName)` to retrieve
+   the target `Deck`.
+6. `EditCardCommand` calls `deck.editCard(cardIndex, question, answer)`,
+   which forwards `setQuestion(question)` and `setAnswer(answer)` to the
+   `Card`. The updated `Card` is returned.
+7. `EditCardCommand` calls `ui.showCardEdited(card, deckName)` to print
+   the confirmation message.
+8. Control returns to `FlashCLI`, which calls `storage.save(deckManager)`
+   to persist the change.
+
+#### Design Rationale
+
+**`HashMap` in `DeckManager` and `ArrayList` in `Deck` serve different access patterns.**
+
+Deck lookup is always by name (a string key), making `HashMap` the natural
+choice for O(1) retrieval. Card access is always by positional index —
+either explicitly by the user (`deleteCard i/2`) or implicitly by iteration
+(study, list) — so `ArrayList` preserves insertion order and gives O(1)
+indexed access. A `HashMap<Integer, Card>` inside `Deck` would add
+unnecessary complexity without any lookup benefit.
+
+**`confidenceLevel` is stored on `Card` so it persists automatically across sessions.**
+
+Storing confidence on `Card` means it is automatically serialised and
+deserialised by `Storage` as part of the normal save/load cycle. If it
+were stored in `StudySession`, it would be lost when the session ends.
+Placing it on `Card` also allows `DeckManager` to export accurate
+statistics about the entire collection without needing to know anything
+about the Study subsystem.
+
+**`editCard` mutates the existing `Card` in-place rather than replacing it.**
+
+Replacing the card at an index (delete + insert) would shift the 0-based
+indices of all subsequent cards, invalidating any in-flight reference other
+commands or the active study session might hold. Mutating the existing
+object avoids this side-effect entirely and keeps `confidenceLevel` intact —
+a card's difficulty rating should survive an edit to its wording.
+
+**`setCards()` access is restricted to the Study and Storage subsystems.**
+
+`setCards()` replaces the entire `cardList` at once. Exposing it broadly
+would allow any command to silently overwrite all cards. It is used in
+exactly two legitimate places: `StudySession` (to install a sorted copy of
+the list) and `Storage` (to rebuild a `Deck` from a JSON snapshot). All
+other mutations go through the fine-grained `addCard` / `deleteCard` /
+`editCard` methods, which validate indices and maintain list integrity.
 
 ## Add Card
 
@@ -663,13 +799,23 @@ powerful and user-friendly.
 ## Product scope
 ### Target user profile
 
-{Describe the target user profile}
+FlashCLI targets **students who prefer a keyboard-driven workflow** and want a lightweight,
+distraction-free tool for active recall revision. The ideal user:
+
+- Is comfortable working in a terminal and prefers typed commands over graphical interfaces
+- Studies multiple subjects simultaneously and wants their revision material clearly separated by topic
+- Revises on a personal machine and wants data stored locally, without requiring an internet connection or account login
+- Values speed and want to capture a new flashcard or start a study session with a single command, without navigating menus
+- Is preparing for exams and wants to focus their limited revision time on the cards they struggle with most
 
 ### Value proposition
 
-{Describe the value proposition: what problem does it solve?}
+FlashCLI solves the problem of **friction in active-recall revision** for CLI-native students.
 
-## User Stories
+Existing tools such as Anki and Quizlet require a browser or dedicated GUI application, which
+pulls students out of their terminal-based workflow. Neither offers a fully keyboard-driven
+experience optimised for speed of entry and session startup.
+
 
 ## User Stories
 

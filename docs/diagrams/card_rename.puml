@@ -1,0 +1,69 @@
+@startuml
+skinparam sequenceArrowThickness 1.5
+skinparam SequenceBoxBorderColor Black
+skinparam ParticipantPadding 15
+skinparam sequenceGroupBorderThickness 1.5
+
+
+actor User
+participant ":FlashCLI" as FlashCLI
+participant ":Parser" as Parser
+participant ":EditCardCommand" as EditCardCommand
+participant ":DeckManager" as DeckManager
+participant ":Deck" as Deck
+participant ":Card" as Card
+participant ":Ui" as Ui
+
+User -> FlashCLI : editCard d/DECK i/INDEX q/QUESTION a/ANSWER
+activate FlashCLI
+
+FlashCLI -> Parser : parse(userInput)
+activate Parser
+Parser -> Parser : validate and extract arguments
+Parser --> FlashCLI : editCardCommand
+deactivate Parser
+
+FlashCLI -> EditCardCommand : execute(deckManager, ui, in)
+activate EditCardCommand
+
+EditCardCommand -> DeckManager : getDeck(deckName)
+activate DeckManager
+DeckManager --> EditCardCommand : deck
+deactivate DeckManager
+
+EditCardCommand -> Deck : editCard(cardIndex, question, answer)
+activate Deck
+
+Deck -> Card : setQuestion(question)
+activate Card
+Card --> Deck
+deactivate Card
+
+Deck -> Card : setAnswer(answer)
+activate Card
+Card --> Deck
+deactivate Card
+
+Deck --> EditCardCommand : card
+deactivate Deck
+
+EditCardCommand -> Ui : showCardEdited(card, deckName)
+activate Ui
+Ui --> User : "Edited card in deck DECK: ..."
+deactivate Ui
+
+EditCardCommand --> FlashCLI : false
+deactivate EditCardCommand
+
+FlashCLI -> FlashCLI : storage.save(deckManager)
+
+deactivate FlashCLI
+
+note over Parser
+  ArgumentExtractor validates prefixes
+  d/, i/, q/, a/ and extracts values.
+  Index is converted from 1-based
+  to 0-based internally.
+end note
+
+@enduml
