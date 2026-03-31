@@ -17,3 +17,8 @@ bin/
 text-ui-Test/EXPECTED-UNIX.TXT
 /data
 
+# Storage data files
+/data/*.json
+storage.json
+*.json
+
