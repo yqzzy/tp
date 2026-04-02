@@ -104,6 +104,27 @@ The `Parser` and `ArgumentExtractor` classes were designed with the following pr
   which simplifies the design and makes the parsing pipeline easy to reason about - given the same
   input string, `Parser.parse()` always produces the same `Command`.
 
+* **Prefix Ordering:** `validatePrefixOrder` enforces strict left-to-right prefix ordering even though the prefixes
+themselves identify each field. This is a deliberate constraint: `extractBetween` slices the
+argument string by index position, so out-of-order prefixes would cause values to be extracted
+incorrectly without any error. The order check makes position-based slicing safe and produces
+a clear `INVALID_ARGUMENTS` error if violated.
+
+* **Reserved Prefix Strings** The strings `d/`, `q/`, `a/`, and `i/` cannot appear inside card content (deck names,
+questions, or answers). If they do, `validatePrefixes` detects the apparent duplicate via
+`indexOf` vs `lastIndexOf` and throws `DUPLICATE_PREFIX`. This is a deliberate tradeoff for parsing simplicity.
+
+### Future Improvements
+
+* **Partial prefix support for `editCard`:** Currently `editCard` requires both `q/` and `a/`
+  even if the user only wants to update one field. A future enhancement could make each optional,
+  only mutating the fields that are explicitly provided.
+
+* **Support for multi-line answers:** The current parser reads a single line of input, so answers
+  containing newlines are not possible. A future design could support a multi-line input mode for
+  long-form answers, terminated by a sentinel such as `END`, without requiring changes to the
+  prefix-based extraction logic for other fields.
+
 ## Storage
 
 The `Storage` and `HistoryManager` components are responsible for saving the application's data (flashcards and decks) to disk and loading it back. A key enhancement is the integrated **version control system**, which automatically creates a historical backup every time data is saved, allowing users to recover from accidental data loss or corruption.

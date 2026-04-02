@@ -107,54 +107,54 @@ public class Ui {
         System.out.println(LINE);
         System.out.println("Here are all the cards in the deck " + deckName + ": ");
         for (int i = 0; i < cardList.size(); i++) {
-            System.out.println((i+1) + ". " + cardList.get(i).getQuestion() + "\n" + cardList.get(i).getAnswer() + "\n");
+            System.out.println((i + 1) + ". " + cardList.get(i).getQuestion() + "\n" + cardList.get(i).getAnswer() + "\n");
         }
         System.out.println(LINE);
     }
 
     public void showHelp() {
         String helpMessage = """
-            FlashCLI Command Guide
-
-            createDeck d/DECK_NAME
-                Create a new subject deck
-
-            listDecks
-                List all subject decks
-            
-            clearDeck d/DECK_NAME
-                 Clear all flashcards in a deck
-            
-            deleteDeck d/DECK_NAME
-                Delete a deck and all its cards
-            
-            addCard d/DECK q/QUESTION a/ANSWER
-                Add a flashcard to a deck
-
-            listCards d/DECK_NAME
-                List all flashcards in a deck
-           
-            deleteCard d/DECK_NAME i/INDEX
-                Delete a flashcard by index
-            
-            study d/DECK
-                Start study mode
-            
-            q
-                End study mode
-            
-            enter (keystroke)
-                show next card/answer during an active study session
-
-            help
-                Show this help message
-
-            exit
-                Exit the program
-            
-            =================================================
-            """;
-
+                FlashCLI Command Guide
+                ----------------------
+                
+                createDeck d/DECK_NAME
+                    Create a new subject deck
+                
+                listDecks
+                    List all subject decks
+                
+                clearDeck d/DECK_NAME
+                    Clear all flashcards in a deck
+                
+                deleteDeck d/DECK_NAME
+                    Delete a deck and all its cards
+                
+                addCard d/DECK_NAME q/QUESTION a/ANSWER
+                    Add a flashcard to a deck
+                
+                listCards d/DECK_NAME
+                    List all flashcards in a deck
+                
+                deleteCard d/DECK_NAME i/INDEX
+                    Delete a flashcard by index
+                
+                editCard d/DECK_NAME i/INDEX q/QUESTION a/ANSWER
+                    Edit a flashcard's question and/or answer
+                
+                study d/DECK_NAME
+                    Start study mode
+                    - Press Enter to reveal the answer
+                    - Rate your confidence 1–5 after each card
+                    - Type 'q' to quit early
+                
+                help
+                    Show this help message
+                
+                exit
+                    Exit the program
+                
+                =================================================
+                """;
         System.out.println(helpMessage);
     }
 

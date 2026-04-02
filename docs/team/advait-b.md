@@ -35,12 +35,17 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 - Created the milestone for **v2.0** on GitHub and populated it with **all** the user stories.
 - Added deadlines to all milestones to keep the team on schedule.
 - Fixed general bugs to ensure the project consistently passed automated build tests throughout development ([#62](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/62), [#64](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/64), [#65](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/65))
+- Created smoke test forum for v2.0 ([#120](https://github.com/AY2526S2-CS2113-T10-1/tp/discussions/120))
 - Managed GitHub releases for v2.0.
 
 ### Mentoring Contributions
 
-- Added non-trivial PR review feedback on these PRs: [#2](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/2), [#5](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/5), [#54](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/54), [#79](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/79)
+- Added non-trivial PR review feedback on these PRs: [#2](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/2), [#5](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/5), [#54](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/54), [#79](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/79), [#106](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/106)
 - Proactively identified code design issues prior to v2.0 and documented actionable recommendations for adhering to SRP, SOC, LSP in a shared Google Doc distributed to the team.
+
+### Contributions beyond the Project Team
+
+- Added 20 non-trivial PR review comments for W10-4's Developer Guide ([Link](https://github.com/NUS-CS2113-AY2526-S2/tp/pull/20))
 
 ### Documentation
 
@@ -49,11 +54,11 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 - Wrote the product introduction section.
 - Wrote the quick start guide.
 - Added the command summary table for quick reference.
-- Added user stories for v1.0.
 
 #### Developer Guide
 
 - Wrote the design and implementation section describing the architecture of FlashCLI.
 - Created the architecture class diagram showing relationships between all major components.
 - Added a Parser class diagram and sequence diagram illustrating the parsing flow.
-- Documented the Parser design rationale.
+- Documented the Parser design rationale. 
+- Added user stories for v1.0 and v2.0.

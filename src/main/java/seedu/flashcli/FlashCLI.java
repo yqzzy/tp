@@ -8,6 +8,9 @@ import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.parser.Parser;
 import seedu.flashcli.storage.Storage;
 import seedu.flashcli.ui.Ui;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FlashCLI {
     private final DeckManager deckManager;
@@ -22,6 +25,12 @@ public class FlashCLI {
      * Main entry-point for the java.duke.Duke application.
      */
     public static void main(String[] args) {
+        // Suppress INFO/WARNING console output
+        Logger rootLogger = Logger.getLogger("");
+        rootLogger.setLevel(Level.SEVERE);
+        for (Handler handler : rootLogger.getHandlers()) {
+            handler.setLevel(Level.SEVERE);
+        }
         FlashCLI flashCLI = new FlashCLI();
         flashCLI.ui.hello();
         Scanner in = new Scanner(System.in);
@@ -32,7 +41,6 @@ public class FlashCLI {
             }
         }
     }
-
 
     /**
      * Executes command the user wants (add item to list, print list, exit).
@@ -53,6 +61,4 @@ public class FlashCLI {
             return false;
         }
     }
-
-
 }
