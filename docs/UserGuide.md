@@ -263,9 +263,60 @@ _______________________________
 
 ## FAQ
 
-**Q**: How do I transfer my data to another computer? 
+**Q: How do I transfer my data to another computer?**  
+**A**: Copy the `data/storage.json` file from your current FlashCLI folder to the same location on the new computer. Ensure FlashCLI is not running while copying the file.
 
-**A**: {your answer here}
+---
+
+**Q: What happens if I accidentally delete a deck or card?**  
+**A**: Deletions are permanent and cannot be undone. You may need to manually restore from a backup of `data/storage.json` if available.
+
+---
+
+**Q: Why does my command not work even though it looks correct?**  
+**A**: Ensure that:
+- Prefixes are in the correct order (e.g. `d/` → `q/` → `a/`)
+- There are no missing prefixes
+- Inputs are not blank  
+  FlashCLI is strict about command format.
+
+---
+
+**Q: Can I use commands during a study session?**  
+**A**: No. Only study session inputs (`Enter`, `1–5`, `q`) are accepted during a study session. Other commands will not work until the session ends.
+
+---
+
+**Q: Why is my deck not appearing after I create it?**  
+**A**: Ensure that:
+- The deck name is not blank
+- A deck with the same name does not already exist  
+  If the command fails, FlashCLI will display an error message.
+
+---
+
+**Q: Where is my data stored?**  
+**A**: All data is stored locally in `data/storage.json` in the same directory as the application.
+
+---
+
+**Q: Can I edit the storage file manually?**  
+**A**: It is not recommended. Incorrect edits may corrupt your data and cause FlashCLI to fail when loading.
+
+---
+
+**Q: What happens if I enter an invalid index for a card?**  
+**A**: FlashCLI will display an error message. Ensure the index is within the range shown by `listCards`.
+
+---
+
+**Q: Do I need to save my data manually?**  
+**A**: No. FlashCLI automatically saves all changes after every command.
+
+---
+
+**Q: Why are my cards shown in a different order during study?**  
+**A**: Cards are automatically ordered by confidence level (lowest first) to help you focus on weaker areas first.
 
 ---
 
