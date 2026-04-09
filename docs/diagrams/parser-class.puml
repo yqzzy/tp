@@ -7,7 +7,7 @@ skinparam nodesep 80
 skinparam ranksep 70
 
 together {
-    class Parser <<Facade>> {
+    class Parser {
         {static} +parse(userInput: String): Command
     }
     interface Command {
