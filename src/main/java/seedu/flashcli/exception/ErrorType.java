@@ -14,7 +14,7 @@ public enum ErrorType {
     DUPLICATE_PREFIX("Duplicate prefixes detected. Each prefix should appear only once."),
     INVALID_ADD_CARD("Invalid format for addCard.\nUse: addCard d/<deck> q/<question> a/<answer>"),
     INVALID_DELETE_CARD("Invalid format for deleteCard.\nUse: deleteCard d/<deck> i/<index>"),
-    INVALID_INDEX("Input an integer index number."),
+    INVALID_INDEX("Invalid index. Enter a positive integer within the range shown by 'listCards'."),
     DECK_NOT_FOUND("Deck not found. Use listDecks to see available decks."),
     CARD_NOT_FOUND("Card index out of bounds. Use listCards to see valid indices."),
     SESSION_ALREADY_IN_PROGRESS("A study session is already running. Please finish it before starting a new one."),
