@@ -211,10 +211,7 @@ public class Ui {
      * @param errorMsg String to print out.
      */
     public void showError(String userInput, String errorMsg) {
-        System.out.println("Error encountered: \n"
-                + "Error msg: " + errorMsg + "\n"
-                + "User Input: " + userInput
-        );
+        System.out.println("Error: " + errorMsg);
     }
 
     public void showConfidencePrompt(){

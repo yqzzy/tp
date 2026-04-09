@@ -45,8 +45,8 @@ The architecture diagram below shows the relationships between all major classes
 
 ## Parser
 The Parser component is responsible for converting raw user input into executable `Command` objects.
-It is designed as a `<<Facade>>`, exposing a single static entry point `Parser.parse(userInput)`
-that hides all internal parsing complexity from the rest of the application.
+It exposes a single static entry point `Parser.parse(userInput)` that hides all internal parsing 
+complexity from the rest of the application.
 
 #### Class Structure
 
@@ -55,7 +55,7 @@ The diagram below shows the classes in the Parser component and how they interac
 ![Parser Class Diagram](diagrams/parser_class.png)
 
 **Key classes:**
-- `Parser` - facade that validates input and dispatches to the correct parse helper
+- `Parser` - utility class that validates input and dispatches to the correct parse helper
 - `ArgumentExtractor` - handles all prefix-based argument extraction and validation
 - `AddCardArgs`, `DeleteCardArgs`, `DeckArgs` - immutable data holders for parsed arguments
 - `Command` - interface implemented by all command objects returned by the parser

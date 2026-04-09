@@ -42,6 +42,8 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
         * macOS / Linux: `./gradlew run`
         * Windows: `.\gradlew.bat run`
     * **From JAR:** `java -jar flashcli.jar`
+      * This command works on Windows, macOS, and Linux.
+      * Ensure the filename matches your downloaded file name.
 
    You should see the welcome message:
    ```
