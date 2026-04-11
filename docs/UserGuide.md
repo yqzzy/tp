@@ -77,8 +77,38 @@ first. This guide walks you through how to install and use FlashCLI.
 `data/storage.json` after every command. You do not need to save manually. In case the
 data has been corrupted, FlashCLI will discard it.
 
-## Features 
+## Notes on Command Format
 
+- Commands are not case-sensitive. For example, `addCard` and `addcard`
+  are treated the same.
+- Prefixes are case-sensitive. Type them exactly as shown: `d/`, `q/`,
+  `a/`, and `i/`.
+- Prefixes must have no space between the letter and slash. `q/` is
+  valid; `q /` will not be recognised and will be rejected.
+- Reserved prefixes (`d/`, `q/`, `a/`, `i/`) cannot appear anywhere in
+  field values - including deck names, questions, and answers. Any input
+  containing a reserved prefix outside of its intended position will be
+  rejected. For example:
+    - `addCard d/Maths q/What does a in a/b represent? a/Numerator`
+      will be rejected, as `a/b` contains a reserved prefix.
+    - The following are accepted alternatives:
+        - `addCard d/Maths q/What does a in a / b represent? a/Numerator`
+          (add a space before the slash)
+        - `addCard d/Maths q/What does a in a\b represent? a/Numerator`
+          (use a backslash)
+        - `addCard d/Maths q/What does a in a:b represent? a/Numerator`
+          (use colon notation)
+    - The same applies to `d/`, `q/`, and `i/` appearing inside field
+      values. Consider alternatives such as `d:`, `deck:`, `(d)`, or
+      rephrasing.
+- Prefixes must be supplied in the order shown for each command.
+- Duplicate prefixes in the same command will be rejected.
+- Card indices must be positive integers.
+- Leading and trailing spaces around field values are ignored.
+- `listDecks`, `exit`, and `help` do not accept any arguments; supplying
+  extra text will be rejected.
+
+## Features 
 
 ### Viewing help : `help`
 
