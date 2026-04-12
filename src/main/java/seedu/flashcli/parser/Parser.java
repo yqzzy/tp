@@ -28,8 +28,8 @@ public class Parser {
     private static final Logger logger = Logger.getLogger("Parser");
 
     private static final String[] VALID_COMMANDS = {
-        "addCard", "listCards", "deleteCard", "createDeck", "editCard",
-        "listDecks", "clearDeck", "deleteDeck", "study", "exit", "help"
+        "addcard", "listcards", "deletecard", "createdeck", "editcard",
+        "listdecks", "cleardeck", "deletedeck", "study", "exit", "help"
     };
 
     private Parser() {
@@ -48,7 +48,7 @@ public class Parser {
         validateInput(userInput);
         // Splits the user input into two words (command, argument)
         String[] tokens = userInput.split(" ", 2);
-        String command = tokens[0].trim();
+        String command = tokens[0].trim().toLowerCase();
         String arguments = tokens.length > 1 ? tokens[1].trim() : "";
         validateCommandName(command);
         logger.log(Level.FINE, "Dispatching command: \"{0}\" with arguments: \"{1}\"",
@@ -93,21 +93,21 @@ public class Parser {
     private static Command dispatch(String command, String arguments) throws FlashException {
         assert !command.isEmpty() : "dispatch() received an empty command";
         switch (command) {
-        case "addCard":
+        case "addcard":
             return parseAddCardCommand(arguments);
-        case "listCards":
+        case "listcards":
             return parseListCardsCommand(arguments);
-        case "deleteCard":
+        case "deletecard":
             return parseDeleteCardCommand(arguments);
-        case "editCard":
+        case "editcard":
             return parseEditCardCommand(arguments);
-        case "createDeck":
+        case "createdeck":
             return parseCreateDeckCommand(arguments);
-        case "listDecks":
+        case "listdecks":
             return requireEmpty(arguments, new ListDecksCommand());
-        case "clearDeck":
+        case "cleardeck":
             return parseClearDeckCommand(arguments);
-        case "deleteDeck":
+        case "deletedeck":
             return parseDeleteDeckCommand(arguments);
         case "study":
             return parseStudyCommand(arguments);
