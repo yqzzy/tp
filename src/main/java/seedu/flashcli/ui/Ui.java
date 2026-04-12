@@ -165,6 +165,7 @@ public class Ui {
      * @param question The question text of the current card.
      */
     public void showStudyQuestion(String question) {
+        System.out.println(LINE);
         System.out.println("Q: " + question);
         System.out.println("(Press Enter to reveal answer, or type 'q' to quit, any other commands or inputs will not be processed before you quit)");
     }
@@ -184,8 +185,10 @@ public class Ui {
      * @param reviewed Number of cards reviewed in the session.
      */
     public void showStudySessionEnd(int reviewed) {
+        System.out.println(LINE);
         System.out.println("End of deck!");
         System.out.println("Session ended. Cards reviewed: " + reviewed);
+        System.out.println(LINE);
     }
 
     /**
@@ -194,7 +197,9 @@ public class Ui {
      * @param reviewed Number of cards reviewed before quitting.
      */
     public void showStudySessionQuit(int reviewed) {
+        System.out.println(LINE);
         System.out.println("Session ended. Cards reviewed: " + reviewed);
+        System.out.println(LINE);
     }
 
     /**
