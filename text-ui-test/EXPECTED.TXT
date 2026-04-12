@@ -1,1 +1,2 @@
 Welcome to FlashCLI!
+Enter a command, or type 'help' to see available commands

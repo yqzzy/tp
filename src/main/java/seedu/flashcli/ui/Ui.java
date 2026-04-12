@@ -10,6 +10,7 @@ public class Ui {
 
     public void hello() {
         System.out.println("Welcome to FlashCLI!");
+        System.out.println("Enter a command, or type 'help' to see available commands");
     }
 
     /**

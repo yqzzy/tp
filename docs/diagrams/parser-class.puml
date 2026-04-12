@@ -10,7 +10,7 @@ together {
     class Parser {
         {static} +parse(userInput: String): Command
     }
-    interface Command {
+    interface Command <<interface>> {
         +execute(deckManager: DeckManager,\n  ui: Ui, in: Scanner): boolean
     }
 }
