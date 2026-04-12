@@ -145,7 +145,7 @@ public class Ui {
                 study d/DECK_NAME
                     Start study mode
                     - Press Enter to reveal the answer
-                    - Rate your confidence 1–5 after each card
+                    - Rate your confidence 1-5 after each card
                     - Type 'q' to quit early
                 
                 help
