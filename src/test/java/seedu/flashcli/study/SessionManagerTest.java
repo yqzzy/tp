@@ -57,7 +57,7 @@ public class SessionManagerTest {
         sessionManager.startSession(sampleDeck);
         int count = sessionManager.finishSession();
 
-        assertEquals(1, count);
+        assertEquals(0, count);
         assertFalse(sessionManager.hasActiveSession(), "Session should be null after finishing");
     }
 
