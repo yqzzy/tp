@@ -3,7 +3,7 @@ package seedu.flashcli.exception;
 public enum ErrorType {
 
     NULL_INPUT("Please type in a command or use \"help\" to see the list of commands."),
-    INVALID_COMMAND("Invalid command. Use \"help\" to see the list of all commands. Note that commands are case-sensitive."),
+    INVALID_COMMAND("Invalid command. Use \"help\" to see the list of all commands."),
     INVALID_ARGUMENTS("Invalid arguments format. Check your prefixes and try again."),
     ARGUMENT_MISSING("One or more required arguments are missing."),
     UNEXPECTED_ARGUMENTS("Too many arguments are provided."),
