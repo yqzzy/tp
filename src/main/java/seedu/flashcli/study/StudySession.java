@@ -28,7 +28,7 @@ public class StudySession {
             throw new IllegalArgumentException("StudySession: deck must not be null");
         }
 
-        ArrayList<Card> tempCards = deck.listCards();
+        ArrayList<Card> tempCards = new ArrayList<>(deck.listCards());
         Deck tempDeck = new Deck(deck.getDeckName());
         tempCards.sort(Comparator.comparing(Card::getConfidenceLevel));
         tempDeck.setCards(tempCards);
