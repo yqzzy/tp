@@ -251,7 +251,7 @@ Format: `study d/DECK_NAME`
   about appear first. Cards that have never been studied (default confidence `0`) always
   appear before any rated card.
 - During a session, only the study session controls listed below are valid. Regular
-  FlashCLI commands (e.g. `addCard`, `listDecks`) cannot be used mid-session.
+  FlashCLI commands (e.g. `addCard`, `listDecks`) cannot be used mid-session. Any inputs followed by Enter will reveal the answer. Users can type out their answers first for self-comparison, but the app does not check correctness.
 
 **Study session controls:**
 
@@ -273,7 +273,7 @@ Format: `study d/DECK_NAME`
     - `5` — Knew it perfectly
 4. FlashCLI advances to the next card. Repeat steps 2–3 until all cards are reviewed
    or you type `q` to quit.
-5. At the end of the session, FlashCLI displays the number of cards reviewed.
+5. At the end of the session, FlashCLI displays the number of cards reviewed. Cards count as "reviewed" only after you rate confidence
 
 > **Note:** Your confidence ratings are saved automatically. The next time you study the
 > same deck, cards with lower confidence ratings will appear first.

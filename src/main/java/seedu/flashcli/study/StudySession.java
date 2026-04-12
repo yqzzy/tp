@@ -102,8 +102,7 @@ public class StudySession {
         // Pre-condition: index must be non-negative for a meaningful review count
         assert currentIndex >= 0 : "finish() called with a negative index; session may have already been finished";
 
-        int cardsReviewed = currentIndex + 1;
-        int finalCount = Math.min(cardsReviewed, deck.getSize());
+        int finalCount = Math.min(currentIndex, deck.getSize());
 
         // Invariant: finalCount must be within [0, deckSize]
         assert finalCount >= 0 && finalCount <= deck.getSize()

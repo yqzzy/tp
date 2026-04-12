@@ -10,66 +10,175 @@ participant ":StudySession" as ss
 participant ":Ui" as ui
 
 User -> cmd : execute(dm, ui, in)
+activate cmd
+
 cmd -> cmd : getDeck(deckName)
+activate cmd
+deactivate cmd
 
 alt deck is empty
     cmd -> ui : showEmptyDeck()
+    activate ui
+    deactivate ui
     cmd --> User : return false
+    deactivate cmd
+
 else deck has cards
     cmd -> sm : startSession(deck)
+    activate sm
     note right of sm
       sorts cards by confidenceLevel
       lowest confidence shown first
     end note
     sm -> ss : new StudySession(deck)
+    activate ss
+ @startuml
+ hide footbox
+ skinparam sequenceArrowFontSize 11
+ skinparam sequenceParticipantFontSize 12
+ skinparam defaultFontSize 12
 
-    cmd -> sm : getCurrentCard()
-    sm --> cmd : first card
-    cmd -> ui : showStudyQuestion(question)
+ actor User
+ participant ":StudyCommand" as cmd
+ participant ":SessionManager" as sm
+ participant ":StudySession" as ss
+ participant ":Ui" as ui
 
-    loop until "q" or finished
-        User -> cmd : [press Enter]
-        cmd -> sm : getCurrentCard()
-        sm --> cmd : current card
-        cmd -> ui : showStudyAnswer(answer)
-        cmd -> ui : showConfidencePrompt()
+ User -> cmd : execute(dm, ui, in)
+ activate cmd
 
-        loop until valid confidence (1-5)
-            User -> cmd : confidence input
-            alt input is "q"
-                cmd -> sm : finishSession()
-                sm -> ss : finish()
-                ss --> sm : count
-                cmd -> ui : showStudySessionQuit(count)
-                cmd --> User : return false
-            else invalid input
-                cmd -> ui : showError(...)
-            else valid (1-5)
-                cmd -> cmd : card.setConfidenceLevel(confidence)
-            end
-        end
+ cmd -> cmd : getDeck(deckName)
+ activate cmd
+ deactivate cmd
 
-        cmd -> sm : nextCard()
-        sm -> ss : nextCard()
-        ss --> sm : isFinished
+ alt deck is empty
+     cmd -> ui : showEmptyDeck()
+     activate ui
+     deactivate ui
+     cmd --> User : return false
+     deactivate cmd
 
-        alt isFinished
-            cmd -> sm : finishSession()
-            sm -> ss : finish()
-            ss --> sm : count
-            cmd -> ui : showStudySessionEnd(count)
-            cmd --> User : return false
-        else not finished
-            cmd -> sm : getCurrentCard()
-            sm --> cmd : next card
-            cmd -> ui : showStudyQuestion(next question)
-        end
-    end
+ else deck has cards
+     cmd -> sm : startSession(deck)
+     activate sm
+     note right of sm
+       sorts cards by confidenceLevel
+       lowest confidence shown first
+     end note
+     sm -> ss : new StudySession(deck)
+     activate ss
+     deactivate ss
+     deactivate sm
 
-    cmd -> sm : finishSession()
-    sm -> ss : finish()
-    ss --> sm : count
-    cmd -> ui : showStudySessionQuit(count)
-    cmd --> User : return false
-end
-@enduml
+     cmd -> sm : getCurrentCard()
+     activate sm
+     sm --> cmd : firstCard
+     deactivate sm
+
+     cmd -> ui : showStudyQuestion(question)
+     activate ui
+     deactivate ui
+
+     loop study loop
+         alt user types q at question prompt
+             User -> cmd : q
+             cmd -> sm : finishSession()
+             activate sm
+             sm -> ss : finish()
+             activate ss
+             ss --> sm : count
+             destroy ss
+             deactivate sm
+
+             cmd -> ui : showStudySessionQuit(count)
+             activate ui
+             deactivate ui
+
+             cmd --> User : return false
+             deactivate cmd
+
+         else user presses Enter
+             User -> cmd : Enter
+
+             cmd -> sm : getCurrentCard()
+             activate sm
+             sm --> cmd : currentCard
+             deactivate sm
+
+             cmd -> ui : showStudyAnswer(answer)
+             activate ui
+             deactivate ui
+
+             cmd -> ui : showConfidencePrompt()
+             activate ui
+             deactivate ui
+
+             loop until valid confidence (1-5)
+                 User -> cmd : confidenceInput
+                 alt input is q
+                     cmd -> sm : finishSession()
+                     activate sm
+                     sm -> ss : finish()
+                     activate ss
+                     ss --> sm : count
+                     destroy ss
+                     deactivate sm
+
+                     cmd -> ui : showStudySessionQuit(count)
+                     activate ui
+                     deactivate ui
+
+                     cmd --> User : return false
+                     deactivate cmd
+
+                 else invalid input
+                     cmd -> ui : showError(...)
+                     activate ui
+                     deactivate ui
+
+                 else valid (1-5)
+                     cmd -> cmd : current.setConfidenceLevel(confidence)
+                     activate cmd
+                     deactivate cmd
+                 end
+             end
+
+             cmd -> sm : nextCard()
+             activate sm
+             sm -> ss : nextCard()
+             activate ss
+             ss --> sm : isFinished
+             deactivate ss
+             sm --> cmd : isFinished
+             deactivate sm
+
+             alt finished
+                 cmd -> sm : finishSession()
+                 activate sm
+                 sm -> ss : finish()
+                 activate ss
+                 ss --> sm : count
+                 destroy ss
+                 deactivate sm
+
+                 cmd -> ui : showStudySessionEnd(count)
+                 activate ui
+                 deactivate ui
+
+                 cmd --> User : return false
+                 deactivate cmd
+
+             else not finished
+                 cmd -> sm : getCurrentCard()
+                 activate sm
+                 sm --> cmd : nextCard
+                 deactivate sm
+
+                 cmd -> ui : showStudyQuestion(nextQuestion)
+                 activate ui
+                 deactivate ui
+             end
+         end
+     end
+ end
+ @enduml

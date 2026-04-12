@@ -63,9 +63,8 @@ public class StudySessionTest {
         StudySession session = new StudySession(sampleDeck);
         session.nextCard(); // move to index 1
 
-        // finish() calculates (currentIndex + 1), which is (1 + 1) = 2
         int count = session.finish();
-        assertEquals(2, count);
+        assertEquals(1, count);
     }
 
     @Test
