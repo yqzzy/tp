@@ -22,3 +22,5 @@ text-ui-Test/EXPECTED-UNIX.TXT
 storage.json
 *.json
 
+data/storage.json
+/data
