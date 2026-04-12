@@ -2,7 +2,6 @@
 !pragma teoz true
 hide footbox
 skinparam sequenceMessageAlign center
-skinparam ParticipantPadding 80
 skinparam style strictuml
 skinparam SequenceGroupBodyBackgroundColor transparent
 skinparam SequenceReferenceBackgroundColor white
@@ -11,41 +10,47 @@ skinparam roundcorner 5
 skinparam SequenceBoxBackgroundColor transparent
 skinparam sequenceParticipantBackgroundColor white
 skinparam sequenceLifeLineBorderColor black
+skinparam BoxPadding 40
 
-hide unlinked
+participant ":Parser" as Parser
+participant ":ArgumentExtractor" as ArgumentExtractor
+participant "     :XYZCommand     " as XYZCommand
 
 group sd dispatch
     |||
     activate Parser
-
-    Parser -> Parser : parse*Command(...)
+    Parser -> Parser : dispatch(command, arguments)
     activate Parser
     deactivate Parser
-
-    note right of Parser : e.g. parseAddCardCommand(...),\nparseDeckCommand(...), requireEmpty(...)
-
+    note right of Parser
+        Routes command keyword to helper
+        e.g. parseAddCardCommand(arguments),
+        parseClearDeckCommand(arguments),
+        requireEmpty(arguments, command)
+    end note
     |||
-
-    Parser -> ArgumentExtractor : parse*Args(...)
-    activate ArgumentExtractor
-
-    ArgumentExtractor -> ArgumentExtractor : validatePrefixes()
-    activate ArgumentExtractor
-    deactivate ArgumentExtractor
-
-    ArgumentExtractor -> ArgumentExtractor : validatePrefixOrder()
-    activate ArgumentExtractor
-    deactivate ArgumentExtractor
-
-    ArgumentExtractor --> Parser : *Args
-    deactivate ArgumentExtractor
-
-    |||
-
-    Parser -> Parser : new *Command(args)
-    activate Parser
-    deactivate Parser
-
+    alt command requires arguments (e.g. addCard, deleteCard, editCard)
+        Parser -> ArgumentExtractor : parse*Args(arguments)
+        activate ArgumentExtractor
+        ArgumentExtractor -> ArgumentExtractor : validatePrefixes(...)
+        activate ArgumentExtractor
+        deactivate ArgumentExtractor
+        ArgumentExtractor -> ArgumentExtractor : validatePrefixOrder(...)
+        activate ArgumentExtractor
+        deactivate ArgumentExtractor
+        ArgumentExtractor --> Parser : Args
+        deactivate ArgumentExtractor
+        |||
+        Parser -> XYZCommand : new *Command(*Args)
+        |||
+    else no-arg command (listDecks, exit, help)
+        Parser -> Parser : requireEmpty(arguments, command)
+        activate Parser
+        deactivate Parser
+        |||
+        Parser -> XYZCommand : new *Command()
+        |||
+    end
     |||
     deactivate Parser
     |||
