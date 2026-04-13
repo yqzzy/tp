@@ -140,6 +140,13 @@ The diagram below illustrates the relationship between the main `Storage` class 
 *   `Storage` - The primary facade for data persistence. It manages the main data file (e.g., `flashcards.json`) and delegates historical versioning operations to the `HistoryManager`.
 *   `HistoryManager` - A dedicated class that manages the lifecycle of historical data snapshots, following the **Single Responsibility Principle**. It handles saving, listing, retrieving, and cleaning historical versions in the `./data/history/` and `./data/waste/` directories.
 
+#### Runtime Instance Snapshot
+
+While the class diagram above defines the blueprint, the object diagram below provides a concrete snapshot of the system's state after successful initialization and data loading. It shows the actual object instances, their attribute values, and links at runtime.
+
+![Storage Runtime State](diagrams/storage_object.png)
+*Diagram: An object diagram showing specific instances after application startup. The `appStorage` object holds a reference to a `historyMgr` object and manages the `loadedDecks` data. This complements the class diagram by illustrating a live system state.*
+
 #### Save & Load Flow with Auto-Backup
 
 The sequence diagram below shows the enhanced flow when the application saves data. The critical addition is the automatic creation of a historical version **before** the new data overwrites the existing file.

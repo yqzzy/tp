@@ -36,7 +36,20 @@ public class StudyCommand implements Command {
         //boolean showingAnswer = false; // false = next Enter shows answer, true = next Enter advances card
 
         String line;
-        while (!(line = in.nextLine()).trim().equals("q")) {
+        while (true) {
+            try {
+                line = in.nextLine();
+            } catch (java.util.NoSuchElementException e) {
+                // Ctrl+D or end of input stream, quit study session gracefully
+                int reviewed = sessionManager.finishSession();
+                ui.showStudySessionQuit(reviewed);
+                return false;
+            }
+            if (line.equals("q")) {
+                int reviewed = sessionManager.finishSession();
+                ui.showStudySessionQuit(reviewed);
+                return false;
+            }
             // Reveal answer for current card
             Card current = sessionManager.getCurrentCard();
             ui.showStudyAnswer(current.getAnswer());
@@ -44,7 +57,15 @@ public class StudyCommand implements Command {
             int confidence = -1;
             while (confidence < 1 || confidence > 5) {
                 ui.showConfidencePrompt();
-                String input = in.nextLine().trim();
+                String input;
+                try {
+                    input = in.nextLine().trim();
+                } catch (java.util.NoSuchElementException e) {
+                    // Ctrl+D or end of input stream, quit study session gracefully
+                    int reviewed = sessionManager.finishSession();
+                    ui.showStudySessionQuit(reviewed);
+                    return false;
+                }
                 if (input.equals("q")) {
                     int reviewed = sessionManager.finishSession();
                     ui.showStudySessionQuit(reviewed);
@@ -74,8 +95,5 @@ public class StudyCommand implements Command {
             ui.showStudyQuestion(next.getQuestion());
             //showingAnswer = false;
         }
-        int reviewed = sessionManager.finishSession();
-        ui.showStudySessionQuit(reviewed);
-        return false;
     }
 }

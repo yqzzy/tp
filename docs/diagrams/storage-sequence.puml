@@ -29,7 +29,7 @@ activate FS
 FS --> Storage
 deactivate FS
 
-alt [Files.exists(filePath) && historyManager != null]
+opt historyManager!=null && file exists
     Storage -> Storage : load() as currentDataOnDisk
     Storage -> HistoryManager : saveVersion(currentDataOnDisk)
     activate HistoryManager
@@ -48,6 +48,7 @@ Storage -> Storage : gson.toJson(currentDeckManager)
 Storage -> FS : writeString(filePath, jsonData)
 activate FS
 FS --> Storage
+destroy FS
 deactivate FS
 
 Storage --> Command
