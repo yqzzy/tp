@@ -35,10 +35,23 @@ public class FlashCLI {
         flashCLI.ui.hello();
         Scanner in = new Scanner(System.in);
         String userInput;
-        while (!(userInput = in.nextLine()).equals("exit")) {
-            if (flashCLI.executeCommand(userInput, in)) {
-                break;
+        try {
+            while (true) {
+                try {
+                    userInput = in.nextLine();
+                } catch (java.util.NoSuchElementException e) {
+                    // Ctrl+D or end of input stream, exit gracefully
+                    break;
+                }
+                if (userInput.equals("exit")) {
+                    break;
+                }
+                if (flashCLI.executeCommand(userInput, in)) {
+                    break;
+                }
             }
+        } finally {
+            in.close();
         }
     }
 

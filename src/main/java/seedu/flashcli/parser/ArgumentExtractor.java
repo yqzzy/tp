@@ -101,17 +101,49 @@ public class ArgumentExtractor {
      */
     public static EditCardArgs parseEditCardArgs(String arguments) throws FlashException {
         logger.log(Level.FINE, "parseEditCardArgs called with: \"{0}\"", arguments);
-        validatePrefixes(arguments, DECK_PREFIX, INDEX_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
-        validatePrefixOrder(arguments, DECK_PREFIX, INDEX_PREFIX, QUESTION_PREFIX, ANSWER_PREFIX);
+        validatePrefixes(arguments, DECK_PREFIX, INDEX_PREFIX);
+        validatePrefixOrder(arguments, DECK_PREFIX, INDEX_PREFIX);
         String deckName = extractBetween(arguments, DECK_PREFIX, INDEX_PREFIX);
-        String indexStr = extractBetween(arguments, INDEX_PREFIX, QUESTION_PREFIX);
-        String question = extractBetween(arguments, QUESTION_PREFIX, ANSWER_PREFIX);
-        String answer = extractAfter(arguments, ANSWER_PREFIX);
+
+        boolean hasQuestion = arguments.contains(QUESTION_PREFIX);
+        boolean hasAnswer = arguments.contains(ANSWER_PREFIX);
+
+        if (!hasQuestion && !hasAnswer){
+            throw new FlashException(ErrorType.INVALID_EDIT);
+        }
+
+        String indexStr;
+        if (hasQuestion){
+            indexStr = extractBetween(arguments, INDEX_PREFIX, QUESTION_PREFIX);
+        } else {
+            indexStr = extractBetween(arguments, INDEX_PREFIX, ANSWER_PREFIX);
+        }
+
+        String question = null;
+        if (hasQuestion){
+            if (hasAnswer){
+                question = extractBetween(arguments, QUESTION_PREFIX, ANSWER_PREFIX);
+            } else{
+                question = extractAfter(arguments, QUESTION_PREFIX);
+            }
+        }
+
+        String answer = null;
+        if (hasAnswer){
+            answer = extractAfter(arguments, ANSWER_PREFIX);
+        }
+
         validateNonEmpty(deckName, ErrorType.MISSING_DECK);
         validateNonEmpty(indexStr, ErrorType.MISSING_INDEX);
-        validateNonEmpty(question, ErrorType.MISSING_QUESTION);
-        validateNonEmpty(answer, ErrorType.MISSING_ANSWER);
+        if (hasQuestion){
+            validateNonEmpty(question, ErrorType.MISSING_QUESTION);   
+        }
+        if (hasAnswer){
+            validateNonEmpty(answer, ErrorType.MISSING_ANSWER);
+        }
+
         int cardIndex = parseIndex(indexStr);
+        
         logger.log(Level.FINE, "parseEditCardArgs succeeded");
         return new EditCardArgs(deckName, cardIndex, question, answer);
     }

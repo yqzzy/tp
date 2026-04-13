@@ -1,0 +1,34 @@
+@startuml storage_object_initialized
+skinparam style strictuml
+skinparam roundcorner 10
+left to right direction
+
+' Define object instances
+object "appStorage: Storage" as storage {
+  filePath = "./data/flashcards.json"
+  gson = <Gson instance>
+  historyManager = historyMgr
+}
+
+object "historyMgr: HistoryManager" as hm {
+  dataDir = "./data"
+  historyDir = "./data/history"
+  wasteDir = "./data/waste"
+  baseFileName = "flashcards"
+  gson = <Gson instance>
+}
+
+object "loadedDecks: DeckManager" as dm {
+  deckMap = { ... } ' Can be detailed or left abstract
+}
+
+' Show links between the objects (instances of relationships from the class diagram)
+storage --> hm : historyManager
+storage --> dm : (manages data)
+
+note top of storage
+  Runtime state after application startup
+  and successful data load.
+end note
+
+@enduml

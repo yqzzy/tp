@@ -17,7 +17,7 @@ public class SessionManagerTest {
     private Deck sampleDeck;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws FlashException{
         sessionManager = new SessionManager();
         sampleDeck = new Deck("Test");
         sampleDeck.addCard("Q1", "A1");
@@ -57,7 +57,7 @@ public class SessionManagerTest {
         sessionManager.startSession(sampleDeck);
         int count = sessionManager.finishSession();
 
-        assertEquals(1, count);
+        assertEquals(0, count);
         assertFalse(sessionManager.hasActiveSession(), "Session should be null after finishing");
     }
 

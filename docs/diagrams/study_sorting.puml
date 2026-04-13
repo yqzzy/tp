@@ -8,36 +8,57 @@ participant ":StudySession" as ss
 participant "tempCards : ArrayList<Card>" as list
 participant "tempDeck : Deck" as tempDeck
 
-note over sm : startSession(deck) called
+activate sm
+@startuml
+skinparam sequenceArrowFontSize 11
+skinparam sequenceParticipantFontSize 12
+skinparam defaultFontSize 12
 
+participant ":SessionManager" as sm
+participant ":StudySession" as ss
+participant "tempCards : ArrayList<Card>" as tempCards
+participant "tempDeck : Deck" as tempDeck
+
+activate sm
+sm -> sm : startSession(deck)
+
+create ss
 sm -> ss : new StudySession(deck)
 activate ss
 
-ss -> list : deck.listCards()
-list --> ss : ArrayList<Card>
+ss -> tempCards : deck.listCards()
+activate tempCards
+tempCards --> ss : ArrayList<Card>
+deactivate tempCards
 
-ss -> list : sort by getConfidenceLevel()\n(ascending)
-note right of list
-  Cards with lowest confidence
-  level appear first.
-  Default confidence = 0.
-end note
+ss -> tempCards : sort(Comparator.comparing(Card::getConfidenceLevel))
+activate tempCards
+deactivate tempCards
 
+create tempDeck
 ss -> tempDeck : new Deck(deck.getDeckName())
-ss -> tempDeck : setCards(sortedCards)
+activate tempDeck
+tempDeck --> ss : tempDeck
+deactivate tempDeck
+
+ss -> tempDeck : setCards(tempCards)
+activate tempDeck
+deactivate tempDeck
 
 note over ss
-  this.deck = tempDeck
-  currentIndex = 0
-  assert currentIndex == 0
+this.deck = tempDeck
+currentIndex = 0
+assert currentIndex == 0
 end note
 
 ss --> sm : StudySession ready
 deactivate ss
 
 note over sm
-  assert hasActiveSession()
-  assert session.getDeckName()
-    .equals(deck.getDeckName())
+assert hasActiveSession()
+assert activeSession.getDeckName()
+  .equals(deck.getDeckName())
 end note
+
+deactivate sm
 @enduml

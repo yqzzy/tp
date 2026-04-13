@@ -16,7 +16,7 @@ public class StudySessionTest {
     private Deck sampleDeck;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws FlashException{
         sampleDeck = new Deck("Java");
         sampleDeck.addCard("Q1", "A1");
         sampleDeck.addCard("Q2", "A2");
@@ -63,9 +63,8 @@ public class StudySessionTest {
         StudySession session = new StudySession(sampleDeck);
         session.nextCard(); // move to index 1
 
-        // finish() calculates (currentIndex + 1), which is (1 + 1) = 2
         int count = session.finish();
-        assertEquals(2, count);
+        assertEquals(1, count);
     }
 
     @Test

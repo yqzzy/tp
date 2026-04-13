@@ -45,16 +45,6 @@ class Deck {
     + setCards(cardList : ArrayList<Card>) : void
 }
 
-class Card {
-    - question : String
-    - answer : String
-    - confidenceLevel : int
-    + getQuestion() : String
-    + getAnswer() : String
-    + getConfidenceLevel() : Integer
-    + setConfidenceLevel(level : int) : void
-}
-
 class Ui {
     + showStudyQuestion(question : String) : void
     + showStudyAnswer(answer : String) : void
@@ -75,7 +65,5 @@ note on link
   sorts cards by
   confidenceLevel on init
 end note
-
-Deck "1" *-- "0..*" Card : contains
 
 @enduml

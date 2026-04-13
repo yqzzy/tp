@@ -25,7 +25,11 @@
 
 ## Introduction
 
-FlashCLI is a lightweight command-line flashcard application for students who prefer a fast, keyboard-first study workflow. You organise your flashcards into named decks, add question-and-answer cards to each deck, and run interactive study sessions that adapt to your self-reported confidence level - showing the cards you are least confident about first. This guide walks you through how to install and use FlashCLI.
+FlashCLI is a lightweight command-line flashcard application for students who prefer a
+fast, keyboard-first study workflow. You organise your flashcards into named decks, add
+question-and-answer cards to each deck, and run interactive study sessions that adapt to
+your self-reported confidence level — showing the cards you are least confident about
+first. This guide walks you through how to install and use FlashCLI.
 
 ---
 
@@ -35,28 +39,76 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
    ```
    java -version
    ```
-2. **Download FlashCLI.** Either clone the repository or download the pre-built JAR from the releases page and place it anywhere on your computer.
-3. **Open a terminal** at the project root (if you cloned) or the folder containing the JAR.
+
+2. **Download FlashCLI.** Either clone the repository or download the pre-built JAR from
+   the releases page and place it anywhere on your computer.
+
+3. **Open a terminal** at the project root (if you cloned) or the folder containing the
+   JAR.
+
 4. **Run FlashCLI.**
-    * **From source:**
-        * macOS / Linux: `./gradlew run`
-        * Windows: `.\gradlew.bat run`
-    * **From JAR:** `java -jar flashcli.jar`
-      * This command works on Windows, macOS, and Linux.
-      * Ensure the filename matches your downloaded file name.
+
+   From source:
+   ```
+   # macOS / Linux
+   ./gradlew run
+
+   # Windows
+   .\gradlew.bat run
+   ```
+
+   From JAR (works on Windows, macOS, and Linux):
+   ```
+   java -jar flashcli.jar
+   ```
+
+   > Ensure the filename matches your downloaded file name.
 
    You should see the welcome message:
    ```
    Welcome to FlashCLI!
+   Enter a command, or type 'help' to see available commands
    ```
-5. Type `help` to see every available command, then start by creating your first deck with `createDeck`.
 
-**Data persistence:** FlashCLI automatically saves all your decks and cards to `data/storage.json` after every command. You do not need to save manually.
+5. Type `help` to see every available command, then start by creating your first deck
+   with `createDeck`.
 
----
+**Data persistence:** FlashCLI automatically saves all your decks and cards to
+`data/storage.json` after every command. You do not need to save manually. In case the
+data has been corrupted, FlashCLI will discard it.
+
+## Notes on Command Format
+
+- Commands are not case-sensitive. For example, `addCard` and `addcard`
+  are treated the same.
+- Prefixes are case-sensitive. Type them exactly as shown: `d/`, `q/`,
+  `a/`, and `i/`.
+- Prefixes must have no space between the letter and slash. `q/` is
+  valid; `q /` will not be recognised and will be rejected.
+- Reserved prefixes (`d/`, `q/`, `a/`, `i/`) cannot appear anywhere in
+  field values - including deck names, questions, and answers. Any input
+  containing a reserved prefix outside of its intended position will be
+  rejected. For example:
+    - `addCard d/Maths q/What does a in a/b represent? a/Numerator`
+      will be rejected, as `a/b` contains a reserved prefix.
+    - The following are accepted alternatives:
+        - `addCard d/Maths q/What does a in a / b represent? a/Numerator`
+          (add a space before the slash)
+        - `addCard d/Maths q/What does a in a\b represent? a/Numerator`
+          (use a backslash)
+        - `addCard d/Maths q/What does a in a:b represent? a/Numerator`
+          (use colon notation)
+    - The same applies to `d/`, `q/`, and `i/` appearing inside field
+      values. Consider alternatives such as `d:`, `deck:`, `(d)`, or
+      rephrasing.
+- Prefixes must be supplied in the order shown for each command.
+- Duplicate prefixes in the same command will be rejected.
+- Card indices must be positive integers.
+- Leading and trailing spaces around field values are ignored.
+- `listDecks`, `exit`, and `help` do not accept any arguments; supplying
+  extra text will be rejected.
 
 ## Features 
-
 
 ### Viewing help : `help`
 
@@ -199,7 +251,7 @@ Format: `study d/DECK_NAME`
   about appear first. Cards that have never been studied (default confidence `0`) always
   appear before any rated card.
 - During a session, only the study session controls listed below are valid. Regular
-  FlashCLI commands (e.g. `addCard`, `listDecks`) cannot be used mid-session.
+  FlashCLI commands (e.g. `addCard`, `listDecks`) cannot be used mid-session. Any inputs followed by Enter will reveal the answer. Users can type out their answers first for self-comparison, but the app does not check correctness.
 
 **Study session controls:**
 
@@ -221,7 +273,7 @@ Format: `study d/DECK_NAME`
     - `5` — Knew it perfectly
 4. FlashCLI advances to the next card. Repeat steps 2–3 until all cards are reviewed
    or you type `q` to quit.
-5. At the end of the session, FlashCLI displays the number of cards reviewed.
+5. At the end of the session, FlashCLI displays the number of cards reviewed. Cards count as "reviewed" only after you rate confidence
 
 > **Note:** Your confidence ratings are saved automatically. The next time you study the
 > same deck, cards with lower confidence ratings will appear first.
@@ -319,6 +371,13 @@ _______________________________
 
 **Q: Why are my cards shown in a different order during study?**  
 **A**: Cards are automatically ordered by confidence level (lowest first) to help you focus on weaker areas first.
+
+---
+
+---
+
+**Q: Are commands case sensitive?**  
+**A**: No, they are not.
 
 ---
 

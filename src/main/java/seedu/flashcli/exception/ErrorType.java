@@ -3,7 +3,7 @@ package seedu.flashcli.exception;
 public enum ErrorType {
 
     NULL_INPUT("Please type in a command or use \"help\" to see the list of commands."),
-    INVALID_COMMAND("Invalid command format. Use \"help\" to see the list of all commands."),
+    INVALID_COMMAND("Invalid command. Use \"help\" to see the list of all commands."),
     INVALID_ARGUMENTS("Invalid arguments format. Check your prefixes and try again."),
     ARGUMENT_MISSING("One or more required arguments are missing."),
     UNEXPECTED_ARGUMENTS("Too many arguments are provided."),
@@ -21,7 +21,8 @@ public enum ErrorType {
     NO_ACTIVE_SESSION("No study session is currently active. Use the 'study' command first."),
     DUPLICATE_NAME("A deck with this name already exists. Please choose a unique name."),
     INVALID_CONFIDENCE("Invalid confidence level. Please enter an integer between 1 and 5. "),
-    INVALID_EDIT("Invalid format for editCard. \nUse: editCard d/<deck> i/<index> q/<new question> a/<new answer>");
+    DUPLICATE_CARD("Card was added, but duplicate card found!"),
+    INVALID_EDIT("Invalid format for editCard. Include in at least a new question or/and new answer! \nUse: editCard d/<deck> i/<index> q/<new question> a/<new answer>");
 
     private final String message;
 

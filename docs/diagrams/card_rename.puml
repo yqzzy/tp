@@ -1,4 +1,3 @@
-@startuml
 skinparam sequenceArrowThickness 1.5
 skinparam SequenceBoxBorderColor Black
 skinparam ParticipantPadding 15
@@ -13,6 +12,7 @@ participant ":DeckManager" as DeckManager
 participant ":Deck" as Deck
 participant ":Card" as Card
 participant ":Ui" as Ui
+participant ":Storage" as Storage
 
 User -> FlashCLI : editCard d/DECK i/INDEX q/QUESTION a/ANSWER
 activate FlashCLI
@@ -20,6 +20,8 @@ activate FlashCLI
 FlashCLI -> Parser : parse(userInput)
 activate Parser
 Parser -> Parser : validate and extract arguments
+activate Parser
+deactivate Parser
 Parser --> FlashCLI : editCardCommand
 deactivate Parser
 
@@ -49,21 +51,17 @@ deactivate Deck
 
 EditCardCommand -> Ui : showCardEdited(card, deckName)
 activate Ui
-Ui --> User : "Edited card in deck DECK: ..."
+Ui --> EditCardCommand : "Edited card in deck DECK: ..."
 deactivate Ui
 
 EditCardCommand --> FlashCLI : false
 deactivate EditCardCommand
 
-FlashCLI -> FlashCLI : storage.save(deckManager)
+FlashCLI -> Storage : save(deckManager)
+activate Storage
+Storage --> FlashCLI
+deactivate Storage
 
 deactivate FlashCLI
-
-note over Parser
-  ArgumentExtractor validates prefixes
-  d/, i/, q/, a/ and extracts values.
-  Index is converted from 1-based
-  to 0-based internally.
-end note
 
 @enduml

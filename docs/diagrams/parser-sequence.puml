@@ -12,26 +12,26 @@ skinparam SequenceBoxBackgroundColor transparent
 skinparam sequenceParticipantBackgroundColor white
 skinparam sequenceLifeLineBorderColor black
 
-participant ":FlashCLI\n" as FlashCLI
-participant "<<class>>\nParser" as Parser
-participant "<<class>>\nArgumentExtractor" as ArgumentExtractor
+participant ":FlashCLI" as FlashCLI
+participant ":Parser" as Parser
+participant ":ArgumentExtractor" as ArgumentExtractor
 
 FlashCLI -> Parser : parse(userInput)
 activate Parser
 
-Parser -> Parser : validateInput()
+Parser -> Parser : validateInput(userInput)
 activate Parser
 deactivate Parser
 
-Parser -> Parser : validateCommandName()
+Parser -> Parser : validateCommandName(command)
 activate Parser
 deactivate Parser
 
 |||
 
-alt invalid input or invalid arguments
-    Parser --> FlashCLI : exception
-else valid input
+alt invalid input or unknown command
+    Parser --> FlashCLI : throws FlashException
+else valid command
     ref over Parser, ArgumentExtractor
         dispatch
     end ref

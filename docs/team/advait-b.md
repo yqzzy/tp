@@ -25,7 +25,7 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 ### Enhancements to Existing Features
 
-- Wrote JUnit tests for the `Parser` component, increasing its line coverage to 98%.
+- Wrote JUnit tests for the `Parser` component, with a method coverage of 100% and line coverage of 98%.
 - Created barebone command classes to establish the inheritance hierarchy, ensuring all commands share a consistent interface and can be extended without duplication.
 - Refactored print statements out of the core `FlashCLI` class and into a dedicated `UI` class to improve modularity, and made corresponding amendments in `StudySession` to maintain consistency ([#61](https://github.com/AY2526S2-CS2113-T10-1/tp/pull/61))
 
@@ -46,6 +46,7 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 ### Contributions beyond the Project Team
 
 - Added 20 non-trivial PR review comments for W10-4's Developer Guide ([Link](https://github.com/NUS-CS2113-AY2526-S2/tp/pull/20))
+- Reported 20 bugs during PE Dry Run ([Link](https://github.com/NUS-CS2113-AY2526-S2/ped-Advait-B/issues))
 
 ### Documentation
 
@@ -53,6 +54,7 @@ FlashCLI is a lightweight command-line flashcard application for students who pr
 
 - Wrote the product introduction section.
 - Wrote the quick start guide.
+- Wrote the notes of command features section.
 - Added the command summary table for quick reference.
 
 #### Developer Guide

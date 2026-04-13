@@ -140,6 +140,13 @@ The diagram below illustrates the relationship between the main `Storage` class 
 *   `Storage` - The primary facade for data persistence. It manages the main data file (e.g., `flashcards.json`) and delegates historical versioning operations to the `HistoryManager`.
 *   `HistoryManager` - A dedicated class that manages the lifecycle of historical data snapshots, following the **Single Responsibility Principle**. It handles saving, listing, retrieving, and cleaning historical versions in the `./data/history/` and `./data/waste/` directories.
 
+#### Runtime Instance Snapshot
+
+While the class diagram above defines the blueprint, the object diagram below provides a concrete snapshot of the system's state after successful initialization and data loading. It shows the actual object instances, their attribute values, and links at runtime.
+
+![Storage Runtime State](diagrams/storage_object.png)
+*Diagram: An object diagram showing specific instances after application startup. The `appStorage` object holds a reference to a `historyMgr` object and manages the `loadedDecks` data. This complements the class diagram by illustrating a live system state.*
+
 #### Save & Load Flow with Auto-Backup
 
 The sequence diagram below shows the enhanced flow when the application saves data. The critical addition is the automatic creation of a historical version **before** the new data overwrites the existing file.
@@ -837,29 +844,26 @@ Existing tools such as Anki and Quizlet require a browser or dedicated GUI appli
 pulls students out of their terminal-based workflow. Neither offers a fully keyboard-driven
 experience optimised for speed of entry and session startup.
 
-
 ## User Stories
 
-| Version | As a ...                    | I want to ...                                        | So that I can ...                                  |
-|---------|-----------------------------|------------------------------------------------------|----------------------------------------------------|
-| v1.0    | Student starting revision   | create subjects for my modules                       | my flashcards are clearly separated                |
-| v1.0    | Student starting revision   | see an overview of all my subjects                   | I know what I am currently revising                |
-| v1.0    | Student starting revision   | start with a clean revision space                    | I can organise my own material from scratch        |
-| v1.0    | Student learning new content| quickly add a question and answer                    | I can capture important points while studying      |
-| v1.0    | Student starting revision   | see how many flashcards I have under each subject    | I can gauge revision workload                      |
-| v1.0    | Student                     | have the app work without internet access            | I can revise anywhere                              |
-| v1.0    | Student revising for an exam| test myself using my flashcards                      | I can practise active recall                       |
-| v1.0    | Student revising for an exam| see questions before answers                         | I am forced to think before checking               |
-| v1.0    | Student revising for an exam| reveal answers only when I choose to                 | I can assess my recall honestly                    |
-| v1.0    | Student                     | focus my revision on one subject at a time           | I am not overwhelmed                               |
-| v1.0    | Student                     | revise flashcards quickly without leaving my CLI workflow | I maintain my productivity environment        |
-| v1.0    | Student                     | have my data stored locally                          | I remain in control of my revision material        |
-| v1.0    | Student learning new content| delete flashcards that are no longer useful          | outdated content does not distract me              |
-| v2.0    | Student revising for an exam| quiz myself with a random subset of the cards        | I can vary my practice                             |
-| v2.0    | Student revising for an exam| revisit flashcards I struggled with                  | I can focus on weak areas                          |
-| v2.0    | Student learning new content| edit flashcards                                      | I can refine wording as my understanding improves  |
-| v2.0    | Student starting revision   | mark my confidence when inputting flashcards         | I can see how my confidence level changed during revision |
-| v2.0    | Student revising for an exam| see statistics about my flashcard collection         | I can track my study progress                      |
+| Version | As a ...                    | I want to ...                                             | So that I can ...                                     |
+|---------|-----------------------------|-----------------------------------------------------------|-------------------------------------------------------|
+| v1.0    | Student starting revision   | create subjects for my modules                            | keep my flashcards clearly separated                  |
+| v1.0    | Student starting revision   | see an overview of all my subjects                        | know what I am currently revising                     |
+| v1.0    | Student starting revision   | start with a clean revision space                         | organise my own material from scratch                 |
+| v1.0    | Student learning new content| quickly add a question and answer                         | capture important points while studying               |
+| v1.0    | Student starting revision   | see how many flashcards I have under each subject         | gauge my revision workload                            |
+| v1.0    | Student                     | have the app work without internet access                 | revise anywhere                                       |
+| v1.0    | Student revising for an exam| test myself using my flashcards                           | practise active recall                                |
+| v1.0    | Student revising for an exam| see questions before answers                              | be forced to think before checking                    |
+| v1.0    | Student revising for an exam| reveal answers only when I choose to                      | assess my recall honestly                             |
+| v1.0    | Student                     | focus my revision on one subject at a time                | avoid being overwhelmed                               |
+| v1.0    | Student                     | revise flashcards quickly without leaving my CLI workflow | maintain my productivity environment                  |
+| v1.0    | Student                     | have my data stored locally                               | remain in control of my revision material             |
+| v1.0    | Student learning new content| delete flashcards that are no longer useful               | avoid being distracted by outdated content            |
+| v2.0    | Student revising for an exam| revisit flashcards I struggled with                       | focus on weak areas                                   |
+| v2.0    | Student learning new content| edit flashcards                                           | refine wording as my understanding improves           |
+| v2.0    | Student starting revision   | mark my confidence when inputting flashcards              | track how my confidence level changes during revision |
 
 ## Non-Functional Requirements
 

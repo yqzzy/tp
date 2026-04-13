@@ -345,18 +345,6 @@ public class ParserTest {
         }
 
         @Test
-        @DisplayName("editCard missing question prefix throws MISSING_QUESTION")
-        void editCard_missingQuestionPrefix_throwsMissingQuestion() {
-            assertParseThrows("editCard d/Math i/1 a/6", ErrorType.MISSING_QUESTION);
-        }
-
-        @Test
-        @DisplayName("editCard missing answer prefix throws MISSING_ANSWER")
-        void editCard_missingAnswerPrefix_throwsMissingAnswer() {
-            assertParseThrows("editCard d/Math i/1 q/What is 3+3?", ErrorType.MISSING_ANSWER);
-        }
-
-        @Test
         @DisplayName("editCard wrong prefix order throws INVALID_ARGUMENTS")
         void editCard_wrongPrefixOrder_throwsInvalidArguments() {
             assertParseThrows("editCard i/1 d/Math q/What is 3+3? a/6", ErrorType.INVALID_ARGUMENTS);
@@ -372,6 +360,12 @@ public class ParserTest {
         @DisplayName("editCard empty deck name throws MISSING_DECK")
         void editCard_emptyDeckName_throwsMissingDeck() {
             assertParseThrows("editCard d/ i/1 q/What is 3+3? a/6", ErrorType.MISSING_DECK);
+        }
+
+        @Test 
+        @DisplayName("ediCard empty question and empty answer throws INVALID_EDIT")
+        void editCard_emptyQuestionEmptyAnswer_throwsInvalidEdit(){
+            assertParseThrows("editCard d/Math i/1", ErrorType.INVALID_EDIT);
         }
 
         @Test

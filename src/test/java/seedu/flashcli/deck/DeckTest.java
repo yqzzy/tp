@@ -34,7 +34,7 @@ class DeckTest {
     }
 
     @Test
-    void addCard_validQuestionAndAnswer_increasesSize() {
+    void addCard_validQuestionAndAnswer_increasesSize() throws FlashException{
         deck.addCard("question 1?", "answer 1");
         assertEquals(1, deck.getSize());
     }
@@ -51,7 +51,7 @@ class DeckTest {
     }
 
     @Test
-    void deleteCard_negativeIndex_throwsFlashException() {
+    void deleteCard_negativeIndex_throwsFlashException() throws FlashException{
         deck.addCard("Q1", "A1");
         
         assertThrows(FlashException.class, () -> {
@@ -60,7 +60,7 @@ class DeckTest {
     }
 
     @Test
-    void deleteCard_outOfBoundsIndex_throwsFlashException() {
+    void deleteCard_outOfBoundsIndex_throwsFlashException() throws FlashException{
         deck.addCard("Q1", "A1");
         assertThrows(FlashException.class, () -> {
             deck.deleteCard(1);
@@ -75,7 +75,7 @@ class DeckTest {
     }
 
     @Test
-    void getCard_negativeIndex_throwsFlashException() {
+    void getCard_negativeIndex_throwsFlashException() throws FlashException{
         deck.addCard("Q1", "A1");
         assertThrows(FlashException.class, () -> {
             deck.getCard(-1);
@@ -90,7 +90,7 @@ class DeckTest {
     }
 
     @Test
-    void clearCards_deckWithCards_sizeBecomesZero() {
+    void clearCards_deckWithCards_sizeBecomesZero() throws FlashException{
         deck.addCard("Q1", "A1");
         deck.addCard("Q2", "A2");
         deck.clearCards();
@@ -99,7 +99,7 @@ class DeckTest {
     }
 
     @Test
-    void getCards_returnsUnmodifiableList() {
+    void getCards_returnsUnmodifiableList() throws FlashException{
         deck.addCard("Q1", "A1");
         List<Card> unmodifiableList = deck.getCards();
         assertThrows(UnsupportedOperationException.class, () -> {
@@ -146,7 +146,7 @@ class DeckTest {
     }
  
     @Test
-    void editCard_outOfBoundsIndex_throwsFlashException() {
+    void editCard_outOfBoundsIndex_throwsFlashException() throws FlashException{
         deck.addCard("Q1", "A1");
         FlashException e = assertThrows(FlashException.class,
                 () -> deck.editCard(5, "Q?", "A"));
@@ -154,7 +154,7 @@ class DeckTest {
     }
  
     @Test
-    void editCard_negativeIndex_throwsFlashException() {
+    void editCard_negativeIndex_throwsFlashException() throws FlashException{
         deck.addCard("Q1", "A1");
         FlashException e = assertThrows(FlashException.class,
                 () -> deck.editCard(-1, "Q?", "A"));
