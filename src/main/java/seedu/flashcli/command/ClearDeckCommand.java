@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.exception.CommandFormat;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
@@ -25,9 +26,13 @@ public class ClearDeckCommand implements Command {
      */
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
-        Deck deck = deckManager.getDeck(deckName);
-        deck.clearCards();
-        ui.showDeckCleared(deckName);
+        try {
+            Deck deck = deckManager.getDeck(deckName);
+            deck.clearCards();
+            ui.showDeckCleared(deckName);
+        } catch (FlashException e) {
+            throw new FlashException(e, CommandFormat.CLEAR_DECK);
+        }
         return false;
     }
 }

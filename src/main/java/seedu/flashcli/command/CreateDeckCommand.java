@@ -3,6 +3,7 @@ package seedu.flashcli.command;
 import java.util.Scanner;
 
 import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.exception.CommandFormat;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
@@ -24,8 +25,12 @@ public class CreateDeckCommand implements Command {
      */
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
-        deckManager.createDeck(deckName);
-        ui.showDeckCreated(deckName);
+        try {
+            deckManager.createDeck(deckName);
+            ui.showDeckCreated(deckName);
+        } catch (FlashException e) {
+            throw new FlashException(e, CommandFormat.CREATE_DECK);
+        }
         return false;
     }
 }

@@ -2,6 +2,7 @@ package seedu.flashcli.command;
 
 import java.util.Scanner;
 
+import seedu.flashcli.exception.CommandFormat;
 import seedu.flashcli.parser.EditCardArgs;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
@@ -23,10 +24,14 @@ public class EditCardCommand implements Command{
     }
 
     @Override
-    public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException{
-        Deck deck = deckManager.getDeck(deckName);
-        Card card = deck.editCard(cardIndex, question, answer);
-        ui.showCardEdited(card, deckName);
+    public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
+        try {
+            Deck deck = deckManager.getDeck(deckName);
+            Card card = deck.editCard(cardIndex, question, answer);
+            ui.showCardEdited(card, deckName);
+        } catch (FlashException e) {
+            throw new FlashException(e, CommandFormat.EDIT_CARD);
+        }
         return false;
     }
 }

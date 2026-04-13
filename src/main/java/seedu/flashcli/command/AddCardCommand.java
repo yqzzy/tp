@@ -5,6 +5,7 @@ import java.util.Scanner;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.exception.CommandFormat;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.parser.AddCardArgs;
 import seedu.flashcli.ui.Ui;
@@ -39,9 +40,13 @@ public class AddCardCommand implements Command {
      * @throws FlashException Throws DECK_NOT_FOUND, indicating that deckName input by the user does not exist.
      */
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
-        Deck deck = deckManager.getDeck(deckName);
-        Card card = deck.addCard(question, answer);
-        ui.showCardAdded(card, deckName);
-        return false;
+        try {
+            Deck deck = deckManager.getDeck(deckName);
+            Card card = deck.addCard(question, answer);
+            ui.showCardAdded(card, deckName);
+            return false;
+        } catch (FlashException e) {
+            throw new FlashException(e, CommandFormat.ADD_CARD);
+        }
     }
 }

@@ -5,6 +5,7 @@ import java.util.Scanner;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.exception.CommandFormat;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.parser.DeleteCardArgs;
 import seedu.flashcli.ui.Ui;
@@ -36,9 +37,13 @@ public class DeleteCardCommand implements Command {
      */
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
-        Deck deck = deckManager.getDeck(deckName);
-        Card card = deck.deleteCard(cardIndex);
-        ui.showCardDeleted(card, deckName);
+        try {
+            Deck deck = deckManager.getDeck(deckName);
+            Card card = deck.deleteCard(cardIndex);
+            ui.showCardDeleted(card, deckName);
+        } catch (FlashException e) {
+            throw new FlashException(e, CommandFormat.DELETE_CARD);
+        }
         return false;
     }
 }

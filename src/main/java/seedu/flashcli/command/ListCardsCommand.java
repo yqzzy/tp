@@ -3,6 +3,7 @@ package seedu.flashcli.command;
 import seedu.flashcli.deck.Card;
 import seedu.flashcli.deck.Deck;
 import seedu.flashcli.deck.DeckManager;
+import seedu.flashcli.exception.CommandFormat;
 import seedu.flashcli.exception.FlashException;
 import seedu.flashcli.ui.Ui;
 
@@ -30,9 +31,13 @@ public class ListCardsCommand implements Command {
      */
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
-        Deck deck = deckManager.getDeck(deckName);
-        ArrayList<Card> cardList = deck.listCards();
-        ui.showCardList(cardList, deckName);
+        try {
+            Deck deck = deckManager.getDeck(deckName);
+            ArrayList<Card> cardList = deck.listCards();
+            ui.showCardList(cardList, deckName);
+        } catch (FlashException e) {
+            throw new FlashException(e, CommandFormat.LIST_CARDS);
+        }
         return false;
     }
 }
