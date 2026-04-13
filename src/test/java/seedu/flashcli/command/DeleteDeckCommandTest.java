@@ -19,7 +19,7 @@ public class DeleteDeckCommandTest {
     public void execute_existingDeck_deletesSuccessfully() throws FlashException {
         DeckManager deckManager = new DeckManager();
         Ui ui = new Ui();
-        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner("yes\n");
 
         DeckArgs deckArgs = new DeckArgs("MA1513");
         Command commandCreateDeck = new CreateDeckCommand(deckArgs.getDeckName());
@@ -36,7 +36,7 @@ public class DeleteDeckCommandTest {
     public void execute_nonExistentDeck_throwsException() {
         DeckManager deckManager = new DeckManager();
         Ui ui = new Ui();
-        Scanner in = new Scanner(System.in);
+        Scanner in = new Scanner("yes\n");
 
         DeckArgs deckArgs = new DeckArgs("MA1513");
         Command commandDeleteDeck = new DeleteDeckCommand(deckArgs.getDeckName());
