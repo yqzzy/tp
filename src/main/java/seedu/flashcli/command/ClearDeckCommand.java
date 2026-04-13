@@ -27,6 +27,11 @@ public class ClearDeckCommand implements Command {
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
         try {
+            ui.clearConfirmationPrompt(deckName);
+            String userConfirmation = in.nextLine();
+            if (!userConfirmation.equals("yes")) {
+                return false;
+            }
             Deck deck = deckManager.getDeck(deckName);
             deck.clearCards();
             ui.showDeckCleared(deckName);

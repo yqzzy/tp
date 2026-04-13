@@ -212,6 +212,26 @@ public class Ui {
     }
 
     /**
+     * Shows a confirmation prompt to warn the user that they are irreversibly deleting the deck.
+     * Asks for confirmation of action.
+     */
+    public void deleteConfirmationPrompt(String deckName) {
+        System.out.println("This action will irreversibly delete the deck "
+            + deckName
+            + ". Enter 'yes' to proceed");
+    }
+
+    /**
+     * Shows a confirmation prompt to warn the user that they are irreversibly clearing the deck.
+     * Asks for confirmation of action.
+     */
+    public void clearConfirmationPrompt(String deckName) {
+        System.out.println("This action will irreversibly clear the deck "
+            + deckName
+            + ". Enter 'yes' to proceed");
+    }
+
+    /**
      * Prints out error message together with the user input that caused it.
      *
      * @param errorMsg String to print out.

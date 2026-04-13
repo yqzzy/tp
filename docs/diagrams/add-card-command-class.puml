@@ -27,7 +27,7 @@ class Deck
 class Ui
 class FlashException <<exception>>
 
-Command <|-- AddCardCommand
+Command <|.. AddCardCommand
 AddCardCommand ..> AddCardArgs
 AddCardCommand ..> DeckManager
 AddCardCommand ..> Deck

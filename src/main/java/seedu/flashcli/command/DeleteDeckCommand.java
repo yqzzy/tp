@@ -33,6 +33,11 @@ public class DeleteDeckCommand implements Command {
     @Override
     public boolean execute(DeckManager deckManager, Ui ui, Scanner in) throws FlashException {
         try {
+            ui.deleteConfirmationPrompt(deckName);
+            String userConfirmation = in.nextLine();
+            if (!userConfirmation.equals("yes")) {
+                return false;
+            }
             deckManager.deleteDeck(deckName);
             ui.showDeckDeleted(deckName);
         } catch (FlashException e) {

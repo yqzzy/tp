@@ -945,8 +945,12 @@ This section provides a step-by-step path for a manual tester to verify the core
   *   **Expected Output:** `Here are all the decks you have currently: 1.Mathematics`
 
 3. **Create another deck and verify:**
-*   **Command:** `createDeck d/Sci./gradlew runence` and then `listDecks`
-*   **Expected Output:** `Here are all the decks you have currently: 1.Mathematics 2.Science`
+* **Command:**
+    * createDeck d/Mathematics 
+    * createDeck d/Science 
+    * listDecks
+  
+* **Expected Output:** `Here are all the decks you have currently: 1.Mathematics 2.Science`
 
 #### Adding and Managing Cards
 1. **Add a card to a deck:**

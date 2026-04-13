@@ -43,9 +43,6 @@ public class FlashCLI {
                     // Ctrl+D or end of input stream, exit gracefully
                     break;
                 }
-                if (userInput.equals("exit")) {
-                    break;
-                }
                 if (flashCLI.executeCommand(userInput, in)) {
                     break;
                 }

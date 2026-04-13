@@ -16,12 +16,12 @@ actor User
 participant ":FlashCLI\n" as FlashCLI
 participant "<<class>>\nParser" as Parser
 participant "<<class>>\nArgumentExtractor" as ArgumentExtractor
-participant "AddCardCommand" as AddCardCommand
-participant "DeckManager" as DeckManager
-participant "Deck" as Deck
-participant "Ui" as Ui
-participant "Storage" as Storage
-participant "Card" as Card
+participant ":AddCardCommand" as AddCardCommand
+participant ":DeckManager" as DeckManager
+participant ":Deck" as Deck
+participant ":Ui" as Ui
+participant ":Storage" as Storage
+participant ":Card" as Card
 
 User -> FlashCLI : enters addcard command
 activate FlashCLI
@@ -32,6 +32,11 @@ Parser -> ArgumentExtractor : parseAddCardArgs(arguments)
 activate ArgumentExtractor
 ArgumentExtractor --> Parser : addCardArgs
 deactivate ArgumentExtractor
+
+Parser -> AddCardCommand : new AddCardCommand(addCardArgs)
+activate AddCardCommand
+AddCardCommand --> Parser
+deactivate AddCardCommand
 
 Parser --> FlashCLI : addCardCommand
 deactivate Parser
