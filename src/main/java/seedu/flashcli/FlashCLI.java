@@ -51,6 +51,7 @@ public class FlashCLI {
                 }
             }
         } finally {
+            flashCLI.ui.bye();
             in.close();
         }
     }
