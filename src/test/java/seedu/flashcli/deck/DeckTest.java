@@ -117,8 +117,9 @@ class DeckTest {
     @Test
     void editCard_validIndex_updatesAnswer() throws FlashException {
         deck.addCard("Original question?", "Original answer");
-        deck.editCard(0, "Original question?", "New answer");
-        assertEquals("New answer", deck.getCard(0).getAnswer());
+        FlashException e = assertThrows(FlashException.class,
+                () -> deck.editCard(0, "Original question?", "New answer"));
+        assertEquals(ErrorType.DUPLICATE_CARD, e.getErrorType());
     }
  
     @Test

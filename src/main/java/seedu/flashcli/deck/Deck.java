@@ -29,15 +29,14 @@ public class Deck {
         int oldSize = cardList.size();
         Card newCard = new Card(question, answer);
         boolean check = checkDuplicate(newCard);
-        cardList.add(newCard);
         if (check){
             throw new FlashException(ErrorType.DUPLICATE_CARD);
+        } else {
+            cardList.add(newCard);
+            assert cardList.size() == oldSize + 1;
+            assert cardList.contains(newCard);
+            return newCard;
         }
-        
-        assert cardList.size() == oldSize + 1;
-        assert cardList.contains(newCard);
-
-        return newCard;
     }
 
     public ArrayList<Card> listCards(){
@@ -91,7 +90,13 @@ public class Deck {
 
         Card card = cardList.get(cardIndex);
         if (newQuestion != null){
-            card.setQuestion(newQuestion);
+            Card tempCard = new Card(newQuestion,null);
+            boolean check = checkDuplicate(tempCard);
+            if (check){
+                throw new FlashException(ErrorType.DUPLICATE_CARD);
+            } else {
+                card.setQuestion(newQuestion);
+            }
         }
         if (newAnswer != null){
             card.setAnswer(newAnswer);

@@ -195,6 +195,7 @@ Adds a new question-and-answer card to an existing deck.
 - Prefixes **must** appear in the order `d/` → `q/` → `a/`.
 - Each of `DECK_NAME`, `QUESTION`, and `ANSWER` must be non-blank.
 - The new card starts with a confidence level of `0` (unreviewed).
+- The `QUESTION` must not be a duplicate of an existing card. 
 
 **Example:**
 ```
@@ -239,7 +240,8 @@ Replaces the question and answer of an existing card.
 
 - Prefixes **must** appear in the order `d/` → `i/` → `q/` → `a/`.
 - `INDEX` is **1-based**.
-- Both `NEW_QUESTION` and `NEW_ANSWER` must be non-blank.
+- `QUESTION` must not be the question of an existing card. 
+- The command can edit either question or answer individually.
 - The card's confidence level is not changed by this command.
 
 **Example:**

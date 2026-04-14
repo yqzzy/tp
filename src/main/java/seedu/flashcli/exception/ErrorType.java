@@ -21,7 +21,7 @@ public enum ErrorType {
     NO_ACTIVE_SESSION("No study session is currently active. Use the 'study' command first."),
     DUPLICATE_NAME("A deck with this name already exists. Please choose a unique name."),
     INVALID_CONFIDENCE("Invalid confidence level. Please enter an integer between 1 and 5. "),
-    DUPLICATE_CARD("Card was added, but duplicate card found!"),
+    DUPLICATE_CARD("Duplicate card found and card was not added."),
     INVALID_EDIT("Invalid format for editCard. Include in at least a new question or/and new answer! \nUse: editCard d/<deck> i/<index> q/<new question> a/<new answer>");
 
     private final String message;
