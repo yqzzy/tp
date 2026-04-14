@@ -34,7 +34,7 @@ application {
 }
 
 shadowJar {
-    archiveBaseName.set("duke")
+    archiveBaseName.set("flashcli")
     archiveClassifier.set("")
 }
 
