@@ -43,6 +43,7 @@ The architecture diagram below shows the relationships between all major classes
 - **Exception** - `FlashException` wraps an `ErrorType` enum value, giving every error a
   consistent message and a single catch point in `FlashCLI.executeCommand()`.
 
+<div style="page-break-after: always;"></div>
 ## Parser
 The Parser component is responsible for converting raw user input into executable `Command` objects.
 It exposes a single static entry point `Parser.parse(userInput)` that hides all internal parsing 
@@ -71,6 +72,7 @@ The sequence diagram below shows the high-level flow when `FlashCLI` calls `Pars
 3. If either check fails, a `FlashException` is thrown back to `FlashCLI`
 4. Otherwise, the `dispatch` interaction (detailed below) is triggered
 
+<div style="page-break-after: always;"></div>
 #### Dispatch
 
 The diagram below shows what happens inside the `dispatch` ref frame.
