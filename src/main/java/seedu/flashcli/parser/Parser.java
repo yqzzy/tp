@@ -55,6 +55,12 @@ public class Parser {
         return dispatch(command, arguments);
     }
 
+    /**
+     * Validates that the user input is not blank.
+     *
+     * @param userInput The raw input string to validate.
+     * @throws FlashException If userInput is null or contains only whitespace.
+     */
     private static void validateInput(String userInput) throws FlashException {
         if (userInput == null || userInput.trim().isEmpty()) {
             logger.log(Level.WARNING, "validateInput failed: input was null or blank");
