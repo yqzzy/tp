@@ -1,21 +1,12 @@
 @startuml
+hide footbox
 skinparam sequenceArrowFontSize 11
 skinparam sequenceParticipantFontSize 12
 skinparam defaultFontSize 12
 
 participant ":SessionManager" as sm
 participant ":StudySession" as ss
-participant "tempCards : ArrayList<Card>" as list
-participant "tempDeck : Deck" as tempDeck
-
-activate sm
-@startuml
-skinparam sequenceArrowFontSize 11
-skinparam sequenceParticipantFontSize 12
-skinparam defaultFontSize 12
-
-participant ":SessionManager" as sm
-participant ":StudySession" as ss
+participant "deck : Deck" as deck
 participant "tempCards : ArrayList<Card>" as tempCards
 participant "tempDeck : Deck" as tempDeck
 
@@ -26,9 +17,13 @@ create ss
 sm -> ss : new StudySession(deck)
 activate ss
 
-ss -> tempCards : deck.listCards()
+ss -> deck : listCards()
+activate deck
+deck --> ss : ArrayList<Card>
+deactivate deck
+
+ss -> tempCards : new ArrayList<>(cards)
 activate tempCards
-tempCards --> ss : ArrayList<Card>
 deactivate tempCards
 
 ss -> tempCards : sort(Comparator.comparing(Card::getConfidenceLevel))

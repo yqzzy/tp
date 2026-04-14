@@ -1,4 +1,5 @@
 @startuml
+hide footbox
 skinparam sequenceArrowFontSize 11
 skinparam sequenceParticipantFontSize 12
 skinparam defaultFontSize 12
@@ -32,153 +33,125 @@ else deck has cards
     end note
     sm -> ss : new StudySession(deck)
     activate ss
- @startuml
- hide footbox
- skinparam sequenceArrowFontSize 11
- skinparam sequenceParticipantFontSize 12
- skinparam defaultFontSize 12
+    deactivate ss
+    deactivate sm
 
- actor User
- participant ":StudyCommand" as cmd
- participant ":SessionManager" as sm
- participant ":StudySession" as ss
- participant ":Ui" as ui
+    cmd -> sm : getCurrentCard()
+    activate sm
+    sm --> cmd : firstCard
+    deactivate sm
 
- User -> cmd : execute(dm, ui, in)
- activate cmd
+    cmd -> ui : showStudyQuestion(question)
+    activate ui
+    deactivate ui
 
- cmd -> cmd : getDeck(deckName)
- activate cmd
- deactivate cmd
+    loop study loop
+        alt user types q at question prompt
+            User -> cmd : q
+            cmd -> sm : finishSession()
+            activate sm
+            sm -> ss : finish()
+            activate ss
+            ss --> sm : count
+            destroy ss
+            sm --> cmd : count
+            deactivate sm
 
- alt deck is empty
-     cmd -> ui : showEmptyDeck()
-     activate ui
-     deactivate ui
-     cmd --> User : return false
-     deactivate cmd
+            cmd -> ui : showStudySessionQuit(count)
+            activate ui
+            deactivate ui
 
- else deck has cards
-     cmd -> sm : startSession(deck)
-     activate sm
-     note right of sm
-       sorts cards by confidenceLevel
-       lowest confidence shown first
-     end note
-     sm -> ss : new StudySession(deck)
-     activate ss
-     deactivate ss
-     deactivate sm
+            cmd --> User : return false
+            deactivate cmd
 
-     cmd -> sm : getCurrentCard()
-     activate sm
-     sm --> cmd : firstCard
-     deactivate sm
+        else user presses Enter
+            User -> cmd : Enter
 
-     cmd -> ui : showStudyQuestion(question)
-     activate ui
-     deactivate ui
+            cmd -> sm : getCurrentCard()
+            activate sm
+            sm --> cmd : currentCard
+            deactivate sm
 
-     loop study loop
-         alt user types q at question prompt
-             User -> cmd : q
-             cmd -> sm : finishSession()
-             activate sm
-             sm -> ss : finish()
-             activate ss
-             ss --> sm : count
-             destroy ss
-             deactivate sm
+            cmd -> ui : showStudyAnswer(answer)
+            activate ui
+            deactivate ui
 
-             cmd -> ui : showStudySessionQuit(count)
-             activate ui
-             deactivate ui
+            cmd -> ui : showConfidencePrompt()
+            activate ui
+            deactivate ui
 
-             cmd --> User : return false
-             deactivate cmd
+            loop until valid confidence (1-5)
+                User -> cmd : confidenceInput
+                alt input is q
+                    cmd -> sm : finishSession()
+                    activate sm
+                    sm -> ss : finish()
+                    activate ss
+                    ss --> sm : count
+                    destroy ss
+                    sm --> cmd : count
+                    deactivate sm
 
-         else user presses Enter
-             User -> cmd : Enter
+                    cmd -> ui : showStudySessionQuit(count)
+                    activate ui
+                    deactivate ui
 
-             cmd -> sm : getCurrentCard()
-             activate sm
-             sm --> cmd : currentCard
-             deactivate sm
+                    cmd --> User : return false
+                    deactivate cmd
 
-             cmd -> ui : showStudyAnswer(answer)
-             activate ui
-             deactivate ui
+                else invalid input
+                    cmd -> ui : showError(...)
+                    activate ui
+                    deactivate ui
 
-             cmd -> ui : showConfidencePrompt()
-             activate ui
-             deactivate ui
+                else valid (1-5)
+                    cmd -> cmd : current.setConfidenceLevel(confidence)
+                    activate cmd
+                    deactivate cmd
+                end
+            end
 
-             loop until valid confidence (1-5)
-                 User -> cmd : confidenceInput
-                 alt input is q
-                     cmd -> sm : finishSession()
-                     activate sm
-                     sm -> ss : finish()
-                     activate ss
-                     ss --> sm : count
-                     destroy ss
-                     deactivate sm
+            cmd -> sm : nextCard()
+            activate sm
+            sm -> ss : nextCard()
+            activate ss
+            note right of ss
+              calls isFinished() internally,
+              returns result as boolean
+            end note
+            ss --> sm : boolean finished
+            deactivate ss
+            sm --> cmd : boolean finished
+            deactivate sm
 
-                     cmd -> ui : showStudySessionQuit(count)
-                     activate ui
-                     deactivate ui
+            alt finished
+                cmd -> sm : finishSession()
+                activate sm
+                sm -> ss : finish()
+                activate ss
+                ss --> sm : count
+                destroy ss
+                sm --> cmd : count
+                deactivate sm
 
-                     cmd --> User : return false
-                     deactivate cmd
+                cmd -> ui : showStudySessionEnd(count)
+                activate ui
+                deactivate ui
 
-                 else invalid input
-                     cmd -> ui : showError(...)
-                     activate ui
-                     deactivate ui
+                cmd --> User : return false
+                deactivate cmd
 
-                 else valid (1-5)
-                     cmd -> cmd : current.setConfidenceLevel(confidence)
-                     activate cmd
-                     deactivate cmd
-                 end
-             end
+            else not finished
+                cmd -> sm : getCurrentCard()
+                activate sm
+                sm --> cmd : nextCard
+                deactivate sm
 
-             cmd -> sm : nextCard()
-             activate sm
-             sm -> ss : nextCard()
-             activate ss
-             ss --> sm : isFinished
-             deactivate ss
-             sm --> cmd : isFinished
-             deactivate sm
-
-             alt finished
-                 cmd -> sm : finishSession()
-                 activate sm
-                 sm -> ss : finish()
-                 activate ss
-                 ss --> sm : count
-                 destroy ss
-                 deactivate sm
-
-                 cmd -> ui : showStudySessionEnd(count)
-                 activate ui
-                 deactivate ui
-
-                 cmd --> User : return false
-                 deactivate cmd
-
-             else not finished
-                 cmd -> sm : getCurrentCard()
-                 activate sm
-                 sm --> cmd : nextCard
-                 deactivate sm
-
-                 cmd -> ui : showStudyQuestion(nextQuestion)
-                 activate ui
-                 deactivate ui
-             end
-         end
-     end
- end
- @enduml
+                cmd -> ui : showStudyQuestion(nextQuestion)
+                activate ui
+                deactivate ui
+            end
+        end
+    end
+end
+@enduml
