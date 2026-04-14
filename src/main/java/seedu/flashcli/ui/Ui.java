@@ -218,7 +218,7 @@ public class Ui {
     public void deleteConfirmationPrompt(String deckName) {
         System.out.println("This action will irreversibly delete the deck "
             + deckName
-            + ". Enter 'yes' to proceed");
+            + ". Enter 'yes' (all lowercase) to proceed");
     }
 
     /**
@@ -228,7 +228,14 @@ public class Ui {
     public void clearConfirmationPrompt(String deckName) {
         System.out.println("This action will irreversibly clear the deck "
             + deckName
-            + ". Enter 'yes' to proceed");
+            + ". Enter 'yes' (all lowercase) to proceed");
+    }
+
+    /**
+     * Shows user that command was aborted because the confirmation response they entered was incorrect.
+     */
+    public void rejectConfirmationPrompt() {
+        System.out.println("Failed to receive correct confirmation response. Command aborted.");
     }
 
     /**

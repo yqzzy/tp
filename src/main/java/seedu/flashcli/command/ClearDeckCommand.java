@@ -30,6 +30,7 @@ public class ClearDeckCommand implements Command {
             ui.clearConfirmationPrompt(deckName);
             String userConfirmation = in.nextLine();
             if (!userConfirmation.equals("yes")) {
+                ui.rejectConfirmationPrompt();
                 return false;
             }
             Deck deck = deckManager.getDeck(deckName);

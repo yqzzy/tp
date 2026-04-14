@@ -36,6 +36,7 @@ public class DeleteDeckCommand implements Command {
             ui.deleteConfirmationPrompt(deckName);
             String userConfirmation = in.nextLine();
             if (!userConfirmation.equals("yes")) {
+                ui.rejectConfirmationPrompt();
                 return false;
             }
             deckManager.deleteDeck(deckName);
