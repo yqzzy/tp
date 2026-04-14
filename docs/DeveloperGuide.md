@@ -119,10 +119,12 @@ a clear `INVALID_ARGUMENTS` error if violated.
 
 ### Future Improvements
 
-* **Support for multi-line answers:** The current parser reads a single line of input, so answers
-  containing newlines are not possible. A future design could support a multi-line input mode for
-  long-form answers, terminated by a sentinel such as `END`, without requiring changes to the
-  prefix-based extraction logic for other fields.
+**Current limitation.** `Parser.parse` accepts a single `String`, so any answer containing a newline must be entered
+on one line or the newline is lost before the string reaches the parser. This makes it impossible to store
+multi-paragraph answers.
+
+**Improvement.** Add an overload (or a companion class) that reads lines from a `BufferedReader` and accumulates
+them until a sentinel line (e.g. `END` on its own line) is seen. Because `d/` and `q/` still appear on the first
 
 ## Storage
 
