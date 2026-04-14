@@ -83,6 +83,12 @@ public class Parser {
         throw new FlashException(ErrorType.INVALID_COMMAND);
     }
 
+    /**
+     * Routes the command keyword to the appropriate parse helper.
+     *
+     * @return The command corresponding to the keyword.
+     * @throws FlashException If the arguments are invalid.
+     */
     private static Command dispatch(String command, String arguments) throws FlashException {
         assert !command.isEmpty() : "dispatch() received an empty command";
         switch (command) {
