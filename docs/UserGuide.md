@@ -81,6 +81,9 @@ data has been corrupted, FlashCLI will discard it.
 
 - Commands are not case-sensitive. For example, `addCard` and `addcard`
   are treated the same.
+- Deck names are case-sensitive. `createDeck d/Maths` and `createDeck d/maths`
+  create two distinct decks. Use consistent capitalisation when referencing
+  a deck across commands.
 - Prefixes are case-sensitive. Type them exactly as shown: `d/`, `q/`,
   `a/`, and `i/`.
 - Prefixes must have no space between the letter and slash. `q/` is
