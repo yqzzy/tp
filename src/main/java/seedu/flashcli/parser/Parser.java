@@ -119,6 +119,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an AddCardCommand. */
     private static Command parseAddCardCommand(String arguments) throws FlashException {
         try {
             AddCardArgs args = ArgumentExtractor.parseAddCardArgs(arguments);
@@ -128,6 +129,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an DeleteCardCommand. */
     private static Command parseDeleteCardCommand(String arguments) throws FlashException {
         try {
             DeleteCardArgs args = ArgumentExtractor.parseDeleteCardArgs(arguments);
@@ -137,6 +139,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an ListCardsCommand. */
     private static Command parseListCardsCommand(String arguments) throws FlashException {
         try {
             DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
@@ -146,6 +149,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an CreateDeckCommand. */
     private static Command parseCreateDeckCommand(String arguments) throws FlashException {
         try {
             DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
@@ -155,6 +159,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an ClearDeckCommand. */
     private static Command parseClearDeckCommand(String arguments) throws FlashException {
         try {
             DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
@@ -164,6 +169,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an DeleteDeckCommand. */
     private static Command parseDeleteDeckCommand(String arguments) throws FlashException {
         try {
             DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
@@ -173,6 +179,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an StudyCommand. */
     private static Command parseStudyCommand(String arguments) throws FlashException {
         try {
             DeckArgs args = ArgumentExtractor.parseDeckArgs(arguments);
@@ -182,6 +189,7 @@ public class Parser {
         }
     }
 
+    /** Parses arguments and returns an EditCardCommand. */
     private static Command parseEditCardCommand(String arguments) throws FlashException {
         try {
             EditCardArgs args = ArgumentExtractor.parseEditCardArgs(arguments);
