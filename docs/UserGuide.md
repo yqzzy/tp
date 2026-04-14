@@ -384,8 +384,6 @@ _______________________________
 
 ---
 
----
-
 **Q: Are commands case sensitive?**  
 **A**: No, they are not.
 
